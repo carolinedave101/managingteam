@@ -1,0 +1,1 @@
+{{-- Toasts are rendered via Alpine $store.notifications in app.blade.php --}}

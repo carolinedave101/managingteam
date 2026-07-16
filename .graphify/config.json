@@ -1,0 +1,38 @@
+{
+  "name": "celebrity-management-portal",
+  "description": "Multi-celebrity fan management portal built on Laravel. Subdomain-based fan portals with customizable config.",
+  "ignorePatterns": [
+    "vendor/**",
+    "node_modules/**",
+    "storage/**",
+    "bootstrap/cache/**",
+    ".git/**",
+    "public/build/**"
+  ],
+  "filePatterns": [
+    "**/*.php",
+    "**/*.blade.php",
+    "**/*.js",
+    "**/*.css",
+    "routes/**/*.php",
+    "database/migrations/**/*.php",
+    "database/seeders/**/*.php"
+  ],
+  "godNodes": [
+    "app/Models/Celebrity.php",
+    "app/Http/Controllers/CelebrityPageController.php",
+    "routes/web.php",
+    "database/seeders/DefaultDataSeeder.php",
+    "app/Filament/Admin/Resources/Celebrities/CelebrityResource.php",
+    "app/Livewire/Navigation.php",
+    "app/Http/Controllers/MessageController.php"
+  ],
+  "tags": {
+    "models": "app/Models/**",
+    "controllers": "app/Http/Controllers/**",
+    "filament": "app/Filament/**",
+    "views": "resources/views/**/*.blade.php",
+    "routes": "routes/**",
+    "migrations": "database/migrations/**"
+  }
+}
