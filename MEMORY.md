@@ -1802,6 +1802,52 @@ The trait's `redirectForTopUp()` used `redirect('/wallet?...')` which generates 
 **Status**: Complete
 
 ### Completed
+- [x] Removed `@push`/`@stack` dependency — Moved `<style>` and `<script>` inline (layout has no `@stack('scripts')` or `@stack('styles')`), fixing the silent omission of all card CSS/JS
+- [x] Simplified Alpine `card3d()` component — Removed conflicting `:style` binding (which fought with direct `element.style.transform` manipulation). Now uses direct DOM manipulation only. Removed unnecessary reactive `transform` property.
+- [x] Redesigned as gift card — Clean gift card aesthetic with:
+  - Front face: "Gift Card" header bar, celebrity branding, redeemable card number area with `••••` placeholder for unclaimed cards, "Awaiting Redemption" status, colored bottom accent bar
+  - Back face: Magnetic stripe placeholder, code panel, terms text, matching accent bar
+  - Clean color palette: Dark slate background (`#1e293b` → `#334155` → `#1e3a5f`) without busy orbs/grids
+  - 180° flip (not 360° spin) — click flips to back like a real card, with `cubic-bezier(0.4, 0, 0.2, 1)` easing
+  - Mouse tilt: 12° max rotation, applied via direct style changes only (12fps-friendly)
+- [x] Redeem flow — Fee banner with amber background, "Redeem Your Card" form card with clean border, tier select with Alpine validation, payment-methods component, gradient "Redeem" CTA button using per-celebrity theme colors
+- [x] Claimed state — "Card Redeemed — Ready to Use" or "Pending Approval" with matching gradient Go to Dashboard button
+- [x] Perks bar — Clean three-item row at bottom (Exclusive perks, Digital wallet, Instant access) with indigo icons
+- [x] Theme-aware — Primary/secondary color used for gradient accent bar, CTA buttons, and "Card" heading text
+- [x] All 25 tests pass
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **Inline `<style>`/`<script>` over `@push`** | Layout has no `@stack('scripts')`/`@stack('styles')` — pushed content was silently lost. Inline tags render immediately with the view. |
+| **Direct DOM transforms over `:style` binding** | Alpine's `:style` binding conflicted with direct `element.style.transform` calls. Single source of truth: direct manipulation only. |
+| **180° flip instead of 360° spin** | A 180° flip mimics a real gift card (front→back). 360° spin was showy but didn't serve the gift card metaphor. Click to see the back of the card, click again to return. |
+| **Clean dark slate gradient** | Replaced neon/grid/orb busy design with a clean premium dark card. Translates to gift card aesthetic better — looks like an actual premium card you'd receive. |
+| **"Gift Card" header bar** | Signals the card type immediately. The thin colored accent bar at the bottom ties the design to the celebrity's brand colors. |
+| **`max-w-xl` card container** | Single-column layout centering the gift card feels more like holding an actual gift card. Simplified overall page layout. |
+| **Per-celebrity gradient buttons** | CTA buttons use `{{ $primaryColor }}`/`{{ $secondaryColor }}` so the redeem action matches the celebrity's brand, not hardcoded indigo. |
+
+### Session 39 — Brighter Membership Card Colors (Dynamic Theme)
+**Date**: 2026-07-16  
+**Status**: Complete
+
+### Completed
+- [x] Replaced dark slate card gradient (`#1e293b` → `#334155` → `#1e3a5f`) with dynamic per-celebrity theme colors
+- [x] Card front/back now use `{{ $primaryColor }}ee` and `{{ $secondaryColor }}dd` gradients for a bright, branded look
+- [x] Increased border opacity (0.12 → 0.25) and softened shadow (0.4 → 0.3) for a lighter, more vibrant card feel
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **Dynamic theme colors over static dark slate** | Each celebrity's card now reflects their brand identity (pink/purple for Jennie, etc.) instead of a generic dark card |
+| **Hex alpha (`ee`/`dd`) for transparency** | Allows the gradient to blend slightly while remaining vibrant; 93%/87% opacity keeps readability |
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `resources/views/celebrity/membership-card.blade.php` | Card front/back backgrounds use `$primaryColor`/`$secondaryColor` with hex alpha; border 0.25; shadow 0.3 |
+
+### Completed
 - [x] **Removed `@push`/`@stack` dependency** — Moved `<style>` and `<script>` inline (layout has no `@stack('scripts')` or `@stack('styles')`), fixing the silent omission of all card CSS/JS
 - [x] **Simplified Alpine `card3d()` component** — Removed conflicting `:style` binding (which fought with direct `element.style.transform` manipulation). Now uses direct DOM manipulation only. Removed unnecessary reactive `transform` property.
 - [x] **Redesigned as gift card** — Clean gift card aesthetic with:

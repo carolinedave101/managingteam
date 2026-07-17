@@ -231,15 +231,15 @@
             -webkit-backface-visibility: hidden;
         }
         .card-front {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e3a5f 100%);
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, {{ $primaryColor }}ee 0%, {{ $secondaryColor }}dd 100%);
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.3);
         }
         .card-back {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e3a5f 100%);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: linear-gradient(135deg, {{ $primaryColor }}ee 0%, {{ $secondaryColor }}dd 100%);
+            border: 1px solid rgba(255,255,255,0.25);
             transform: rotateY(180deg);
-            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.3);
         }
         @keyframes flip {
             0% { transform: rotateY(0deg); }
