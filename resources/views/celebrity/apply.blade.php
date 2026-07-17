@@ -162,6 +162,7 @@
                                 <x-payment-methods
                                     :methods="$celebrity->enabledPaymentMethods"
                                     :wallet="$wallet"
+                                    :celebrity="$celebrity"
                                     label="Payment Method"
                                     amountLabel="Application Fee: ${{ number_format($fee, 2) }}"
                                     :price="$fee"

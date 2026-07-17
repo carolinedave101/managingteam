@@ -43,7 +43,15 @@ class TransactionsRelationManager extends RelationManager
                     ->label('Source'),
                 TextColumn::make('reference_id')
                     ->label('Proof')
-                    ->formatStateUsing(fn ($state) => $state && !str_starts_with($state, 'admin_') ? '<a href="'.Storage::url($state).'" target="_blank" class="text-primary-600 underline">📎 View</a>' : '—')
+                    ->formatStateUsing(function ($state) {
+                        if (!$state || str_starts_with($state, 'admin_')) return '—';
+                        $url = \Illuminate\Support\Facades\Storage::disk('public')->url($state);
+                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
+                        if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                            return '<img src="'.$url.'" class="proof-preview-trigger object-cover rounded border cursor-pointer hover:opacity-75 transition" style="width:48px;height:48px;min-width:48px" data-src="'.$url.'" title="Click to view full size">';
+                        }
+                        return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline text-xs">📎 View</a>';
+                    })
                     ->html(),
                 TextColumn::make('creator.name')
                     ->label('By'),

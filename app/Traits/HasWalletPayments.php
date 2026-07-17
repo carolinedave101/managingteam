@@ -28,7 +28,9 @@ trait HasWalletPayments
 
     protected function redirectForTopUp(Celebrity $celebrity, float $amount): RedirectResponse
     {
-        $shortfall = number_format($amount, 2, '.', '');
+        $wallet = Wallet::findOrCreateForUser(auth()->user(), $celebrity);
+        $shortfall = max(0, $amount - $wallet->balance);
+        $shortfallFormatted = number_format($shortfall, 2, '.', '');
 
         $returnUrl = url()->previous();
 
@@ -37,8 +39,8 @@ trait HasWalletPayments
 
         return redirect()->route('celebrity.wallet', [
             'celebrity' => $celebrity->slug,
-            'topup' => $shortfall,
+            'topup' => $shortfallFormatted,
             'return' => $returnUrl,
-        ])->with('info', 'Your wallet balance is insufficient. Please top up at least $'.number_format($amount, 2).' to continue.');
+        ])->with('info', 'Your wallet balance is insufficient. Please top up at least $'.number_format($shortfall, 2).' to continue.');
     }
 }

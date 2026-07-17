@@ -8,7 +8,7 @@ class PrivateMeetup extends Model
 {
     protected $fillable = [
         'celebrity_id', 'user_id', 'title', 'description', 'date', 'duration', 'location', 'price',
-        'status', 'notes', 'payment_method', 'payment_ref', 'payment_proof', 'stripe_payment_id',
+        'status', 'notes', 'payment_method', 'payment_ref', 'payment_proof', 'rejection_reason', 'stripe_payment_id',
     ];
 
     protected function casts(): array

@@ -8,7 +8,7 @@ class Membership extends Model
 {
     protected $fillable = [
         'celebrity_id', 'user_id', 'tier', 'price', 'start_date', 'end_date', 'is_active',
-        'auto_renew', 'payment_method', 'payment_ref', 'payment_proof', 'stripe_sub_id',
+        'auto_renew', 'payment_method', 'payment_ref', 'payment_proof', 'rejection_reason', 'stripe_sub_id',
     ];
 
     protected function casts(): array

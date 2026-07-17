@@ -6,6 +6,7 @@ use App\Events\WalletUpdated;
 use App\Filament\Admin\Resources\WalletTopUps\WalletTopUpResource;
 use App\Models\WalletTransaction;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
@@ -48,14 +49,21 @@ class EditWalletTopUp extends EditRecord
                 ->label('Reject Top-Up')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
-                ->requiresConfirmation()
+                ->form([
+                    Textarea::make('rejection_reason')
+                        ->label('Reason for Rejection (optional)')
+                        ->placeholder('Let the fan know why their top-up was rejected...'),
+                ])
                 ->modalHeading('Reject Top-Up Request')
-                ->modalDescription('This will mark the request as rejected. The fan\'s payment proof will be disregarded and no funds will be credited. Use this if the proof is invalid, the payment didn\'t go through, or the request is suspicious.')
+                ->modalDescription('This will mark the request as rejected. The fan\'s payment proof will be disregarded and no funds will be credited. You can optionally provide a reason so the fan understands why.')
                 ->modalSubmitActionLabel('Yes, Reject Request')
-                ->action(function () {
+                ->action(function (array $data) {
                     $txn = $this->record;
 
-                    $txn->update(['status' => 'rejected']);
+                    $txn->update([
+                        'status' => 'rejected',
+                        'rejection_reason' => $data['rejection_reason'] ?? null,
+                    ]);
 
                     Notification::make()
                         ->title('Top-Up Rejected')

@@ -135,6 +135,7 @@
                             </div>
                             <x-payment-methods
                                 :methods="$paymentMethods"
+                                :celebrity="$celebrity"
                                 label="Payment Method"
                                 amountLabel="Choose how to add funds"
                                 :showWallet="false"

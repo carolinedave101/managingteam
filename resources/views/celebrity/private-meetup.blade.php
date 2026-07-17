@@ -186,6 +186,7 @@
                             <x-payment-methods
                                 :methods="$paymentMethods"
                                 :wallet="$wallet"
+                                :celebrity="$celebrity"
                                 label="Payment Method"
                                 amountLabel="Price depends on selected duration"
                                 :price="$minMeetupPrice"

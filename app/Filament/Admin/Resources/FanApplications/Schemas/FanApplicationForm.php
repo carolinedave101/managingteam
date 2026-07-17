@@ -50,11 +50,17 @@ class FanApplicationForm
                             ->helperText('The payment method the fan used for the application fee (e.g. "stripe", "wallet", "bank_transfer"). Populated automatically if processed online. This helps track which payment channels are being used.'),
                         Placeholder::make('payment_proof')
                             ->label('Payment Proof')
-                            ->content(fn ($record) => $record?->payment_proof
-                                ? ($record->payment_proof === 'wallet'
-                                    ? '✅ Paid via Wallet'
-                                    : '<a href="'.Storage::url($record->payment_proof).'" target="_blank" class="text-primary-600 underline">📎 View Proof File</a>')
-                                : 'N/A')
+                            ->content(function ($record) {
+                                $path = $record?->payment_proof;
+                                if (!$path) return '<span class="text-gray-400">—</span>';
+                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                                if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                                    return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
+                                }
+                                return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
+                            })
                             ->helperText('Displays the uploaded payment proof (e.g. receipt screenshot, bank transfer confirmation). Shows "Paid via Wallet" if the fan used wallet credits, or a clickable link to view the uploaded file. Read-only — verify before approving the application.'),
                         Select::make('status')
                             ->options([
@@ -64,7 +70,13 @@ class FanApplicationForm
                             ])
                             ->required()
                             ->default('pending')
+                            ->live()
                             ->helperText('Workflow: Pending (awaiting review) → Approved (fan gains access to the celebrity portal and gated content) or Rejected (fan is denied entry, optionally with notes explaining why). Once approved, the fan appears in the celebrity_fan pivot table and can access exclusive features. Changing from approved back to pending will revoke access.'),
+                        Textarea::make('rejection_reason')
+                            ->label('Rejection Reason (optional)')
+                            ->placeholder('Provide a clear reason for rejection so the fan understands why...')
+                            ->visible(fn ($get) => $get('status') === 'rejected')
+                            ->columnSpanFull(),
                         TextInput::make('reviewed_by')
                             ->helperText('Enter your name or admin username to record who reviewed this application. Useful for audit trails and accountability. This field is manually entered (not auto-populated) so fill it in when you perform the review.'),
                         Textarea::make('notes')

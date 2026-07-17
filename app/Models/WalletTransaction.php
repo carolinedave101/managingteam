@@ -8,7 +8,7 @@ class WalletTransaction extends Model
 {
     protected $fillable = [
         'wallet_id', 'type', 'amount', 'description',
-        'reference_type', 'reference_id', 'created_by', 'status',
+        'reference_type', 'reference_id', 'created_by', 'status', 'rejection_reason',
     ];
 
     protected function casts(): array

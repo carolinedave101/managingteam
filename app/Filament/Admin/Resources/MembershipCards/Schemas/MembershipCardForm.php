@@ -49,17 +49,27 @@ class MembershipCardForm
                         Toggle::make('is_active')
                             ->required()
                             ->helperText('Required. Toggle ON to allow the fan to view and display this digital card on their profile. When OFF, the card is hidden from the fan\'s view even if it hasn\'t expired yet. Use this to manually revoke card access without deleting the record.'),
+                        Textarea::make('rejection_reason')
+                            ->label('Deactivation Reason (optional)')
+                            ->placeholder('Provide a reason if deactivating this card...')
+                            ->columnSpanFull(),
                         TextInput::make('payment_method')
                             ->helperText('Optional but recommended. Record how the fan paid for the card (e.g. "credit_card", "stripe", "wallet", "paypal", "bank_transfer"). Used for financial reconciliation. Free-text — keep consistent naming across records for accurate reporting.'),
                         TextInput::make('payment_ref')
                             ->helperText('Optional. The external payment transaction reference (e.g. PayPal receipt ID, bank transfer reference, or internal order number). Helps cross-reference payments across systems and simplifies dispute resolution.'),
                         Placeholder::make('payment_proof')
                             ->label('Payment Proof')
-                            ->content(fn ($record) => $record?->payment_proof
-                                ? ($record->payment_proof === 'wallet'
-                                    ? '✅ Paid via Wallet'
-                                    : '<a href="'.Storage::url($record->payment_proof).'" target="_blank" class="text-primary-600 underline">📎 View Proof File</a>')
-                                : 'N/A')
+                            ->content(function ($record) {
+                                $path = $record?->payment_proof;
+                                if (!$path) return '<span class="text-gray-400">—</span>';
+                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                                if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                                    return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
+                                }
+                                return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
+                            })
                             ->helperText('Displays the uploaded payment receipt or wallet payment indicator. If the fan paid via wallet funds, it shows "Paid via Wallet". Otherwise a clickable link to the uploaded proof file is shown. This field is read-only and populated automatically through the payment process.'),
                         TextInput::make('stripe_payment_id')
                             ->helperText('Optional. The Stripe PaymentIntent ID (e.g. "pi_123abc...") if payment was processed via Stripe. Links the card issuance to a specific Stripe transaction for refunds, reconciliation, and webhook event handling. Leave blank for non-Stripe payments.'),

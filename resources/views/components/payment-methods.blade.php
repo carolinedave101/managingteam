@@ -14,9 +14,19 @@
 
 @php
     $insufficient = $showWallet && $wallet && $price > 0 && $wallet->balance < $price;
+    $shortfall = $insufficient ? number_format($price - $wallet->balance, 2, '.', '') : '0';
+    $topUpUrl = $insufficient && $celebrity
+        ? route('celebrity.wallet', [
+            'celebrity' => $celebrity->slug,
+            'topup' => $shortfall,
+            'return' => url()->current(),
+        ])
+        : '';
 @endphp
 
-<div data-uid="{{ $uniqueId }}">
+<div data-uid="{{ $uniqueId }}"
+     data-shortfall="{{ $shortfall }}"
+     data-topup-url="{{ $topUpUrl }}">
     <div class="mb-5">
         <x-input-label for="{{ $uniqueId }}-select" :value="$label" />
         @if ($amountLabel)
@@ -38,7 +48,7 @@
     </div>
 
     {{-- Payment proof upload --}}
-    <div id="{{ $uniqueId }}-proof" class="hidden mb-6">
+    <div id="{{ $uniqueId }}-proof" class="pm-panel mb-6">
         <x-input-label for="{{ $uniqueId }}-proof-input" value="Upload Payment Proof" />
         <input type="file" name="{{ $proofName }}" id="{{ $uniqueId }}-proof-input" accept="image/*,.pdf" {{ $required ? 'required' : '' }}
                class="form-input mt-1 text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 file:cursor-pointer cursor-pointer" />
@@ -46,7 +56,7 @@
     </div>
 
     {{-- Wallet info --}}
-    <div id="{{ $uniqueId }}-wallet" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+    <div id="{{ $uniqueId }}-wallet" class="pm-panel bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
                 <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -60,7 +70,7 @@
 
     {{-- Low balance warning --}}
     @if ($insufficient)
-    <div id="{{ $uniqueId }}-low-balance" class="hidden" style="background-color:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;margin-bottom:24px;">
+    <div id="{{ $uniqueId }}-low-balance" class="pm-panel" style="background-color:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;margin-bottom:24px;">
         <div class="flex items-start gap-3">
             <svg class="w-5 h-5 shrink-0 mt-0.5" style="color:#dc2626" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <div>
@@ -90,7 +100,7 @@
             $txt = $parts[2];
             $prose = $parts[3];
         @endphp
-        <div id="{{ $uniqueId }}-{{ $pmType }}" class="hidden {{ $bg }} border {{ $border }} rounded-xl p-4 mb-6">
+        <div id="{{ $uniqueId }}-{{ $pmType }}" class="pm-panel {{ $bg }} border {{ $border }} rounded-xl p-4 mb-6">
             <div class="flex items-center gap-2 mb-2">
                 <svg class="w-4 h-4 {{ $txt }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     @switch($pmType)
@@ -169,14 +179,37 @@
         <ol class="text-xs text-gray-500 space-y-1.5 ml-4 list-decimal">
             <li>Select your preferred payment method from the dropdown above.</li>
             <li>Follow the payment instructions shown for your chosen method.</li>
-            <li class="wallet-step hidden" data-uid="{{ $uniqueId }}">If using wallet: click submit — no upload needed.</li>
-            <li class="proof-step hidden" data-uid="{{ $uniqueId }}">Upload a screenshot or receipt as proof of payment.</li>
+            <li class="wallet-step pm-fade" data-uid="{{ $uniqueId }}">If using wallet: click submit — no upload needed.</li>
+            <li class="proof-step pm-fade" data-uid="{{ $uniqueId }}">Upload a screenshot or receipt as proof of payment.</li>
             <li>Click the submit button below to complete your request.</li>
         </ol>
     </div>
 </div>
 
 @once
+    <style>
+        .pm-panel {
+            transition: opacity 0.12s ease, max-height 0.15s ease, visibility 0.12s ease;
+            opacity: 0;
+            visibility: hidden;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .pm-panel.pm-visible {
+            opacity: 1;
+            visibility: visible;
+            max-height: 2000px;
+        }
+        .pm-fade {
+            transition: opacity 0.1s ease, visibility 0.1s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .pm-fade.pm-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
     <script>
         window.paymentMethodToggle = function(uid, val) {
             var proof = document.getElementById(uid + '-proof');
@@ -186,7 +219,7 @@
 
             function show(el, showIt) {
                 if (!el) return;
-                if (showIt) el.classList.remove('hidden'); else el.classList.add('hidden');
+                if (showIt) el.classList.add('pm-visible'); else el.classList.remove('pm-visible');
             }
 
             show(proof, val !== 'wallet');
@@ -212,6 +245,16 @@
                 var type = el.id.slice(uid.length + 1);
                 show(el, val === type);
             });
+
+            var container = document.querySelector('[data-uid="' + uid + '"]');
+            var form = container ? container.closest('form') : null;
+            if (form) {
+                if (val === 'wallet' && container.dataset.topupUrl) {
+                    form.setAttribute('data-pm-block-submit', uid);
+                } else {
+                    form.removeAttribute('data-pm-block-submit');
+                }
+            }
         };
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -222,6 +265,18 @@
                     window.paymentMethodToggle(uid, select.value);
                 }
             });
+        });
+
+        document.addEventListener('submit', function(e) {
+            var form = e.target;
+            var blockedUid = form.getAttribute('data-pm-block-submit');
+            if (blockedUid) {
+                e.preventDefault();
+                var container = document.querySelector('[data-uid="' + blockedUid + '"]');
+                if (container && container.dataset.topupUrl) {
+                    window.location.href = container.dataset.topupUrl;
+                }
+            }
         });
     </script>
 @endonce

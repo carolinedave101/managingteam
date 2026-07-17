@@ -55,18 +55,30 @@ class MeetGreetTicketForm
                             ])
                             ->required()
                             ->default('pending')
+                            ->live()
                             ->helperText('Required. Current lifecycle status of the ticket: Pending = awaiting payment/approval, Confirmed = payment received and access granted, Completed = event has passed and ticket was used, Cancelled = ticket voided before use, Refunded = payment returned to fan. Use the workflow: Pending → Confirmed → Completed. Cancelled/Refunded can be applied at any point.'),
+                        Textarea::make('rejection_reason')
+                            ->label('Reason (optional)')
+                            ->placeholder('Provide a reason for cancelling or refunding...')
+                            ->visible(fn ($get) => in_array($get('status'), ['cancelled', 'refunded']))
+                            ->columnSpanFull(),
                         TextInput::make('payment_method')
                             ->helperText('Optional but recommended. Record the payment method used (e.g. "stripe", "credit_card", "wallet", "paypal", "bank_transfer", "cash"). Consistent naming is important for accurate payment reporting. This field supports free-text entry.'),
                         TextInput::make('payment_ref')
                             ->helperText('Optional. The external payment reference or transaction ID (e.g. Stripe charge ID, PayPal transaction ID, or bank reference number). Use this to trace the payment in the gateway\'s dashboard for refunds or disputes.'),
                         Placeholder::make('payment_proof')
                             ->label('Payment Proof')
-                            ->content(fn ($record) => $record?->payment_proof
-                                ? ($record->payment_proof === 'wallet'
-                                    ? '✅ Paid via Wallet'
-                                    : '<a href="'.Storage::url($record->payment_proof).'" target="_blank" class="text-primary-600 underline">📎 View Proof File</a>')
-                                : 'N/A')
+                            ->content(function ($record) {
+                                $path = $record?->payment_proof;
+                                if (!$path) return '<span class="text-gray-400">—</span>';
+                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                                if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                                    return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
+                                }
+                                return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
+                            })
                             ->helperText('Displays the uploaded payment receipt/evidence or a wallet payment indicator. "Paid via Wallet" means the fan used their internal wallet balance. Otherwise a clickable link to the uploaded proof file is shown. This is a read-only display field populated by the payment workflow.'),
                         TextInput::make('stripe_payment_id')
                             ->helperText('Optional. The Stripe PaymentIntent ID (e.g. "pi_abc123...") for Stripe-processed payments. Links this ticket purchase to a specific Stripe transaction, enabling automated refunds, receipt generation, and webhook synchronization. Leave blank for non-Stripe payments.'),

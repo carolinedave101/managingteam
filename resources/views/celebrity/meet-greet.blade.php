@@ -136,6 +136,7 @@
                                     <x-payment-methods
                                         :methods="$paymentMethods"
                                         :wallet="$wallet"
+                                        :celebrity="$celebrity"
                                         label="Payment Method"
                                         amountLabel="${{ number_format($event->price, 2) }} per ticket"
                                         :price="$event->price"

@@ -41,9 +41,17 @@ class WalletTopUpForm
                             ->helperText('"pending" means this request is awaiting your review.'),
                         Placeholder::make('reference_id')
                             ->label('Payment Proof')
-                            ->content(fn ($record) => $record?->reference_id
-                                ? '<a href="'.Storage::url($record->reference_id).'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>'
-                                : 'No proof uploaded')
+                            ->content(function ($record) {
+                                $path = $record?->reference_id;
+                                if (!$path) return '<span class="text-gray-400">—</span>';
+                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                                if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                                    return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
+                                }
+                                return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
+                            })
                             ->helperText('Click to open the fan\'s uploaded payment proof in a new tab. Verify that the fan actually made the payment before approving.'),
                     ]),
             ]);

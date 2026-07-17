@@ -159,6 +159,7 @@
                                     <x-payment-methods
                                         :methods="$paymentMethods"
                                         :wallet="$wallet"
+                                        :celebrity="$celebrity"
                                         label="Payment Method"
                                         amountLabel="Plan: {{ $tier['name'] }} — ${{ number_format($tier['price'], 2) }}/mo"
                                         :price="$tier['price']"

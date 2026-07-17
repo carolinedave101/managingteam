@@ -8,7 +8,7 @@ class MembershipCard extends Model
 {
     protected $fillable = [
         'celebrity_id', 'user_id', 'card_number', 'tier', 'price', 'issued_at', 'expires_at', 'is_active',
-        'payment_method', 'payment_ref', 'payment_proof', 'stripe_payment_id',
+        'payment_method', 'payment_ref', 'payment_proof', 'rejection_reason', 'stripe_payment_id',
     ];
 
     protected function casts(): array

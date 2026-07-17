@@ -8,7 +8,7 @@ class MeetGreetTicket extends Model
 {
     protected $fillable = [
         'celebrity_id', 'user_id', 'event_id', 'quantity', 'total_price', 'status',
-        'payment_method', 'payment_ref', 'payment_proof', 'stripe_payment_id',
+        'payment_method', 'payment_ref', 'payment_proof', 'rejection_reason', 'stripe_payment_id',
     ];
 
     protected function casts(): array

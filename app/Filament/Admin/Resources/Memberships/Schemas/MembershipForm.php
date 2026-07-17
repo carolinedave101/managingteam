@@ -50,17 +50,27 @@ class MembershipForm
                         Toggle::make('auto_renew')
                             ->required()
                             ->helperText('Required. Toggle ON to enable automatic renewal at the end of the subscription period. When ON, the system will attempt to charge the saved payment method and extend the end_date automatically. OFF means the subscription lapses after end_date.'),
+                        Textarea::make('rejection_reason')
+                            ->label('Deactivation Reason (optional)')
+                            ->placeholder('Provide a reason if deactivating this membership...')
+                            ->columnSpanFull(),
                         TextInput::make('payment_method')
                             ->helperText('Optional but recommended. Record how the fan paid (e.g. "credit_card", "paypal", "stripe", "wallet", "bank_transfer", "cash"). Used for reconciliation and reporting. Free-text field — keep values consistent across records.'),
                         TextInput::make('payment_ref')
                             ->helperText('Optional. The external payment transaction ID or reference number (e.g. PayPal transaction ID, bank transfer reference, or internal order number). Useful for cross-referencing with payment gateways and accounting.'),
                         Placeholder::make('payment_proof')
                             ->label('Payment Proof')
-                            ->content(fn ($record) => $record?->payment_proof
-                                ? ($record->payment_proof === 'wallet'
-                                    ? '✅ Paid via Wallet'
-                                    : '<a href="'.Storage::url($record->payment_proof).'" target="_blank" class="text-primary-600 underline">📎 View Proof File</a>')
-                                : 'N/A')
+                            ->content(function ($record) {
+                                $path = $record?->payment_proof;
+                                if (!$path) return '<span class="text-gray-400">—</span>';
+                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                                if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                                    return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
+                                }
+                                return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
+                            })
                             ->helperText('Displays the uploaded proof of payment file or wallet indicator. If the fan paid via wallet, it shows "Paid via Wallet". Otherwise, a link to the uploaded receipt/screenshot is shown. This is read-only and managed through the payment flow.'),
                         TextInput::make('stripe_sub_id')
                             ->helperText('Optional. The Stripe subscription ID (e.g. "sub_123abc...") if payment was processed through Stripe. This links the internal membership record to the Stripe subscription object for billing management, refunds, and webhook handling.'),

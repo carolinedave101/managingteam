@@ -62,7 +62,13 @@ class PrivateMeetupForm
                             ])
                             ->required()
                             ->default('pending')
+                            ->live()
                             ->helperText('Workflow: Pending (awaiting admin confirmation) → Confirmed (date/time finalized, fan notified) → Completed (meetup occurred successfully) or Cancelled (meetup called off, refund may be due). Changing to "confirmed" triggers a notification to the fan.'),
+                        Textarea::make('rejection_reason')
+                            ->label('Cancellation Reason (optional)')
+                            ->placeholder('Provide a reason for cancellation...')
+                            ->visible(fn ($get) => $get('status') === 'cancelled')
+                            ->columnSpanFull(),
                         Textarea::make('notes')
                             ->columnSpanFull()
                             ->helperText('Internal admin notes visible only in the admin panel. Use this to record special arrangements, fan preferences, follow-up items, or any issues that arose. Not visible to the fan.'),
@@ -72,11 +78,17 @@ class PrivateMeetupForm
                             ->helperText('The transaction reference ID from the payment processor (e.g. Stripe charge ID, PayPal transaction ID, or bank transfer reference). Used for reconciliation and refund processing.'),
                         Placeholder::make('payment_proof')
                             ->label('Payment Proof')
-                            ->content(fn ($record) => $record?->payment_proof
-                                ? ($record->payment_proof === 'wallet'
-                                    ? '✅ Paid via Wallet'
-                                    : '<a href="'.Storage::url($record->payment_proof).'" target="_blank" class="text-primary-600 underline">📎 View Proof File</a>')
-                                : 'N/A')
+                            ->content(function ($record) {
+                                $path = $record?->payment_proof;
+                                if (!$path) return '<span class="text-gray-400">—</span>';
+                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                                if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                                    return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
+                                }
+                                return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
+                            })
                             ->helperText('Displays the uploaded proof of payment (e.g. screenshot, receipt PDF). Shows "Paid via Wallet" if the fan used wallet credits, or a clickable link to the uploaded file. Read-only — to replace, re-upload from the fan-facing form.'),
                         TextInput::make('stripe_payment_id')
                             ->helperText('The Stripe Payment Intent ID or Charge ID (e.g. pi_3Oq1234ABCD or ch_3Oq1234ABCD). Populated automatically when payment is processed via Stripe. Useful for manual refunds or dispute tracking in the Stripe dashboard.'),

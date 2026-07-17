@@ -40,7 +40,16 @@ class MeetGreetTicketsTable
                     ->searchable(),
                 TextColumn::make('payment_proof')
                     ->label('Proof')
-                    ->formatStateUsing(fn ($state) => $state === 'wallet' ? '✅ Wallet' : ($state ? '<a href="'.Storage::url($state).'" target="_blank">📎 View</a>' : '—'))
+                    ->formatStateUsing(function ($state) {
+                        if (!$state) return '<span class="text-gray-400">—</span>';
+                        if ($state === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Wallet</span>';
+                        $url = \Illuminate\Support\Facades\Storage::disk('public')->url($state);
+                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
+                        if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                            return '<img src="'.$url.'" class="proof-preview-trigger object-cover rounded border cursor-pointer hover:opacity-75 transition" style="width:48px;height:48px;min-width:48px" data-src="'.$url.'" title="Click to view full size">';
+                        }
+                        return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline text-xs">📎 View</a>';
+                    })
                     ->html(),
                 TextColumn::make('stripe_payment_id')
                     ->searchable(),

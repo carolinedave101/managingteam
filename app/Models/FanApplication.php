@@ -8,7 +8,7 @@ class FanApplication extends Model
 {
     protected $fillable = [
         'celebrity_id', 'user_id', 'bio', 'reason', 'social_links', 'status', 'price',
-        'payment_method', 'payment_proof', 'reviewed_by', 'notes',
+        'payment_method', 'payment_proof', 'rejection_reason', 'reviewed_by', 'notes',
     ];
 
     protected function casts(): array
