@@ -52,13 +52,18 @@ class FanApplicationForm
                             ->label('Payment Proof')
                             ->content(function ($record) {
                                 $path = $record?->payment_proof;
-                                if (!$path) return '<span class="text-gray-400">—</span>';
-                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
-                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                if (! $path) {
+                                    return '<span class="text-gray-400">—</span>';
+                                }
+                                if ($path === 'wallet') {
+                                    return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                }
+                                $url = Storage::disk('public')->url($path);
                                 $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
                                 if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                                     return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
                                 }
+
                                 return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
                             })
                             ->helperText('Displays the uploaded payment proof (e.g. receipt screenshot, bank transfer confirmation). Shows "Paid via Wallet" if the fan used wallet credits, or a clickable link to view the uploaded file. Read-only — verify before approving the application.'),

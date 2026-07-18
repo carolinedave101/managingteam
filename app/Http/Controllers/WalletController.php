@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewAdminNotification;
+use App\Mail\FanNotificationMail;
 use App\Models\Celebrity;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class WalletController extends Controller
 {
@@ -71,6 +74,31 @@ class WalletController extends Controller
             'reference_id' => $proofPath,
             'created_by' => $user->id,
         ]);
+
+        // Notify the fan
+        try {
+            Mail::send(new FanNotificationMail(
+                celebrity: $this->celebrity,
+                user: $user,
+                subject: 'Top-up request received',
+                bodyLines: [
+                    "Your top-up request of <strong>\${$data['amount']}</strong> has been received.",
+                    "The {$this->celebrity->name} Management Team will review your payment proof and credit your wallet.",
+                ],
+                actionText: 'View Wallet',
+                actionUrl: $this->celebrity->getPortalUrl().'/wallet',
+            ));
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        // Notify admins
+        safe_event(new NewAdminNotification(
+            'wallet_topup',
+            "New top-up request from {$user->name} for \${$data['amount']} on {$this->celebrity->name}",
+            $this->celebrity->id,
+            url('/admin/wallet-top-ups'),
+        ));
 
         $returnUrl = $data['return_url'] ?? session()->pull('wallet_pending_return');
 

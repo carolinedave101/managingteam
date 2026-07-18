@@ -33,6 +33,11 @@ class Wallet extends Model
         return $this->hasMany(WalletTransaction::class);
     }
 
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
     public static function findOrCreateForUser(User $user, Celebrity $celebrity): self
     {
         return static::firstOrCreate([

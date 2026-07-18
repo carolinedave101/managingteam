@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MembershipCardDownloadController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\PrivateMeetupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectLinkController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 
 $baseDomain = parse_url(config('app.url'), PHP_URL_HOST);
@@ -74,6 +76,10 @@ Route::domain('{celebrity}.'.$baseDomain)->group(function () {
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('celebrity.profile.destroy');
         Route::get('/wallet', [WalletController::class, 'index'])->name('celebrity.wallet');
         Route::post('/wallet/top-up', [WalletController::class, 'topUp'])->name('celebrity.wallet.top-up');
+        Route::get('/wallet/withdraw', [WithdrawalController::class, 'create'])->name('celebrity.wallet.withdraw');
+        Route::post('/wallet/withdraw', [WithdrawalController::class, 'store'])->name('celebrity.wallet.withdraw.store');
+        Route::post('/wallet/accounts', [WithdrawalController::class, 'storeAccount'])->name('celebrity.wallet.account.store');
+        Route::delete('/wallet/accounts/{account}', [WithdrawalController::class, 'destroyAccount'])->name('celebrity.wallet.account.destroy');
     });
 
     // Custom pages (must be last — catch-all)
@@ -100,6 +106,12 @@ Route::post('/redirect', [LandingController::class, 'redirect'])->name('landing.
 // Redirect links (short URLs)
 Route::get('/r/{code}', [RedirectLinkController::class, 'redirect'])
     ->name('redirect-link');
+
+// Admin: download membership card PDF
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/membership-cards/{membershipCard}/download', MembershipCardDownloadController::class)
+        ->name('admin.membership-cards.download');
+});
 
 // Profile routes (authenticated)
 Route::middleware('auth')->group(function () {

@@ -30,8 +30,12 @@ class CelebrityPageController extends Controller
     public function apply()
     {
         $application = auth()->user()?->application;
+        $wallet = null;
+        if (auth()->check()) {
+            $wallet = Wallet::findOrCreateForUser(auth()->user(), $this->celebrity);
+        }
 
-        return view('celebrity.apply', compact('application'));
+        return view('celebrity.apply', compact('application', 'wallet'));
     }
 
     public function membership()
@@ -40,14 +44,16 @@ class CelebrityPageController extends Controller
         $tiers = $config['membership_tiers'] ?? [];
         $paymentMethods = $this->celebrity->enabledPaymentMethods;
         $activeMembership = null;
+        $wallet = null;
         if (auth()->check()) {
             $activeMembership = auth()->user()->memberships()
                 ->where('celebrity_id', $this->celebrity->id)
                 ->where('is_active', true)
                 ->first();
+            $wallet = Wallet::findOrCreateForUser(auth()->user(), $this->celebrity);
         }
 
-        return view('celebrity.membership', compact('tiers', 'paymentMethods', 'activeMembership'));
+        return view('celebrity.membership', compact('tiers', 'paymentMethods', 'activeMembership', 'wallet'));
     }
 
     public function meetGreet()
@@ -57,28 +63,38 @@ class CelebrityPageController extends Controller
             ->orderBy('date')
             ->get();
         $paymentMethods = $this->celebrity->enabledPaymentMethods;
+        $wallet = null;
+        if (auth()->check()) {
+            $wallet = Wallet::findOrCreateForUser(auth()->user(), $this->celebrity);
+        }
 
-        return view('celebrity.meet-greet', compact('events', 'paymentMethods'));
+        return view('celebrity.meet-greet', compact('events', 'paymentMethods', 'wallet'));
     }
 
     public function membershipCard()
     {
         $paymentMethods = $this->celebrity->enabledPaymentMethods;
         $card = null;
+        $wallet = null;
         if (auth()->check()) {
             $card = auth()->user()->membershipCards()
                 ->where('celebrity_id', $this->celebrity->id)
                 ->first();
+            $wallet = Wallet::findOrCreateForUser(auth()->user(), $this->celebrity);
         }
 
-        return view('celebrity.membership-card', compact('paymentMethods', 'card'));
+        return view('celebrity.membership-card', compact('paymentMethods', 'card', 'wallet'));
     }
 
     public function privateMeetup()
     {
         $paymentMethods = $this->celebrity->enabledPaymentMethods;
+        $wallet = null;
+        if (auth()->check()) {
+            $wallet = Wallet::findOrCreateForUser(auth()->user(), $this->celebrity);
+        }
 
-        return view('celebrity.private-meetup', compact('paymentMethods'));
+        return view('celebrity.private-meetup', compact('paymentMethods', 'wallet'));
     }
 
     public function dashboard()

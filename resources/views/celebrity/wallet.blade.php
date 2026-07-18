@@ -74,17 +74,22 @@
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                         </div>
                     </div>
-                    <div class="flex gap-3">
-                        <button onclick="document.getElementById('topUpModal').classList.add('modal-open')"
-                                class="animate-shine bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                            Top Up
-                        </button>
-                        <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}"
-                           class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition">
-                            Back to Dashboard
-                        </a>
-                    </div>
+                            <div class="flex gap-3">
+                                <button onclick="document.getElementById('topUpModal').classList.add('modal-open')"
+                                        class="animate-shine bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                    Top Up
+                                </button>
+                                <a href="{{ route('celebrity.wallet.withdraw', ['celebrity' => $celebrity->slug]) }}"
+                                   class="animate-shine bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                    Withdraw
+                                </a>
+                                <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}"
+                                   class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition">
+                                    Dashboard
+                                </a>
+                            </div>
                 </div>
             </div>
 
@@ -178,7 +183,7 @@
                             </div>
                         @endforeach
                     </div>
-                    <p class="text-xs text-amber-700 mt-3">Your deposit will be credited once the admin reviews and approves your payment proof.</p>
+                    <p class="text-xs text-amber-700 mt-3">Your deposit will be credited once the {{ $celebrity->name }} Management Team reviews and approves your payment proof.</p>
                 </div>
             </div>
             @endif
@@ -216,7 +221,7 @@
                                         <p class="text-xs text-gray-500">
                                             {{ $txn->created_at->format('M d, Y g:i A') }}
                                             @if ($txn->creator)
-                                                · by {{ $txn->creator->name }}
+                                                · by {{ $txn->creator->isAdmin() ? $celebrity->name . ' Management Team' : $txn->creator->name }}
                                             @endif
                                         </p>
                                     </div>

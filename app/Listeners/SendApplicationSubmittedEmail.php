@@ -24,7 +24,7 @@ class SendApplicationSubmittedEmail
             subject: "Application submitted to {$celebrity->name}",
             bodyLines: [
                 "Your fan application for <strong>{$celebrity->name}</strong> has been received!",
-                'Our team is reviewing your application and you will be notified once it\'s approved.',
+                "The {$celebrity->name} Management Team is reviewing your application and you will be notified once it's approved.",
             ],
             actionText: 'Check Status',
             actionUrl: $celebrity->getPortalUrl().'/apply',

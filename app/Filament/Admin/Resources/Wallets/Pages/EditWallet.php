@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Wallets\Pages;
 
+use App\Filament\Admin\Resources\Wallets\RelationManagers\TransactionsRelationManager;
 use App\Filament\Admin\Resources\Wallets\WalletResource;
 use App\Models\Wallet;
 use Filament\Actions\Action;
@@ -176,6 +177,7 @@ class EditWallet extends EditRecord
                                 ->body("The fan's balance (\${$record->balance}) may not be enough for {$count} debit transactions averaging \${$maxAmount} each. Reduce the count or max amount, or choose a different type.")
                                 ->danger()
                                 ->send();
+
                             return;
                         }
                     }
@@ -223,7 +225,7 @@ class EditWallet extends EditRecord
                         'Overpayment returned',
                         'Duplicate payment reversed',
                         'Promotional credit removed',
-                        'Manual adjustment by admin',
+                        'Manual adjustment by Management Team',
                     ];
 
                     $descriptions = $type === 'credit' ? $creditDescriptions : $debitDescriptions;
@@ -286,7 +288,7 @@ class EditWallet extends EditRecord
     public function getRelationManagers(): array
     {
         return [
-            \App\Filament\Admin\Resources\Wallets\RelationManagers\TransactionsRelationManager::class,
+            TransactionsRelationManager::class,
         ];
     }
 }

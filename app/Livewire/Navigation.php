@@ -35,10 +35,12 @@ class Navigation extends Component
     {
         if (! $user = auth()->user()) {
             $this->walletBalance = 0;
+
             return;
         }
         if (! $this->celebrity) {
             $this->walletBalance = 0;
+
             return;
         }
         $wallet = $user->wallets()->where('celebrity_id', $this->celebrity->id)->first();

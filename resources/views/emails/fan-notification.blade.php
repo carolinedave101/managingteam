@@ -23,6 +23,6 @@
 
     <p style="margin:0;font-size:13px;color:#64748b;">
         Cheers,<br>
-        <strong>{{ $celebrityName }} Team</strong>
+        <strong>{{ $celebrityName }} Management Team</strong>
     </p>
 @endsection

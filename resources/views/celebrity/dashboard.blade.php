@@ -442,11 +442,18 @@
                             Your wallet balance is <strong class="text-gray-900 price-glow" data-wallet-balance>${{ number_format($wallet->balance, 2) }}</strong>.
                             Use wallet credits to pay for memberships, events, and services instantly — no upload needed!
                         </p>
-                        <a href="{{ route('celebrity.wallet', ['celebrity' => $celebrity->slug]) }}"
-                           class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 group/link animate-shine">
-                            <span>Manage Wallet</span>
-                            <svg class="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                        </a>
+                        <div class="flex gap-2">
+                            <a href="{{ route('celebrity.wallet', ['celebrity' => $celebrity->slug]) }}"
+                               class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 group/link animate-shine">
+                                <span>Manage Wallet</span>
+                                <svg class="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="{{ route('celebrity.wallet.withdraw', ['celebrity' => $celebrity->slug]) }}"
+                               class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 group/link animate-shine">
+                                <span>Withdraw Funds</span>
+                                <svg class="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

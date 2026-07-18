@@ -34,7 +34,7 @@ class SendApplicationReviewedEmail
                 ]
                 : [
                     "Your application for <strong>{$celebrity->name}</strong>'s community was <strong>{$event->status}</strong>.",
-                    'If you have any questions, please reach out to our support team.',
+                    "If you have any questions, please reach out to the {$celebrity->name} Management Team.",
                 ],
             actionText: $approved ? 'Go to Dashboard' : 'Contact Support',
             actionUrl: $approved

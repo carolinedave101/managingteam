@@ -17,7 +17,9 @@ class StatsOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
-        return Cache::remember('admin.stats', 300, function () {
+        $cacheKey = 'admin.stats.'.md5_file(base_path('composer.lock'));
+
+        return Cache::remember($cacheKey, 300, function () {
             return [
                 Stat::make('Total Celebrities', Celebrity::count())
                     ->icon('heroicon-o-user-group')

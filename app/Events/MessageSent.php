@@ -16,6 +16,8 @@ class MessageSent implements ShouldBroadcast
 
     public string $senderName;
 
+    public int $senderId;
+
     public string $subject;
 
     public int $celebrityId;
@@ -28,6 +30,7 @@ class MessageSent implements ShouldBroadcast
     {
         $this->message = $message->content;
         $this->senderName = $message->sender?->name ?? 'System';
+        $this->senderId = $message->sender_id;
         $this->subject = $message->subject;
         $this->celebrityId = $message->celebrity_id;
         $this->receiverId = $message->receiver_id;

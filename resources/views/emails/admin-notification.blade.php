@@ -3,7 +3,7 @@
 @section('subject', $subject)
 
 @section('content')
-    <p style="margin:0 0 16px;font-size:16px;">Hello Admin,</p>
+    <p style="margin:0 0 16px;font-size:16px;">Hello {{ $celebrityName }} Management Team,</p>
 
     <p style="margin:0 0 12px;">
         <strong>{{ $actionType }}</strong> &mdash; {{ $celebrityName }} ({{ $celebritySlug }})
@@ -22,7 +22,7 @@
     @if ($actionUrl)
         <div style="text-align:center;margin:28px 0 8px;">
             <a href="{{ $actionUrl }}" style="display:inline-block;padding:12px 28px;border-radius:8px;color:#ffffff !important;text-decoration:none;font-weight:600;font-size:14px;background:linear-gradient(135deg, #2563eb, #7c3aed);">
-                View in Admin Panel
+                View in Dashboard
             </a>
         </div>
     @endif

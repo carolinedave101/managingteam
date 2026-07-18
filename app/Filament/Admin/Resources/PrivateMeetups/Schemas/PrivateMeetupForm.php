@@ -80,13 +80,18 @@ class PrivateMeetupForm
                             ->label('Payment Proof')
                             ->content(function ($record) {
                                 $path = $record?->payment_proof;
-                                if (!$path) return '<span class="text-gray-400">—</span>';
-                                if ($path === 'wallet') return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
-                                $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                if (! $path) {
+                                    return '<span class="text-gray-400">—</span>';
+                                }
+                                if ($path === 'wallet') {
+                                    return '<span class="text-emerald-600 font-medium">✅ Paid via Wallet</span>';
+                                }
+                                $url = Storage::disk('public')->url($path);
                                 $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
                                 if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                                     return '<img src="'.$url.'" class="proof-preview-trigger max-w-xs max-h-48 rounded-lg border shadow-sm cursor-pointer hover:opacity-90 transition" data-src="'.$url.'" title="Click to view full size">';
                                 }
+
                                 return '<a href="'.$url.'" target="_blank" class="text-primary-600 underline font-medium">📎 View Proof File</a>';
                             })
                             ->helperText('Displays the uploaded proof of payment (e.g. screenshot, receipt PDF). Shows "Paid via Wallet" if the fan used wallet credits, or a clickable link to the uploaded file. Read-only — to replace, re-upload from the fan-facing form.'),

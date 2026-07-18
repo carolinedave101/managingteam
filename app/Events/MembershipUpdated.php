@@ -20,12 +20,15 @@ class MembershipUpdated implements ShouldBroadcast
 
     public string $status;
 
-    public function __construct(Membership $membership)
+    public string $action;
+
+    public function __construct(Membership $membership, string $action = 'subscribed')
     {
         $this->celebrityId = $membership->celebrity_id;
         $this->userId = $membership->user_id;
         $this->tier = $membership->tier;
         $this->status = $membership->is_active ? 'active' : 'inactive';
+        $this->action = $action;
     }
 
     public function broadcastOn(): array
@@ -45,6 +48,7 @@ class MembershipUpdated implements ShouldBroadcast
         return [
             'tier' => $this->tier,
             'status' => $this->status,
+            'action' => $this->action,
         ];
     }
 }

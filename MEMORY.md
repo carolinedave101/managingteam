@@ -1,5 +1,81 @@
 # Project Memory — Celebrity Management Portal
 
+## Deployment Context
+
+> **IMPORTANT**: This section stores all server credentials and deployment procedures. No need to ask user — proceed autonomously.
+
+### Server Access
+| Credential | Value |
+|------------|-------|
+| Host | `server.ultraprohost.com` |
+| cPanel/SSH Username | `managingteam` |
+| cPanel/SSH Password | `^.o3J3mg+]=&6Xk=` |
+| Domain | `managingteam.info` |
+
+### Database
+| Credential | Value |
+|------------|-------|
+| DB Name | `managingteam_celeb` |
+| DB Username | `managingteam_celeb` |
+| DB Password | `SK7E9F3dmEW94s!` |
+| Host | `localhost` (cPanel internal) |
+| Engine | MySQL |
+
+### Email (SMTP)
+| Credential | Value |
+|------------|-------|
+| Mailbox | `support@managingteam.info` |
+| Password | `$hZT&fgyYVMXg9w` |
+| SMTP Host | `mail.managingteam.info` |
+| SMTP Port | 587 (STARTTLS) |
+| Fallback Port | 465 (SSL) |
+| Mailer Config | failover: `smtp_primary` (587) → `smtp_secondary` (465) → `log` |
+
+### Fan Portals
+| Subdomain | Celebrity |
+|-----------|-----------|
+| `jennie.managingteam.info` | Jennie Kim |
+| `jungkook.managingteam.info` | Jungkook |
+| `lisa.managingteam.info` | Lisa |
+
+### GitHub
+| Credential | Value |
+|------------|-------|
+| Repo | `github.com/carolinedave101/managingteam.git` |
+| Owner | `carolinedave101` |
+| Note | Remote origin already has PAT configured — push with `git push origin master` |
+
+### Login Credentials
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | `admin@managingteam.info` | `admin123!` |
+| Fan (Jennie) | `sarah@demo.com` | `demo1234!` |
+| Fan (Jennie) | `james@demo.com` | `demo1234!` |
+| Fan (Jennie) | `emily@demo.com` | `demo1234!` |
+| Fan (Jungkook) | `mia@demo.com` | `demo1234!` |
+| Fan (Jungkook) | `daniel@demo.com` | `demo1234!` |
+| Fan (Lisa) | `sophia@demo.com` | `demo1234!` |
+| Fan (Lisa) | `noah@demo.com` | `demo1234!` |
+| Fan (Lisa) | `olivia@demo.com` | `demo1234!` |
+
+### Deployment Procedure (cPanel — no terminal)
+1. **Build zip**: `zip -r managingteam-deploy.zip . -x 'node_modules/*' '.git/*' 'vendor/*' 'public/build/*' 'storage/*.key' '.env' 'managingteam-deploy.zip' 'database/managingteam_celeb.sql'`
+2. **SFTP upload**: Connect as `managingteam@server.ultraprohost.com`, upload to `/home/managingteam/public_html/`
+3. **Extract**: cPanel → File Manager → Extract zip (overwrite existing)
+4. **Restore `.env`**: Upload production `.env` if overwritten (credentials above)
+5. **Fix perms**: `chmod -R 755 storage/ bootstrap/cache/` (via cPanel File Manager → Change Permissions)
+6. **Clear config cache**: Delete `bootstrap/cache/config.php` so Laravel reads fresh `.env`
+7. **Storage link**: `php artisan storage:link` (user may need to run this if terminal is available)
+
+### Important Paths
+| Path | Purpose |
+|------|---------|
+| `/home/managingteam/public_html/` | Document root on server |
+| `/home/managingteam/public_html/.env` | Production env file |
+| `/home/managingteam/public_html/storage/framework/sessions/` | Session files (must exist) |
+| `/home/managingteam/public_html/storage/logs/laravel.log` | Error log |
+| `/home/managingteam/public_html/public/` | Web root (`.htaccess` rewrites) |
+
 ## Session Log
 
 ### Session 1 — Initial Laravel Setup
@@ -1827,9 +1903,190 @@ The trait's `redirectForTopUp()` used `redirect('/wallet?...')` which generates 
 | **`max-w-xl` card container** | Single-column layout centering the gift card feels more like holding an actual gift card. Simplified overall page layout. |
 | **Per-celebrity gradient buttons** | CTA buttons use `{{ $primaryColor }}`/`{{ $secondaryColor }}` so the redeem action matches the celebrity's brand, not hardcoded indigo. |
 
-### Session 39 — Brighter Membership Card Colors (Dynamic Theme)
-**Date**: 2026-07-16  
+### Session 40 — Wallet Withdrawals + Celebrity Team Terminology
+**Date**: 2026-07-16
 **Status**: Complete
+
+### Completed
+
+#### Withdrawal System
+- [x] **Created migration `create_withdrawal_accounts_table`** — `user_id`, `celebrity_id`, `type` (bank/cashapp/paypal/cryptocurrency), `label`, `json` details, `is_default`
+- [x] **Created migration `create_withdrawals_table`** — `wallet_id`, `user_id`, `celebrity_id`, `withdrawal_account_id`, `amount`, `status` (pending/approved/rejected), admin_notes, reviewed_at, reviewed_by — with indexes on (wallet_id, status), (celebrity_id, status), (user_id, status)
+- [x] **Created `WithdrawalAccount` model** — fillable, casts (details array, is_default boolean), belongsTo user/celebrity
+- [x] **Created `Withdrawal` model** — fillable, casts (amount decimal, reviewed_at datetime), belongsTo wallet/user/celebrity/withdrawalAccount/reviewer; scopes: pending/approved/rejected
+- [x] **Updated `Wallet` model** — added `withdrawals()` hasMany relationship
+- [x] **Created `WithdrawalRequested` event** — broadcasts on `celebrity.{id}.admin` + `admin.global` channels, carries amount + fan name + admin link
+- [x] **Created `WithdrawalReviewed` event** — broadcasts on `celebrity.{id}.fan.{userId}` channel, carries amount + status + message
+- [x] **Created `SendWithdrawalRequestedEmail` listener** — emails all admins with amount + fan name + admin link
+- [x] **Created `SendWithdrawalReviewedEmail` listener** — emails fan with approval/rejection status via FanNotificationMail
+- [x] **Created `WithdrawalController`** — 4 methods:
+  - `create()` — shows withdrawal form + saved accounts + withdrawal history
+  - `store()` — validates amount + account, checks balance, creates pending withdrawal, dispatches `WithdrawalRequested` event
+  - `storeAccount()` — validates type-specific fields (bank_name/account_number for bank, cashtag for cashapp, email for paypal, network/wallet_address for crypto), saves account, auto-sets first as default
+  - `destroyAccount()` — deletes saved account
+- [x] **Created fan-facing `withdraw.blade.php`** — Full page with:
+  - Balance card showing available funds
+  - Withdrawal request form with amount input + account select
+  - Saved accounts sidebar with add/delete
+  - Add Account modal with dynamic fields per type (bank/CashApp/PayPal/crypto) using Alpine.js `x-model`
+  - Withdrawal history with status badges (pending/approved/rejected) and account labels
+  - Empty states for no accounts and no history
+- [x] **Created admin `WithdrawalResource`** — Filament resource under Fan Management group:
+  - `WithdrawalsTable` — columns: Celebrity Portal, Fan, Amount, Account, Type (badge), Status (color-coded badge), Requested date, Reviewed date; sorted by latest; EditAction with tooltip
+  - `WithdrawalForm` — read-only details view: fan, celebrity, amount, wallet balance, account type/label/details, requested date + admin notes textarea
+  - `ListWithdrawals` — list page with Refresh action
+  - `EditWithdrawal` — two header actions:
+    - **Approve**: checks pending status + sufficient balance, decrements wallet, marks approved, dispatches `WithdrawalReviewed`
+    - **Reject**: marks rejected with optional admin_notes, dispatches `WithdrawalReviewed`
+  - Navigation badge showing pending withdrawal count
+- [x] **Added 4 new routes** — `GET /wallet/withdraw`, `POST /wallet/withdraw`, `POST /wallet/accounts`, `DELETE /wallet/accounts/{account}`
+- [x] **Added Withdraw button** to wallet balance card and dashboard wallet feature card
+- [x] **All 25 tests pass** — no regressions
+- [x] **Vite builds clean** — CSS 106KB, JS 122KB
+- [x] **Pint clean** — all new files pass
+
+#### Celebrity Team Terminology
+- [x] **Wallet page** — Changed "the admin reviews" to "the Celebrity Team reviews" in pending deposits description
+- [x] **AdminNotificationMail** — Changed email subject prefix from `[Admin]` to `[Celebrity Team]`, tagline from "Admin Notification" to "Celebrity Team Notification"
+- [x] **Admin notification email template** — Changed greeting from "Hello Admin," to "Hello Celebrity Team,", button text from "View in Admin Panel" to "View in Dashboard"
+- [x] All fan-facing "admin" references now say "Celebrity Team"
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **Separate `withdrawal_accounts` table** | Fans can save multiple accounts per celebrity portal. Storing details as JSON allows arbitrary type-specific fields without schema changes per type. |
+| **Pending withdrawal does NOT deduct balance** | The wallet balance is only debited on approval. This prevents fan from initiating multiple withdrawals that exceed their balance, and lets admin reject without needing to refund. |
+| **Admin approval decrements wallet** | When admin approves, the amount is deducted from the wallet (same as any other debit). The withdrawal is recorded in the funding history. |
+| **Type-specific form validation per account** | Bank accounts need routing/SWIFT, PayPal needs email, crypto needs network+address. Validated at controller level to ensure data integrity. |
+| **Alpine.js `x-model` for dynamic account fields** | The add-account modal shows different fields based on selected type without page reload. Same pattern used elsewhere in the app. |
+| **"Celebrity Team" replaces "Admin"** | Fans should see their celebrity's team name, not the internal role. This aligns with the fan portal brand identity. |
+
+### Files Created (14 files)
+| File | Purpose |
+|------|---------|
+| `database/migrations/2026_07_16_180000_create_withdrawal_accounts_table.php` | Withdrawal accounts table |
+| `database/migrations/2026_07_16_180001_create_withdrawals_table.php` | Withdrawals table |
+| `app/Models/WithdrawalAccount.php` | WithdrawalAccount model |
+| `app/Models/Withdrawal.php` | Withdrawal model |
+| `app/Events/WithdrawalRequested.php` | Broadcast event — admin notified on new withdrawal request |
+| `app/Events/WithdrawalReviewed.php` | Broadcast event — fan notified on approval/rejection |
+| `app/Listeners/SendWithdrawalRequestedEmail.php` | Email admins on new withdrawal request |
+| `app/Listeners/SendWithdrawalReviewedEmail.php` | Email fan on withdrawal review |
+| `app/Http/Controllers/WithdrawalController.php` | Fan-facing withdrawal CRUD |
+| `resources/views/celebrity/withdraw.blade.php` | Fan withdrawal page with account management |
+| `app/Filament/Admin/Resources/Withdrawals/WithdrawalResource.php` | Admin withdrawal resource |
+| `app/Filament/Admin/Resources/Withdrawals/Pages/ListWithdrawals.php` | Withdrawal list page |
+| `app/Filament/Admin/Resources/Withdrawals/Pages/EditWithdrawal.php` | Withdrawal review page with Approve/Reject |
+| `app/Filament/Admin/Resources/Withdrawals/Schemas/WithdrawalForm.php` | Withdrawal details form |
+| `app/Filament/Admin/Resources/Withdrawals/Tables/WithdrawalsTable.php` | Withdrawal list table |
+
+### Files Modified (7 files)
+| File | Change |
+|------|--------|
+| `app/Models/Wallet.php` | Added `withdrawals()` relationship |
+| `routes/web.php` | Added WithdrawalController import + 4 withdrawal routes |
+| `resources/views/celebrity/wallet.blade.php` | Added Withdraw button; "admin" → "Celebrity Team" |
+| `resources/views/celebrity/dashboard.blade.php` | Added "Withdraw Funds" link on wallet card |
+| `app/Mail/AdminNotificationMail.php` | `[Admin]` → `[Celebrity Team]` in subject/tagline |
+| `resources/views/emails/admin-notification.blade.php` | "Hello Admin" → "Hello Celebrity Team"; button text updated |
+
+### Known Issues
+- Withdrawal request does not deduct balance until admin approves (by design)
+- No `WalletUpdated` event dispatched on withdrawal approval (the balance changes but the fan sees the withdrawal status change via `WithdrawalReviewed` instead)
+- Queue worker required for production email delivery (`QUEUE_CONNECTION=database`)
+
+### Session 41 — Full Fan Notification Coverage Audit & Fix: All Actions Now Send Emails
+**Date**: 2026-07-17  
+**Status**: Complete
+
+### Completed
+
+#### Bug Fixes
+- [x] **BUG #1: Subscribe sent "cancelled" email** — `MembershipUpdated` event now includes `$action` string ('subscribed'/'approved'/'cancelled'). `MembershipController` passes action context. Listener uses match expression to send appropriate email text per action.
+- [x] **BUG #2: New-thread messages never emailed anyone** — Added `$senderId` to `MessageSent` event. `SendMessageSentEmail` now handles two paths: replies email the receiver (as before), new threads email the fan a confirmation AND notify all admins via `AdminNotificationMail`.
+- [x] **BUG #3: Rejected wallet top-up sent no email** — `EditWalletTopUp` reject action now sends `FanNotificationMail` to the fan explaining the rejection with optional reason.
+
+#### Missing Fan Notifications Added
+- [x] **Welcome email on registration** — Created `SendWelcomeEmail` listener for `Illuminate\Auth\Events\Registered`. Fan receives a welcome email from their celebrity portal when they register.
+- [x] **Wallet top-up requested notification** — `WalletController@topUp()` now sends `FanNotificationMail` to the fan + fires `NewAdminNotification` for admin broadcast.
+- [x] **Membership admin status change** — `EditMembership::afterSave()` fires `MembershipUpdated` with action 'approved'/'cancelled' when `is_active` changes.
+- [x] **Meet & Greet ticket admin status change** — `EditMeetGreetTicket::afterSave()` fires `MeetGreetBooked` when `status` changes. Added `$status` to `MeetGreetBooked` event. Listener uses status to send context-appropriate email (confirmed/rejected/pending).
+- [x] **Private Meetup admin status change** — `EditPrivateMeetup::afterSave()` fires `PrivateMeetupBooked` when `status` changes. Listener now uses status for context-appropriate email content.
+- [x] **Membership Card admin activation** — `EditMembershipCard::afterSave()` fires `CardOrdered` with action 'approved'/'cancelled' when `is_active` changes. Added `$action` to `CardOrdered` event. Listener uses action for appropriate email text.
+
+#### Admin Email Viewer
+- [x] **Created `sent_emails` table** — Captures every outgoing email (to, subject, body, headers, sent_at).
+- [x] **Created `LogSentEmail` listener** — Listens to `Illuminate\Mail\Events\MessageSent`, saves email data to DB.
+- [x] **Created Filament `SentEmailResource`** — Under System → Sent Emails. Lists all emails with To/Subject/Sent At. Detail view shows full body content.
+
+### Files Created (11 files)
+| File | Purpose |
+|------|---------|
+| `database/migrations/2026_07_17_223332_create_sent_emails_table.php` | Sent emails log table |
+| `app/Models/SentEmail.php` | SentEmail model |
+| `app/Listeners/LogSentEmail.php` | Captures all outgoing emails to DB |
+| `app/Listeners/SendWelcomeEmail.php` | Welcome email on fan registration |
+| `app/Filament/Admin/Resources/SentEmails/SentEmailResource.php` | Admin email viewer resource |
+| `app/Filament/Admin/Resources/SentEmails/Pages/ListSentEmails.php` | Email list page |
+| `app/Filament/Admin/Resources/SentEmails/Pages/EditSentEmail.php` | Email detail view page |
+| `app/Filament/Admin/Resources/SentEmails/Schemas/SentEmailForm.php` | Email detail form schema |
+| `app/Filament/Admin/Resources/SentEmails/Tables/SentEmailsTable.php` | Email list table |
+
+### Files Modified (22 files)
+| File | Change |
+|------|--------|
+| `app/Events/MembershipUpdated.php` | Added `$action` property |
+| `app/Events/MeetGreetBooked.php` | Added `$status` property |
+| `app/Events/CardOrdered.php` | Added `$action` property |
+| `app/Events/MessageSent.php` | Added `$senderId` property |
+| `app/Http/Controllers/MembershipController.php` | Passes action to MembershipUpdated |
+| `app/Http/Controllers/WalletController.php` | Sends fan email + admin notification on top-up request |
+| `app/Listeners/SendMembershipUpdatedEmail.php` | Uses action for email content (subscribed/approved/cancelled) |
+| `app/Listeners/SendMeetGreetBookedEmail.php` | Uses status for email content (confirmed/rejected/pending) |
+| `app/Listeners/SendPrivateMeetupBookedEmail.php` | Uses status for email content (confirmed/rejected/pending) |
+| `app/Listeners/SendCardOrderedEmail.php` | Uses action for email content (ordered/approved) |
+| `app/Listeners/SendMessageSentEmail.php` | Handles new-thread + reply cases; notifies admins on new threads |
+| `app/Listeners/SendWithdrawalRequestedEmail.php` | Also sends fan confirmation email (was admin-only) |
+| `app/Filament/Admin/Resources/Memberships/Pages/EditMembership.php` | afterSave fires MembershipUpdated on is_active change |
+| `app/Filament/Admin/Resources/MeetGreetTickets/Pages/EditMeetGreetTicket.php` | afterSave fires MeetGreetBooked on status change |
+| `app/Filament/Admin/Resources/PrivateMeetups/Pages/EditPrivateMeetup.php` | afterSave fires PrivateMeetupBooked on status change |
+| `app/Filament/Admin/Resources/MembershipCards/Pages/EditMembershipCard.php` | afterSave fires CardOrdered on is_active change |
+| `app/Filament/Admin/Resources/FanApplications/Pages/EditFanApplication.php` | afterSave fires ApplicationReviewed on status change |
+| `app/Filament/Admin/Resources/WalletTopUps/Pages/EditWalletTopUp.php` | Sends fan email on rejection |
+| `.env` | MAIL_MAILER=log (local dev — no SMTP dependency) |
+
+### Complete Notification Coverage
+| Fan Action | Fan Email | Admin Email |
+|---|---|---|
+| Registration | ✅ Welcome email | — |
+| Application submitted | ✅ Submission confirmation | ✅ New admin notification |
+| Application reviewed | ✅ Approval/rejection email | — |
+| Membership subscribed | ✅ Pending confirmation | ✅ New admin notification |
+| Membership cancelled | ✅ Cancellation email | — |
+| Membership approved (admin) | ✅ Activation email | — |
+| Meet & Greet booked | ✅ Booking confirmation | ✅ New admin notification |
+| Meet & Greet status changed (admin) | ✅ Confirm/reject email | — |
+| Meetup booked | ✅ Booking confirmation | ✅ New admin notification |
+| Meetup status changed (admin) | ✅ Confirm/reject email | — |
+| Card ordered | ✅ Order confirmation | ✅ New admin notification |
+| Card activated (admin) | ✅ Activation email | — |
+| Message reply | ✅ Notification to receiver | — |
+| New message thread | ✅ Confirmation to sender | ✅ Admin notification |
+| Wallet credited | ✅ Credit notification | — |
+| Wallet debited | ✅ Debit notification | — |
+| Wallet top-up requested | ✅ Confirmation email | ✅ Admin notification |
+| Wallet top-up approved | ✅ Credit notification | — |
+| Wallet top-up rejected | ✅ Rejection email | — |
+| Withdrawal requested | ✅ Confirmation email | ✅ Admin notification |
+| Withdrawal reviewed | ✅ Approve/reject email | — |
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **`$action` on MembershipUpdated** | Distinguishes 'subscribed' (pending) from 'approved' (activated) from 'cancelled' — the listener sends the correct email for each state |
+| **`$status` on MeetGreetBooked** | Allows reusing the same event for initial booking (pending) and admin status change (confirmed/rejected) |
+| **New-thread emails fan + all admins** | Fan gets confirmation that their message was sent; admins get notified of new fan inquiries |
+| **`SendWelcomeEmail` listens to `Registered`** | Uses Laravel's built-in auth event — no need to modify the controller. Fan's celebrity is resolved via `$user->celebrities()->first()` |
 
 ### Completed
 - [x] Replaced dark slate card gradient (`#1e293b` → `#334155` → `#1e3a5f`) with dynamic per-celebrity theme colors
@@ -1872,5 +2129,184 @@ The trait's `redirectForTopUp()` used `redirect('/wallet?...')` which generates 
 | **"Gift Card" header bar** | Signals the card type immediately. The thin colored accent bar at the bottom ties the design to the celebrity's brand colors. |
 | **`max-w-xl` card container** | Single-column layout centering the gift card feels more like holding an actual gift card. Simplified overall page layout. |
 | **Per-celebrity gradient buttons** | CTA buttons use `{{ $primaryColor }}`/`{{ $secondaryColor }}` so the redeem action matches the celebrity's brand, not hardcoded indigo. |
+
+---
+
+### Session 43 — 500 Error Fixes, Email Delivery, and Admin Label Cleanup
+**Date**: 2026-07-18  
+**Status**: Complete
+
+### Completed
+
+#### Fix 1: Wallet 500 Error on Guest-Facing Pages
+- [x] Root cause: 5 fan-facing GET routes (`/membership-card`, `/meet-greet`, `/membership`, `/apply`, `/private-meetup`) had no `auth` middleware, but their views called `Wallet::findOrCreateForUser(auth()->user(), ...)`. The method type-hints `User $user` — `null` caused `TypeError` → 500.
+- [x] Updated `CelebrityPageController` — All 5 methods now resolve `$wallet` inside `auth()->check()` guard and pass it to view as null for guests.
+- [x] Updated all 5 Blade views — Replaced inline `Wallet::findOrCreateForUser()` with `$wallet` from controller. The payment-methods component already handles `$wallet === null` gracefully (hides wallet option).
+
+#### Fix 2: Email Not Sending
+- [x] Root cause: `.env` had `MAIL_MAILER=log` — all emails were written to `storage/logs/` instead of sent via SMTP.
+- [x] Changed `MAIL_MAILER=smtp`, `MAIL_HOST=mail.managingteam.info`, `MAIL_PORT=587`, `MAIL_USERNAME=support@managingteam.info`, `MAIL_SCHEME=tls`.
+- [x] `QUEUE_CONNECTION=sync` already set (emails send during HTTP response, no queue worker needed).
+
+#### Fix 3: "by admin" → "by {Celeb} Management Team"
+- [x] Fan wallet transaction history (`wallet.blade.php`) — now checks `$txn->creator->isAdmin()` and shows `"{$celebrity->name} Management Team"` instead of the admin's name.
+- [x] Admin wallet seed descriptions (`EditWallet.php`, `ListWallets.php`) — changed `'Manual adjustment by admin'` → `'Manual adjustment by Management Team'`.
+
+### Critical User Action Required (cPanel)
+1. **Set `MAIL_PASSWORD`** in `.env` on cPanel (via File Manager) — get password from cPanel Email Accounts for `support@managingteam.info`
+2. **Delete stale compiled views** — Use cPanel File Manager to delete all `.php` files in `storage/framework/views/` (keep `.gitignore`). This forces Blade to recompile with correct server paths.
+3. **Delete `bootstrap/cache/*.php`** if they contain hardcoded dev paths (config.php, routes-v7.php, services.php, packages.php)
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `app/Http/Controllers/CelebrityPageController.php` | Added wallet resolution to 5 methods (apply, membership, meetGreet, membershipCard, privateMeetup) |
+| `resources/views/celebrity/membership-card.blade.php` | Removed direct Wallet::findOrCreateForUser call, uses controller-passed `$wallet` |
+| `resources/views/celebrity/meet-greet.blade.php` | Same |
+| `resources/views/celebrity/membership.blade.php` | Same |
+| `resources/views/celebrity/apply.blade.php` | Same |
+| `resources/views/celebrity/private-meetup.blade.php` | Same |
+| `resources/views/celebrity/wallet.blade.php` | Shows "{Celeb} Management Team" for admin creators instead of admin name |
+| `app/Filament/Admin/Resources/Wallets/Pages/EditWallet.php` | 'Manual adjustment by admin' → 'by Management Team' |
+| `app/Filament/Admin/Resources/Wallets/Pages/ListWallets.php` | Same |
+| `.env` | MAIL_MAILER=log → smtp; SMTP server + credentials set |
+
+### Build Results
+| Check | Result |
+|-------|--------|
+| Tests | 25 passed, 61 assertions |
+
+---
+
+### Session 44 — Admin Mail Settings Page + MailConfigServiceProvider
+**Date**: 2026-07-18  
+**Status**: Complete
+
+### Completed
+- [x] Created `MailSettings` Filament page (System → Mail Settings) with form fields for:
+  - Mail Driver (smtp/sendmail/log), SMTP Host, Port, Encryption (TLS/SSL/None)
+  - SMTP Username, Password (masked input)
+  - From Address, From Name
+  - Save button + Send Test Email button (tests with raw email to the admin's inbox)
+- [x] Created `MailConfigServiceProvider` — reads `mail.settings` from `system_configs` DB table at runtime and overrides Laravel's mail config. Wrapped in try-catch so missing table on fresh installs doesn't crash.
+- [x] Provider auto-discovered (lives in `app/Providers/`), no registration needed.
+- [x] All 25 tests pass no regressions.
+
+### How It Works
+1. Admin navigates to System → Mail Settings in the admin panel
+2. Fills in SMTP credentials, clicks Save → stored in `system_configs` table as key `mail.settings`
+3. On every subsequent request, `MailConfigServiceProvider::boot()` reads the record and applies it via `config([...])` — overrides `.env` values
+4. Admin clicks "Send Test Email" to verify delivery (sends to their own inbox)
+
+### Files Created
+| File | Purpose |
+|------|---------|
+| `app/Filament/Admin/Pages/MailSettings.php` | Admin page with mail config form + test email action |
+| `resources/views/filament/admin/pages/mail-settings.blade.php` | View with info banner + form + action buttons |
+| `app/Providers/MailConfigServiceProvider.php` | Runtime config override from DB settings |
+
+---
+
+### Session 45 — Database Switch: PostgreSQL → MySQL
+**Date**: 2026-07-18  
+**Status**: Complete
+
+### Completed
+- [x] Switched `.env` from `DB_CONNECTION=pgsql` to `DB_CONNECTION=mysql`
+- [x] Created fresh MySQL database `managingteam_celeb`
+- [x] Fixed `0001_01_01_000002_create_jobs_table.php` — changed `connection` and `queue` from `text` to `string(255)` to fix MySQL index-on-TEXT error
+- [x] All 28 migrations ran successfully on MySQL
+- [x] Seed data populated (3 celebrities, 9 users, all demo records)
+- [x] All 9 logins verified (admin + 8 fans)
+- [x] All 25 tests pass (61 assertions)
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `.env` | `DB_CONNECTION=pgsql` → `mysql`, `DB_PORT=5432` → `3306` |
+| `database/migrations/0001_01_01_000002_create_jobs_table.php` | `text('connection')` → `string('connection', 255)`, `text('queue')` → `string('queue', 255)` |
+
+---
+
+### Session 46 — Deployment Prep: Config Cache, .htaccess, DEPLOY.md, .env.example, Zip Build
+**Date**: 2026-07-18  
+**Status**: Complete
+
+### Completed
+- [x] Pre-built all optimization caches (route, config, view, events, blade-icons, Filament components)
+- [x] Created `.htaccess` (project root) — rewrites `/public_html/` → `/public/` for cPanel
+- [x] Created `DEPLOY.md` — full cPanel deployment guide with 7 steps
+- [x] Updated `.env.example` — production-ready template with MySQL defaults, SMTP config, `QUEUE_CONNECTION=sync`, `SESSION_DRIVER=file`, `CACHE_STORE=file`
+- [x] Removed `public/setup.php` (no longer needed)
+- [x] Built `managingteam-deploy.zip` (48 MB) with all vendor + build assets, excluding dev files
+- [x] Fixed `StatsOverview` widget cache key — uses `md5_file(base_path('composer.lock'))` to auto-invalidate on deploy
+
+### Files Created
+| File | Purpose |
+|------|---------|
+| `.htaccess` | cPanel root rewrite to `public/` |
+| `DEPLOY.md` | Deployment guide |
+| `.env.example` | Production-safe env template |
+
+---
+
+### Session 47 — Admin Membership Card PDF Download
+**Date**: 2026-07-18  
+**Status**: Complete
+
+### Completed
+- [x] Installed `barryvdh/laravel-dompdf ^3.1` — PDF generation via DOMPDF
+- [x] Created `resources/views/pdf/membership-card.blade.php` — printable PDF card design with:
+  - Fan name, member ID (`card_number`), tier badge
+  - Celebrity branding with theme colors (gradient background)
+  - Redeemable benefits list from the tier config
+  - Issue/expiry dates and active status
+  - Print-friendly layout (DejaVu Sans font, page-break-safe)
+- [x] Created `app/Http/Controllers/Admin/MembershipCardDownloadController.php` — generates and streams the PDF, aborts 403 if card not yet active
+- [x] Added route `GET /admin/membership-cards/{membershipCard}/download` (named `admin.membership-cards.download`) in web.php, under `auth` middleware
+- [x] Added "Download Card PDF" header action to `EditMembershipCard` page — green button, visible only when card is active, opens download in new tab
+- [x] Rebuilt `managingteam-deploy.zip` (52 MB)
+- [x] All 25 tests pass, Pint clean
+
+### How It Works
+1. Admin goes to Fan Management → Fan ID Cards → Edit an active card
+2. Clicks green "Download Card PDF" button in the header
+3. PDF downloads with filename `membership-card-JK-4820-*.pdf`
+4. PDF contains: fan name, card number, tier, celebrity name, redeemable benefits from config, issue/expiry dates
+5. Admin prints the card and mails it to the fan's address
+
+### Files Created/Changed
+| File | Change |
+|------|--------|
+| `composer.json` | Added `barryvdh/laravel-dompdf ^3.1` |
+| `resources/views/pdf/membership-card.blade.php` | New — printable PDF card view |
+| `app/Http/Controllers/Admin/MembershipCardDownloadController.php` | New — PDF download controller |
+| `routes/web.php` | Added import + route for download |
+| `app/Filament/Admin/Resources/MembershipCards/Pages/EditMembershipCard.php` | Added "Download Card PDF" header action |
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **DOMPDF over wkhtmltopdf** | DOMPDF is pure PHP, no system dependencies — works on cPanel with no terminal |
+| **Separate controller, not inline Filament action** | Clean separation, testable, reusable for future batch downloads |
+| **403 for inactive cards** | Prevent downloading cards that haven't been approved yet |
+| **DejaVu Sans font** | DOMPDF ships with DejaVu — guaranteed rendering, no extra font files needed |
+
+---
+
+### Session 48 — SMTP Fix: `$` in Password Parsed as Variable Reference
+**Date**: 2026-07-18  
+**Status**: Complete
+
+### Completed
+- [x] **Root cause**: `.env` had `MAIL_PASSWORD=$hZT&fgyYVMXg9w` — unquoted `$` caused Laravel's `.env` parser to interpret `$hZT` as a variable reference (resolving to empty), so the actual password used was `&fgyYVMXg9w` → SMTP auth failed (535)
+- [x] **Fix**: Wrapped password in single quotes: `MAIL_PASSWORD='$hZT&fgyYVMXg9w'` (prevents `$` variable expansion)
+- [x] **Verified**: Test email sent in 266ms with no errors in log — email delivered via SMTP
+- [x] **Cleanup**: Removed temp `mail-test.php` and `debug-mail.php` from server
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `.env` (server) | `MAIL_PASSWORD=$hZT&fgyYVMXg9w` → `MAIL_PASSWORD='$hZT&fgyYVMXg9w'` |
 
 ---

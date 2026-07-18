@@ -30,7 +30,7 @@ class MessageController extends Controller
             ->whereNull('parent_id')
             ->where(function ($q) use ($user) {
                 $q->where('sender_id', $user->id)
-                  ->orWhere('receiver_id', $user->id);
+                    ->orWhere('receiver_id', $user->id);
             })
             ->with(['sender', 'replies.sender'])
             ->latest()

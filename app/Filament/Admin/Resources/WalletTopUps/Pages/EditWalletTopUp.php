@@ -4,11 +4,13 @@ namespace App\Filament\Admin\Resources\WalletTopUps\Pages;
 
 use App\Events\WalletUpdated;
 use App\Filament\Admin\Resources\WalletTopUps\WalletTopUpResource;
+use App\Mail\FanNotificationMail;
 use App\Models\WalletTransaction;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Mail;
 
 class EditWalletTopUp extends EditRecord
 {
@@ -65,9 +67,27 @@ class EditWalletTopUp extends EditRecord
                         'rejection_reason' => $data['rejection_reason'] ?? null,
                     ]);
 
+                    // Notify the fan
+                    $fan = $txn->wallet->user;
+                    $celebrity = $txn->wallet->celebrity;
+                    if ($fan && $celebrity) {
+                        Mail::send(new FanNotificationMail(
+                            celebrity: $celebrity,
+                            user: $fan,
+                            subject: 'Top-up request not approved',
+                            bodyLines: [
+                                'Your top-up request was reviewed but was <strong>not approved</strong>.',
+                                'Amount: <strong>$'.number_format($txn->amount, 2).'</strong>',
+                                $data['rejection_reason'] ? 'Reason: '.e($data['rejection_reason']) : 'If you have any questions, please contact the team.',
+                            ],
+                            actionText: 'View Wallet',
+                            actionUrl: $celebrity->getPortalUrl().'/wallet',
+                        ));
+                    }
+
                     Notification::make()
                         ->title('Top-Up Rejected')
-                        ->body('The top-up request from '.$txn->wallet->user->name.' has been rejected.')
+                        ->body('The top-up request from '.$fan->name.' has been rejected.')
                         ->danger()
                         ->send();
 

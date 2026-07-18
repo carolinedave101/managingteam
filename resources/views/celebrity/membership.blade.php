@@ -154,7 +154,7 @@
                                     <input type="hidden" name="tier" value="{{ $tier['name'] }}">
                                     <input type="hidden" name="price" value="{{ $tier['price'] }}">
                                     @php
-                                        $wallet = \App\Models\Wallet::findOrCreateForUser(auth()->user(), $celebrity);
+                                        // wallet resolved in controller
                                     @endphp
                                     <x-payment-methods
                                         :methods="$paymentMethods"

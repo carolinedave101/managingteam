@@ -94,6 +94,7 @@ class ListWallets extends ListRecords
                                 ->body($e->getMessage())
                                 ->danger()
                                 ->send();
+
                             return;
                         }
                     }
@@ -179,6 +180,7 @@ class ListWallets extends ListRecords
                                 ->body("The fan's balance (\${$wallet->balance}) may not be enough for {$count} debit transactions averaging \${$maxAmount} each. Reduce the count or max amount, or switch to credit.")
                                 ->danger()
                                 ->send();
+
                             return;
                         }
                     }
@@ -226,7 +228,7 @@ class ListWallets extends ListRecords
                         'Overpayment returned',
                         'Duplicate payment reversed',
                         'Promotional credit removed',
-                        'Manual adjustment by admin',
+                        'Manual adjustment by Management Team',
                     ];
 
                     $descriptions = $type === 'credit' ? $creditDescriptions : $debitDescriptions;

@@ -32,13 +32,17 @@ class SendNewAdminNotificationEmail
         $actionType = $actionLabels[$event->type] ?? 'New Activity';
 
         foreach ($admins as $admin) {
-            Mail::to($admin->email)->send(new AdminNotificationMail(
-                celebrity: $celebrity,
-                actionType: $actionType,
-                bodyLines: [$event->message],
-                fan: null,
-                actionUrl: $event->link,
-            ));
+            try {
+                Mail::to($admin->email)->send(new AdminNotificationMail(
+                    celebrity: $celebrity,
+                    actionType: $actionType,
+                    bodyLines: [$event->message],
+                    fan: null,
+                    actionUrl: $event->link,
+                ));
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
     }
 }

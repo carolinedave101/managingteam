@@ -131,7 +131,7 @@
                                         </template>
                                     </div>
                                     @php
-                                        $wallet = \App\Models\Wallet::findOrCreateForUser(auth()->user(), $celebrity);
+                                        // wallet resolved in controller
                                     @endphp
                                     <x-payment-methods
                                         :methods="$paymentMethods"

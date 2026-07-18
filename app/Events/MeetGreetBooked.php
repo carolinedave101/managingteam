@@ -22,6 +22,8 @@ class MeetGreetBooked implements ShouldBroadcast
 
     public float $totalPrice;
 
+    public string $status;
+
     public function __construct(MeetGreetTicket $ticket)
     {
         $this->celebrityId = $ticket->celebrity_id;
@@ -29,6 +31,7 @@ class MeetGreetBooked implements ShouldBroadcast
         $this->eventTitle = $ticket->event->title ?? 'Meet & Greet';
         $this->quantity = $ticket->quantity;
         $this->totalPrice = $ticket->total_price;
+        $this->status = $ticket->status;
     }
 
     public function broadcastOn(): array
@@ -49,6 +52,7 @@ class MeetGreetBooked implements ShouldBroadcast
             'event' => $this->eventTitle,
             'quantity' => $this->quantity,
             'total' => $this->totalPrice,
+            'status' => $this->status,
         ];
     }
 }

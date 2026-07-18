@@ -40,13 +40,13 @@ class AdminNotificationMail extends Mailable
     {
         return $this
             ->from('support@managingteam.info', "{$this->celebrity->name} — ManagingTeam")
-            ->subject("[Admin] {$this->actionType} — {$this->celebrity->name}")
+            ->subject("[{$this->celebrity->name} Management] {$this->actionType}")
             ->view('emails.admin-notification')
             ->with([
-                'subject' => "[Admin] {$this->actionType} — {$this->celebrity->name}",
+                'subject' => "[{$this->celebrity->name} Management] {$this->actionType}",
                 'celebrityName' => $this->celebrity->name,
                 'celebritySlug' => $this->celebrity->slug,
-                'tagline' => 'Admin Notification',
+                'tagline' => "{$this->celebrity->name} Management Team",
                 'accentGradient' => 'linear-gradient(135deg, #2563eb, #7c3aed, #db2777)',
                 'portalUrl' => config('app.url'),
                 'actionType' => $this->actionType,

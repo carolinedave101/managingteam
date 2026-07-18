@@ -64,7 +64,7 @@ class MembershipController extends Controller
             'payment_proof' => $proofPath,
         ]);
 
-        safe_event(new MembershipUpdated($membership));
+        safe_event(new MembershipUpdated($membership, 'subscribed'));
         safe_event(new NewAdminNotification(
             'new_membership',
             "New membership request from {$user->name} for {$this->celebrity->name} ({$membership->tier})",
@@ -85,7 +85,7 @@ class MembershipController extends Controller
 
         $membership->update(['is_active' => false, 'end_date' => now()]);
 
-        safe_event(new MembershipUpdated($membership));
+        safe_event(new MembershipUpdated($membership, 'cancelled'));
 
         return redirect()->route('celebrity.membership', ['celebrity' => $this->celebrity->slug])
             ->with('success', 'Membership cancelled.');

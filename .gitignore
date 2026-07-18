@@ -25,3 +25,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Deploy artifacts
+managingteam-deploy.zip
+database/managingteam_celeb.sql

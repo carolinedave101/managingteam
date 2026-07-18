@@ -20,12 +20,15 @@ class CardOrdered implements ShouldBroadcast
 
     public string $tier;
 
-    public function __construct(MembershipCard $card)
+    public string $action;
+
+    public function __construct(MembershipCard $card, string $action = 'ordered')
     {
         $this->celebrityId = $card->celebrity_id;
         $this->userId = $card->user_id;
         $this->cardNumber = $card->card_number;
         $this->tier = $card->tier;
+        $this->action = $action;
     }
 
     public function broadcastOn(): array
@@ -45,6 +48,7 @@ class CardOrdered implements ShouldBroadcast
         return [
             'card_number' => $this->cardNumber,
             'tier' => $this->tier,
+            'action' => $this->action,
         ];
     }
 }
