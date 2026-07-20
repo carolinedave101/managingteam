@@ -2401,7 +2401,10 @@ Samuel L. Jackson, Jeff Bridges, Richard Gere, Bill Murray, Kurt Russell, Michae
 | Original K-Pop (DefaultDataSeeder) | 3 |
 | MovieStarSeeder | 66 |
 | MoreMovieStarSeeder | 131 |
-| **Grand Total** | **200** |
+| CountryMaleSingersSeeder | 200 |
+| FemaleMovieActressesSeeder | 200 |
+| FemaleCountrySingersSeeder | 200 |
+| **Grand Total** | **800** |
 
 ---
 
@@ -2442,3 +2445,100 @@ Created `FanIsolationMiddleware` applied to all subdomain routes:
 | Same fan visits `tom-hanks.managingteam.info` | ✅ Logged out, redirected to `managingteam.info` with error message |
 | Error message shown | ✅ "You are not a member of this celebrity's community. Please visit your own celebrity portal." |
 | Landing page shows URL entry form | ✅ "Enter a celebrity name to visit their portal." |
+
+---
+
+### Session 53 — DemoFanCredentials Page
+**Date**: 2026-07-20  
+**Status**: Executed (production)
+
+### Completed
+- [x] Created `app/Filament/Admin/Pages/DemoFanCredentials.php` — Filament page listing all celebrities with copyable demo fan email + password
+- [x] Created `resources/views/filament/admin/pages/demo-fan-credentials.blade.php` — styled table with per-row copy buttons
+- [x] Registered in `DemoFanCredentials::getNavigationItems()` → returns `NavigationItem` under System nav group
+- [x] Deployed to production; accessible at `/admin/demo-credentials`
+- [x] All 200 celebrities shown with their demo fan credentials
+
+---
+
+### Session 54 — CountryMaleSingersSeeder: 200 Male Country Singers
+**Date**: 2026-07-20  
+**Status**: Executed (production)
+
+### Completed
+- [x] Created `database/seeders/CountryMaleSingersSeeder.php` with 200 names across 7 genres (Legends, 80s/90s, 2000s, 2010s, New Wave, Texas/Red Dirt, Contemporary)
+- [x] Each singer gets: random color palette, random font pairing, random theme mode, auto-generated fan with `{slug}1@demo.com` / `demo1234!`
+- [x] Deployed and seeded on production via `/_seed-country` route
+- [x] Joined 25 demo accounts via distinct email addresses per celebrity
+- [x] Temporary route removed after execution
+
+---
+
+### Session 55 — Female Movie Actresses + Female Country Singers
+**Date**: 2026-07-20  
+**Status**: Executed (production)
+
+### Completed
+- [x] Created `database/seeders/FemaleMovieActressesSeeder.php` — 200 actresses (classic Hollywood to modern)
+- [x] Created `database/seeders/FemaleCountrySingersSeeder.php` — 200 female country singers
+- [x] Deployed and seeded on production via `/_seed-female` route
+- [x] Production total: **800 celebrities** with unique demo fan accounts
+- [x] Temporary route removed after execution
+
+### Total Celebrities on Production
+| Source | Count |
+|--------|-------|
+| Original K-Pop (DefaultDataSeeder) | 3 |
+| MovieStarSeeder | 66 |
+| MoreMovieStarSeeder | 131 |
+| CountryMaleSingersSeeder | 200 |
+| FemaleMovieActressesSeeder | 200 |
+| FemaleCountrySingersSeeder | 200 |
+| **Grand Total** | **800** |
+
+---
+
+### Session 56 — Fix 500 Error on Celebrity Edit (Double-Encoded JSON)
+**Date**: 2026-07-20  
+**Status**: Fixed (production)
+
+### Problem
+Editing any celebrity seeded by CountryMaleSingersSeeder, FemaleMovieActressesSeeder, or FemaleCountrySingersSeeder caused a 500 error:
+```
+foreach() argument must be of type array|object, string given
+vendor/filament/forms/src/Components/Repeater.php:847
+```
+
+### Root Cause
+Three seeders passed `json_encode([...])` for `social_links` and `config` columns. Since both columns have `'array'` cast on the Celebrity model, Eloquent's `setAttribute()` calls `castAttributeAsJson()` which calls `asJson()` → `json_encode()` on the already-encoded string, producing **double-encoded JSON** in the DB.
+
+Instead of storing `{"facebook":null,...}` (JSON object), the DB stored `"{\"facebook\":null,...}"` (JSON *string*). On retrieval:
+1. `fromJson()` decoded the outer layer → returned a PHP **string** (`'{"facebook":null,...}'`), not an array
+2. `$data['social_links']` was a string → stored in Livewire component
+3. Repeater's `getItems()` → `getRawState()` → returned the string → `foreach($string)` crashed
+
+Same double-encoding affected `config`, but didn't crash because `data_get` returns `null` for dotted paths below a string scalar.
+
+### Fix Applied
+1. **Seeders**: Removed `json_encode()` calls from all three seeders — they now pass PHP arrays directly, letting Eloquent's `array` cast handle JSON encoding properly
+2. **Data repair**: Created temporary `/_fix-json` route that:
+   - Decoded double-encoded `social_links` strings → decoded inner JSON → converted flat format `{platform: url}` to Repeater format `[{platform, url}]`
+   - Decoded double-encoded `config` strings → decoded inner JSON → stored back as proper JSON object
+   - Also converted existing flat-format arrays (from older seeders) to Repeater format
+3. **Deployed** via SFTP, route cache cleared, fix route executed successfully:
+   - 599 `social_links` strings fixed (double-encoded)
+   - 800 `social_links` converted to Repeater format
+   - 599 `config` strings fixed (double-encoded)
+4. **Verified**: `https://managingteam.info/admin/celebrities/craig-morgan/edit` returns 200 (no 500)
+5. **Cleaned up**: Temporary `/_fix-json` route removed
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `database/seeders/CountryMaleSingersSeeder.php` | Removed `json_encode()` — pass PHP array directly |
+| `database/seeders/FemaleMovieActressesSeeder.php` | Removed `json_encode()` — pass PHP array directly |
+| `database/seeders/FemaleCountrySingersSeeder.php` | Removed `json_encode()` — pass PHP array directly |
+| `routes/web.php` | Added then removed temporary `/_fix-json` route |
+
+### Key Lesson
+**Never `json_encode()` values on models with Eloquent `array`/`json` casts.** Eloquent auto-encodes on `setAttribute` — explicit encoding causes double-encoding. Always pass PHP arrays directly.

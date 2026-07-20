@@ -56,3 +56,4 @@ A multi-celebrity fan management portal built on Laravel. Super admin creates ce
 4. **One admin** manages all celebrities from `managingteam.info/admin`
 5. **Threaded messaging** — `parent_id` on messages table enables fan↔admin conversations
 6. **All fan queries scoped** by `celebrity_id` — no cross-celebrity data leakage
+7. **Never `json_encode()` Eloquent `array`/`json` cast attributes** — Eloquent auto-encodes on `setAttribute`; explicit encoding causes double-encoding that crashes Filament Repeater fields
