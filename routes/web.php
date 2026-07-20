@@ -120,27 +120,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// TEMPORARY: seed female European actresses and musicians (remove after running)
-Route::get('/_seed-female-europe', function () {
-    if (request('key') !== hash('sha256', 'seed-female-europe-2026')) abort(403);
+// TEMPORARY: seed female European actresses (remove after running)
+Route::get('/_seed-actresses', function () {
+    if (request('key') !== hash('sha256', 'seed-actresses-2026')) abort(403);
     set_time_limit(300);
-    $results = [];
+    try { (new Database\Seeders\FemaleEuropeanActressesSeeder)->run(); return 'OK'; }
+    catch (\Throwable $e) { return 'ERROR: ' . e($e->getMessage()); }
+});
 
-    try {
-        (new Database\Seeders\FemaleEuropeanActressesSeeder)->run();
-        $results[] = 'FemaleEuropeanActressesSeeder completed';
-    } catch (\Throwable $e) {
-        $results[] = 'FemaleEuropeanActressesSeeder ERROR: ' . $e->getMessage();
-    }
-
-    try {
-        (new Database\Seeders\FemaleEuropeanMusiciansSeeder)->run();
-        $results[] = 'FemaleEuropeanMusiciansSeeder completed';
-    } catch (\Throwable $e) {
-        $results[] = 'FemaleEuropeanMusiciansSeeder ERROR: ' . $e->getMessage();
-    }
-
-    return nl2br(e(implode("\n", $results)));
+// TEMPORARY: seed female European musicians (remove after running)
+Route::get('/_seed-musicians', function () {
+    if (request('key') !== hash('sha256', 'seed-musicians-2026')) abort(403);
+    set_time_limit(300);
+    try { (new Database\Seeders\FemaleEuropeanMusiciansSeeder)->run(); return 'OK'; }
+    catch (\Throwable $e) { return 'ERROR: ' . e($e->getMessage()); }
 });
 
 // Debug: check error log
