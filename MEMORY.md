@@ -2542,3 +2542,50 @@ Same double-encoding affected `config`, but didn't crash because `data_get` retu
 
 ### Key Lesson
 **Never `json_encode()` values on models with Eloquent `array`/`json` casts.** Eloquent auto-encodes on `setAttribute` — explicit encoding causes double-encoding. Always pass PHP arrays directly.
+
+---
+
+### Session 57 — Apply Consistent Pricing to All Celebrities
+**Date**: 2026-07-20  
+**Status**: Executed (production)
+
+### Problem
+Only 201 celebrities (3 K-pop + 197 movie stars) had `membership_tiers` and `pricing` in their `config`. The remaining 599 celebrities (country singers, actresses) had no pricing configuration at all — fan portal features like membership tiers, meet & greet pricing, and private meetup pricing wouldn't function.
+
+### Solution
+Applied the same pricing structure used by `MovieStarSeeder` to all 599 celebrities missing it:
+
+| Tier | Price (cents) | Color | Benefits |
+|------|--------------|-------|----------|
+| Standard | 3000 | `#C0C0C0` | 5 benefits |
+| Premium | 5000 | `#FFD700` | 6 benefits (incl. Standard) |
+| VIP | 10000 | `#E5E4E2` | 8 benefits (incl. Premium) |
+
+Pricing section:
+- `fan_application_fee`: 5000
+- `membership_card_fee`: 5000
+- `meet_greet_default_price`: 1000
+- `private_meetup`: 30min @ 5000, 60min @ 10000
+
+### Execution
+1. Created temporary `/_add-pricing` route that chunk-processed all celebrities (50 per batch)
+2. Handled safety checks for double-encoded config strings (leftover from Session 56)
+3. Used `saveQuietly()` to avoid event overhead
+4. **Result**: 599 celebrities updated, 201 skipped (already had pricing), 0 errors
+5. Removed temporary route after execution
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `routes/web.php` | Added then removed temporary `/_add-pricing` route |
+
+### Total Celebrities on Production (with pricing)
+| Group | With Pricing |
+|-------|-------------|
+| DefaultDataSeeder (K-pop) | 3 |
+| MovieStarSeeder | 66 |
+| MoreMovieStarSeeder | 131 |
+| CountryMaleSingersSeeder | 200 ✅ (now added) |
+| FemaleMovieActressesSeeder | 200 ✅ (now added) |
+| FemaleCountrySingersSeeder | 199 ✅ (now added) |
+| **Grand Total** | **799** (1 duplicate slug skipped during seeding) |
