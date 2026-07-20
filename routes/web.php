@@ -120,31 +120,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// TEMPORARY: seed European actors and singers (remove after running)
-Route::get('/_seed-europe', function () {
-    if (request('key') !== hash('sha256', 'seed-europe-managingteam-2026')) abort(403);
-    set_time_limit(300);
-    $results = [];
-
-    try {
-        $seeder = new Database\Seeders\MaleEuropeanActorsSeeder;
-        $seeder->run();
-        $results[] = 'MaleEuropeanActorsSeeder completed';
-    } catch (\Throwable $e) {
-        $results[] = 'MaleEuropeanActorsSeeder ERROR: ' . $e->getMessage();
-    }
-
-    try {
-        $seeder = new Database\Seeders\MaleEuropeanSingersSeeder;
-        $seeder->run();
-        $results[] = 'MaleEuropeanSingersSeeder completed';
-    } catch (\Throwable $e) {
-        $results[] = 'MaleEuropeanSingersSeeder ERROR: ' . $e->getMessage();
-    }
-
-    return nl2br(e(implode("\n", $results)));
-});
-
 // Debug: check error log
 Route::middleware('auth')->get('/_debug-edit', function () {
     if (! auth()->user()->isAdmin()) abort(403);
