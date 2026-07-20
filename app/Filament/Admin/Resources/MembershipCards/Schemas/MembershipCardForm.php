@@ -36,8 +36,8 @@ class MembershipCardForm
                             ->required()
                             ->helperText('Required. A unique identifier for this physical or digital card. Use a consistent format (e.g. "MC-2024-0001" or a UUID). This number is displayed on the fan\'s digital card and used for verification. Must be unique across all cards.'),
                         TextInput::make('tier')
-                            ->required()
-                            ->helperText('Required. The membership tier this card represents (e.g. "Gold", "VIP", "Standard"). Must match a tier defined in the celebrity\'s configuration. The tier determines the card\'s design, color scheme, and associated perks displayed to the fan.'),
+                            ->default('Standard')
+                            ->helperText('The membership tier this card represents (e.g. "Standard", "Gold", "VIP"). Defaults to "Standard". Affects the badge label displayed on the card.'),
                         TextInput::make('price')
                             ->numeric()
                             ->prefix('$')

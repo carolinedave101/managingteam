@@ -117,23 +117,6 @@
                         <div class="p-6">
                             <form method="POST" action="{{ route('celebrity.membership-card.order', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data" x-data="formValidation">
                                 @csrf
-                                <div class="mb-4">
-                                    <x-input-label for="tier" value="Choose your tier" />
-                                    <p class="text-xs text-gray-400 mt-0.5 mb-1">Select the membership tier this card will represent.</p>
-                                    <select name="tier" required
-                                        x-on:change="validate('tier', $el.value, [validators.required])"
-                                        x-bind:class="selectClass('tier')"
-                                        class="form-input text-sm">
-                                        <option value="">Select a tier...</option>
-                                        @foreach (($celebrity->config['membership_tiers'] ?? []) as $tier)
-                                            <option value="{{ $tier['name'] }}">{{ $tier['name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                    <template x-if="invalid('tier')">
-                                        <p x-text="errors.tier" class="text-red-500 text-xs mt-1"></p>
-                                    </template>
-                                </div>
-
                                 @php
                                     // wallet resolved in controller
                                 @endphp

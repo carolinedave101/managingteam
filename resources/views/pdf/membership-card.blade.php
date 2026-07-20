@@ -171,10 +171,6 @@
         $theme = $celeb->config['theme'] ?? [];
         $primary = $theme['primary_color'] ?? '#ec4899';
         $secondary = $theme['secondary_color'] ?? '#8b5cf6';
-
-        $tiers = collect($celeb->config['membership_tiers'] ?? []);
-        $tierConfig = $tiers->firstWhere('name', $card->tier);
-        $benefits = $tierConfig['benefits'] ?? [];
     @endphp
 
     <div class="card-wrapper">
@@ -189,20 +185,9 @@
                     <div class="member-name">{{ $card->user->name }}</div>
                     <div class="member-id">{{ $card->card_number }}</div>
 
-                    <div class="tier-badge" style="border-color:{{ $tierConfig['color'] ?? '#fff' }};">
+                    <div class="tier-badge" style="border-color:rgba(255,255,255,0.35);">
                         {{ $card->tier }}
                     </div>
-
-                    @if(count($benefits))
-                        <div class="benefits-section">
-                            <div class="benefits-title">Redeemable Benefits</div>
-                            <ul class="benefits-list">
-                                @foreach($benefits as $benefit)
-                                    <li>{{ $benefit }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                 </div>
 
                 <div class="card-footer" style="background:rgba(0,0,0,0.08);">

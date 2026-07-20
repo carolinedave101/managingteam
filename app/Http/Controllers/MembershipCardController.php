@@ -29,7 +29,6 @@ class MembershipCardController extends Controller
     public function order()
     {
         request()->validate([
-            'tier' => 'required|string',
             'payment_method' => 'required|string',
             'payment_proof' => 'required_if:payment_method,!=,wallet|file|mimes:jpg,jpeg,png,gif,webp,pdf|max:5120',
         ]);
@@ -63,7 +62,7 @@ class MembershipCardController extends Controller
             'celebrity_id' => $this->celebrity->id,
             'user_id' => $user->id,
             'card_number' => $cardNumber,
-            'tier' => request('tier'),
+            'tier' => 'Standard',
             'price' => $cardFee,
             'is_active' => false,
             'payment_method' => request('payment_method'),
