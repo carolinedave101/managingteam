@@ -16,5 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FemaleCountrySingersSeeder::class);
         $this->call(MaleEuropeanActorsSeeder::class);
         $this->call(MaleEuropeanSingersSeeder::class);
+        $this->call(FemaleEuropeanActressesSeeder::class);
+        $this->call(FemaleEuropeanMusiciansSeeder::class);
     }
 }

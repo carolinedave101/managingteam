@@ -120,6 +120,29 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// TEMPORARY: seed female European actresses and musicians (remove after running)
+Route::get('/_seed-female-europe', function () {
+    if (request('key') !== hash('sha256', 'seed-female-europe-2026')) abort(403);
+    set_time_limit(300);
+    $results = [];
+
+    try {
+        (new Database\Seeders\FemaleEuropeanActressesSeeder)->run();
+        $results[] = 'FemaleEuropeanActressesSeeder completed';
+    } catch (\Throwable $e) {
+        $results[] = 'FemaleEuropeanActressesSeeder ERROR: ' . $e->getMessage();
+    }
+
+    try {
+        (new Database\Seeders\FemaleEuropeanMusiciansSeeder)->run();
+        $results[] = 'FemaleEuropeanMusiciansSeeder completed';
+    } catch (\Throwable $e) {
+        $results[] = 'FemaleEuropeanMusiciansSeeder ERROR: ' . $e->getMessage();
+    }
+
+    return nl2br(e(implode("\n", $results)));
+});
+
 // Debug: check error log
 Route::middleware('auth')->get('/_debug-edit', function () {
     if (! auth()->user()->isAdmin()) abort(403);
