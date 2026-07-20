@@ -123,7 +123,9 @@ Route::middleware('auth')->group(function () {
 // TEMPORARY: add pricing to celebrities missing it (remove after running)
 Route::get('/_add-pricing', function () {
     if (request('key') !== hash('sha256', 'add-pricing-managingteam-2026')) abort(403);
+    set_time_limit(300);
     $count = 0;
+    $errors = 0;
     $pricingTemplate = [
         'membership_tiers' => [
             ['name' => 'Standard', 'price' => 3000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
@@ -141,20 +143,42 @@ Route::get('/_add-pricing', function () {
         ],
     ];
 
-    \App\Models\Celebrity::all()->each(function (\App\Models\Celebrity $c) use ($pricingTemplate, &$count) {
-        $config = $c->config ?? [];
-        $hasPricing = isset($config['pricing']) || isset($config['membership_tiers']);
-        if (! $hasPricing) {
-            $config = array_merge($config, $pricingTemplate);
-            $c->config = $config;
-            $c->saveQuietly();
-            $count++;
-        }
-    });
+    try {
+        \App\Models\Celebrity::chunk(50, function ($celebrities) use ($pricingTemplate, &$count, &$errors) {
+            foreach ($celebrities as $c) {
+                try {
+                    $config = $c->config;
+                    // Handle double-encoded config string (safety net)
+                    if (is_string($config)) {
+                        $decoded = json_decode($config, true);
+                        $config = is_array($decoded) ? $decoded : [];
+                    }
+                    if (! is_array($config)) $config = [];
+
+                    $hasPricing = isset($config['pricing']) || isset($config['membership_tiers']);
+                    if (! $hasPricing) {
+                        $config = array_merge($config, $pricingTemplate);
+                        $c->config = $config;
+                        $c->saveQuietly();
+                        $count++;
+                    }
+                } catch (\Throwable $e) {
+                    $errors++;
+                    \Illuminate\Support\Facades\Log::warning("_add-pricing error for {$c->slug}: {$e->getMessage()}");
+                }
+            }
+        });
+    } catch (\Throwable $e) {
+        return "Error: " . e($e->getMessage());
+    }
 
     $total = \App\Models\Celebrity::count();
-    $msg = "Added pricing to {$count} celebrities (out of {$total} total). Skipped {$total - $count} already had pricing.";
-    \Illuminate\Support\Facades\Log::info($msg);
+    $msg = "Added pricing to {$count} celebrities (out of {$total} total). Errors: {$errors}. Skipped {$total - $count} already had pricing.";
+
+    try {
+        \Illuminate\Support\Facades\Log::info($msg);
+    } catch (\Throwable $e) {}
+
     return nl2br(e($msg));
 });
 
