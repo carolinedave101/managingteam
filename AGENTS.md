@@ -41,6 +41,14 @@ A multi-celebrity fan management portal built on Laravel. Super admin creates ce
 - `app/Filament/Admin/Resources/` — Filament admin resources (10 resource groups)
 - `app/Livewire/` — Livewire components (Navigation, Cart, Toast)
 
+## Deployment
+- **Production**: `https://managingteam.info` (cPanel on UltraProHost)
+- **cPanel**: `https://server.ultraprohost.com:2083` — user: `managingteam`
+- **Production DB**: MySQL — DB: `managingteam_celeb`, user: `managingteam_celeb`
+- **Production path**: `/public_html/` on the server
+- **Credentials stored**: `.env.production` (gitignored — do not commit)
+- **Deploy method**: Upload files via cPanel File Manager API, run seeders via web route
+
 ## Architecture Principles
 1. **Celebrity config JSON** is the single source of truth for all per-celebrity customization (theme, content, pricing, features, payments)
 2. **Subdomain routing** isolates fan portals — each `{slug}.managingteam.info` renders a different celebrity

@@ -26,6 +26,12 @@
                 <p class="text-gray-400 text-sm mt-1">Try <strong>jennie</strong>, <strong>jungkook</strong>, or <strong>lisa</strong></p>
             </div>
 
+            @if (session('error'))
+                <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-4 text-sm">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
                 <form method="POST" action="{{ route('landing.redirect') }}" class="space-y-4">
                     @csrf

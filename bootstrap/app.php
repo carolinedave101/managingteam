@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         __DIR__.'/../app/Listeners',
     ])
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'fan.isolation' => \App\Http\Middleware\FanIsolationMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

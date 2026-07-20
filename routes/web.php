@@ -29,7 +29,7 @@ require __DIR__.'/auth.php';
 //  Auth routes for subdomains are included here
 //  so they match before the catch-all below.
 // ──────────────────────────────────────────────
-Route::domain('{celebrity}.'.$baseDomain)->group(function () {
+Route::domain('{celebrity}.'.$baseDomain)->middleware('fan.isolation')->group(function () {
     // Auth routes on subdomains
     Route::middleware('guest')->group(function () {
         Route::get('register', [RegisteredUserController::class, 'create'])->name('celebrity.register');
@@ -119,3 +119,75 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// TEMPORARY: fix double-encoded JSON in social_links and config (remove after running)
+Route::middleware('auth')->get('/_fix-json', function () {
+    if (! auth()->user()->isAdmin()) abort(403);
+    $count = ['social_links' => 0, 'config' => 0, 'social_links_converted' => 0];
+    \App\Models\Celebrity::all()->each(function (\App\Models\Celebrity $c) use (&$count) {
+        $dirty = false;
+
+        // Fix double-encoded social_links
+        if (is_string($c->social_links)) {
+            $decoded = json_decode($c->social_links, true);
+            if (is_array($decoded)) {
+                // Convert flat format {platform: url} to Repeater format [{platform, url}]
+                $items = [];
+                foreach ($decoded as $platform => $url) {
+                    if ($url) {
+                        $items[] = ['platform' => $platform, 'url' => $url];
+                    }
+                }
+                $c->social_links = $items;
+                $count['social_links_converted']++;
+            } else {
+                $c->social_links = [];
+            }
+            $dirty = true;
+            $count['social_links']++;
+        } elseif (is_array($c->social_links) && ! isset($c->social_links[0])) {
+            // Already an array but in flat format — convert to Repeater format
+            $items = [];
+            foreach ($c->social_links as $platform => $url) {
+                if ($url) {
+                    $items[] = ['platform' => $platform, 'url' => $url];
+                }
+            }
+            $c->social_links = $items;
+            $dirty = true;
+            $count['social_links_converted']++;
+        }
+
+        // Fix double-encoded config
+        if (is_string($c->config)) {
+            $decoded = json_decode($c->config, true);
+            $c->config = is_array($decoded) ? $decoded : [];
+            $dirty = true;
+            $count['config']++;
+        }
+
+        if ($dirty) {
+            $c->saveQuietly();
+        }
+    });
+    $total = \App\Models\Celebrity::count();
+    $msg = "Fixed JSON double-encoding across {$total} celebrities:\n"
+        ."- social_links strings fixed: {$count['social_links']}\n"
+        ."- social_links converted to Repeater format: {$count['social_links_converted']}\n"
+        ."- config strings fixed: {$count['config']}";
+    \Illuminate\Support\Facades\Log::info($msg);
+    return nl2br(e($msg));
+});
+
+// Debug: check error log
+Route::middleware('auth')->get('/_debug-edit', function () {
+    if (! auth()->user()->isAdmin()) abort(403);
+    $log = file_get_contents(storage_path('logs/laravel.log'));
+    $lines = explode("\n", $log);
+    $recent = array_slice($lines, -200);
+    return '<pre>'.implode("\n", array_map('e', $recent)).'</pre>';
+});
+
+
+
+
