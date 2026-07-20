@@ -53,6 +53,11 @@
                         Go to Portal
                     </button>
                 </form>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <a href="{{ route('celebrities.index') }}" class="text-sm text-pink-600 hover:text-pink-700 font-medium">
+                        Browse all celebrity portals &rarr;
+                    </a>
+                </div>
                 <p class="text-xs text-gray-400 mt-4">
                     Don't have a link?
                     <a href="{{ route('login') }}" class="text-pink-600 hover:underline">Sign in</a>

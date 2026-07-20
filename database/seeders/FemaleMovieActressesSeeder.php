@@ -36,6 +36,23 @@ class FemaleMovieActressesSeeder extends Seeder
         ['heading' => 'Cinzel:wght@500;600;700;800', 'body' => 'Cormorant+Garamond:wght@400;500;600'],
     ];
 
+    private array $pricingTemplate = [
+        'membership_tiers' => [
+            ['name' => 'Standard', 'price' => 3000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
+            ['name' => 'Premium', 'price' => 5000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
+            ['name' => 'VIP', 'price' => 10000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
+        ],
+        'pricing' => [
+            'fan_application_fee' => 5000,
+            'membership_card_fee' => 5000,
+            'meet_greet_default_price' => 1000,
+            'private_meetup' => [
+                ['duration' => 30, 'price' => 5000],
+                ['duration' => 60, 'price' => 10000],
+            ],
+        ],
+    ];
+
         private array $names = [
         'Marilyn Monroe', 'Audrey Hepburn', 'Katharine Hepburn', 'Bette Davis', 'Grace Kelly',
         'Ingrid Bergman', 'Elizabeth Taylor', 'Vivien Leigh', 'Marlene Dietrich', 'Greta Garbo',
@@ -130,11 +147,17 @@ class FemaleMovieActressesSeeder extends Seeder
                     'description' => "Join the official {$name} fan portal. Memberships, meet & greet events, private meetups, and exclusive content.",
                 ],
             ];
+            $config = array_merge($config, $this->pricingTemplate);
 
             $celebrity = Celebrity::create([
                 'name' => $name,
                 'slug' => $slug,
                 'bio' => "Official fan community for {$name}. Join the portal to connect with fellow fans, get exclusive content, and be part of the journey.",
+                'category' => 'movie_star',
+                'avatar' => Celebrity::avatarUrlFor($name),
+                'cover_photo' => Celebrity::coverUrlFor($slug),
+                'gender' => 'female',
+                'country' => 'United States',
                 'is_active' => true,
                 'social_links' => [
                     'facebook' => null,

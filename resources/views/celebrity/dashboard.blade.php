@@ -33,7 +33,7 @@
                     <div class="flex items-center gap-4">
                         <div class="relative">
                             @if ($celebrity->avatar)
-                                <img src="{{ $celebrity->avatar }}" alt="{{ $celebrity->name }}" class="w-14 h-14 rounded-full object-cover shadow-lg ring-2 ring-white/60">
+                                <img src="{{ $celebrity->getAvatarUrl() }}" alt="{{ $celebrity->name }}" class="w-14 h-14 rounded-full object-cover shadow-lg ring-2 ring-white/60">
                             @else
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white text-xl font-bold shadow-lg ring-2 ring-white/60">
                                     {{ strtoupper(substr($celebrity->name, 0, 1)) }}

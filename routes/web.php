@@ -103,6 +103,14 @@ Route::get('/', function () {
 
 Route::post('/redirect', [LandingController::class, 'redirect'])->name('landing.redirect');
 
+Route::get('/celebrities', function () {
+    $celebrities = \App\Models\Celebrity::where('is_active', true)
+        ->orderBy('category')
+        ->orderBy('name')
+        ->get();
+    return view('pages.celebrities', compact('celebrities'));
+})->name('celebrities.index');
+
 // Redirect links (short URLs)
 Route::get('/r/{code}', [RedirectLinkController::class, 'redirect'])
     ->name('redirect-link');
@@ -121,13 +129,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // Debug: check error log
-Route::middleware('auth')->get('/_debug-edit', function () {
-    if (! auth()->user()->isAdmin()) abort(403);
-    $log = file_get_contents(storage_path('logs/laravel.log'));
-    $lines = explode("\n", $log);
-    $recent = array_slice($lines, -200);
-    return '<pre>'.implode("\n", array_map('e', $recent)).'</pre>';
-});
 
 
 

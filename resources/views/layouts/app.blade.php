@@ -72,7 +72,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body class="font-sans antialiased text-gray-900 page-bg-{{ $bgType ?? 'mesh' }}" style="background-color: {{ $bgColor ?? '#ffffff' }};">
+    <body class="font-sans antialiased text-gray-900 page-bg-{{ $bgType ?? 'mesh' }}" style="background-color: {{ $bgColor ?? '#ffffff' }};" data-category="{{ $celebrity?->category ?? 'general' }}">
         <div class="min-h-screen flex flex-col">
             <livewire:navigation />
 

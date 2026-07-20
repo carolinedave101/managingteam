@@ -6,88 +6,135 @@
         $tiers = $c['membership_tiers'] ?? [];
         $payments = $celebrity->enabledPaymentMethods;
         $theme = $c['theme'] ?? [];
+        $cat = $celebrity->category;
+
+        $catDefaults = [
+            'movie_star' => [
+                'section_heading' => 'Hollywood & Red Carpet',
+                'section_subheading' => 'Premium access',
+                'features_heading' => 'Everything for <span class="gradient-text-gold">True Fans</span>',
+                'features_subheading' => 'Red carpet access, exclusive premieres, and behind-the-scenes content.',
+                'pricing_heading' => 'Your <span class="gradient-text-gold">VIP</span> Experience',
+                'pricing_subheading' => 'Choose the access level that matches your passion for the spotlight.',
+                'events_heading' => 'Upcoming <span class="gradient-text-gold">Premieres</span>',
+                'events_subheading' => 'Be there for exclusive screenings and red carpet moments.',
+                'cta_heading' => 'Ready to Step Into the Spotlight?',
+                'cta_subheading' => 'Join ' . $celebrity->name . '\'s inner circle. Unlock VIP access to premieres and exclusive content.',
+                'stats' => [
+                    ['value' => '50+', 'label' => 'Box Office Hits'],
+                    ['value' => '200+', 'label' => 'Award Nominations'],
+                    ['value' => '15', 'label' => 'Years in Film'],
+                    ['value' => '100M+', 'label' => 'Global Fans'],
+                ],
+                'about_title' => 'From the Screen to Your World',
+                'about_body' => '<p>' . $celebrity->name . ' has captivated audiences worldwide with unforgettable performances on the big screen. This is your exclusive backstage pass — the official fan community where you get closer than ever before.</p><p>Join fellow fans, access premium content, and be part of a community that celebrates the magic of cinema.</p>',
+                'features' => [
+                    'membership' => ['M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'VIP Membership', 'Unlock exclusive tiers with red carpet invites, signed merch, and priority access to all events.'],
+                    'meet_greet' => ['M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', 'Meet & Greet', 'Attend exclusive screenings and red carpet events. Get up close and personal with the star.'],
+                    'membership_card' => ['M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', 'VIP Card', 'Your digital backstage pass for priority access at premieres, events, and exclusive fan gatherings.'],
+                    'private_meetup' => ['M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Private Meetup', 'Request an intimate one-on-one with the star. A personal experience you\'ll never forget.'],
+                    'messaging' => ['M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', 'Fan Mail', 'Send messages directly to the management team and stay connected with the community.'],
+                    'fan_applications' => ['M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Fan Verification', 'Apply to become a verified fan and unlock exclusive Hollywood-level perks.'],
+                ],
+            ],
+            'country_singer' => [
+                'section_heading' => 'Southern Roots & Country Vibes',
+                'section_subheading' => 'Family, music, and good times',
+                'features_heading' => 'Everything for <span class="gradient-text-gold">True Country Fans</span>',
+                'features_subheading' => 'Backstage passes, exclusive acoustic sets, and the best fan community in country music.',
+                'pricing_heading' => 'Your <span class="gradient-text-gold">Front Row</span> Pass',
+                'pricing_subheading' => 'Pick the tier that gets you closer to the music and the artist.',
+                'events_heading' => 'Upcoming <span class="gradient-text-gold">Shows</span>',
+                'events_subheading' => 'Get tickets to exclusive performances and fan club parties.',
+                'cta_heading' => 'Ready to Join the Family?',
+                'cta_subheading' => 'Step into ' . $celebrity->name . '\'s world. Backstage access, exclusive music, and a community that feels like home.',
+                'stats' => [
+                    ['value' => '15', 'label' => '#1 Hits'],
+                    ['value' => '10M+', 'label' => 'Albums Sold'],
+                    ['value' => '500+', 'label' => 'Tour Cities'],
+                    ['value' => '20', 'label' => 'Years on Tour'],
+                ],
+                'about_title' => 'The Story Behind the Music',
+                'about_body' => '<p>' . $celebrity->name . ' brings the heart and soul of country music to fans around the world. From humble beginnings to sold-out arenas, every song tells a story.</p><p>This is the official fan community — a place where real country music lovers come together. Join the family.</p>',
+                'features' => [
+                    'membership' => ['M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'Fan Membership', 'Join the official fan club. Get exclusive merch, early concert access, and a community that feels like family.'],
+                    'meet_greet' => ['M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', 'Meet & Greet', 'VIP concert experiences, backstage passes, and intimate acoustic sessions with the star.'],
+                    'membership_card' => ['M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', 'Fan Card', 'Your official fan club card for VIP concert entry, merch discounts, and exclusive event access.'],
+                    'private_meetup' => ['M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Private Meetup', 'Request a personal meet-up with the artist. A moment you\'ll cherish forever.'],
+                    'messaging' => ['M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', 'Fan Mail', 'Stay in touch with the management team and the fan community. We\'re always here.'],
+                    'fan_applications' => ['M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Fan Verification', 'Apply to become a verified fan and unlock the full country music fan experience.'],
+                ],
+            ],
+            'adult_star' => [
+                'section_heading' => 'Premium & Exclusive',
+                'section_subheading' => 'Your private fan experience',
+                'features_heading' => 'Everything for <span class="gradient-text-gold">Premium Members</span>',
+                'features_subheading' => 'Exclusive content, private messaging, and VIP perks for the ultimate fan experience.',
+                'pricing_heading' => 'Your <span class="gradient-text-gold">Premium</span> Access',
+                'pricing_subheading' => 'Choose the membership that unlocks the content and connection you want.',
+                'events_heading' => 'Exclusive <span class="gradient-text-gold">Events</span>',
+                'events_subheading' => 'Private events and special appearances just for premium members.',
+                'cta_heading' => 'Ready for the Ultimate Experience?',
+                'cta_subheading' => 'Join ' . $celebrity->name . '\'s exclusive community. Premium content, private access, and more.',
+                'stats' => [
+                    ['value' => '500+', 'label' => 'Exclusive Posts'],
+                    ['value' => '50K+', 'label' => 'Premium Members'],
+                    ['value' => '8', 'label' => 'Years Active'],
+                    ['value' => '10K+', 'label' => 'Fan Interactions'],
+                ],
+                'about_title' => 'Your Premium Fan Destination',
+                'about_body' => '<p>' . $celebrity->name . ' invites you into an exclusive world of premium content, private interactions, and VIP perks.</p><p>This is the official fan community — a private space where premium members connect, engage, and access content you won\'t find anywhere else.</p>',
+                'features' => [
+                    'membership' => ['M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'Premium Membership', 'Unlock exclusive content, priority messaging, and VIP perks across multiple tiers.'],
+                    'meet_greet' => ['M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', 'VIP Events', 'Attend exclusive premium events and private gatherings for top-tier members.'],
+                    'membership_card' => ['M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', 'VIP Card', 'Your elite digital membership card for premium access at all events and exclusive perks.'],
+                    'private_meetup' => ['M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Private Meetup', 'Request an exclusive one-on-one private session. Personal and unforgettable.'],
+                    'messaging' => ['M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', 'Direct Messaging', 'Send private messages directly. Premium members get priority responses.'],
+                    'fan_applications' => ['M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Fan Verification', 'Apply to become a verified premium member and unlock the full experience.'],
+                ],
+            ],
+            'musician' => [
+                'section_heading' => 'Music & Concert Central',
+                'section_subheading' => 'Live the music',
+                'features_heading' => 'Everything for <span class="gradient-text-gold">Real Music Fans</span>',
+                'features_subheading' => 'Early access to drops, exclusive merch, concert priority, and behind-the-scenes content.',
+                'pricing_heading' => 'Your <span class="gradient-text-gold">Backstage</span> Pass',
+                'pricing_subheading' => 'Choose the tier that gets you closer to the music and the artist.',
+                'events_heading' => 'Upcoming <span class="gradient-text-gold">Shows</span>',
+                'events_subheading' => 'Get priority tickets to concerts and exclusive fan events.',
+                'cta_heading' => 'Ready to Feel the Music?',
+                'cta_subheading' => 'Join ' . $celebrity->name . '\'s community. Early access to new music, exclusive merch, and concert priority.',
+                'stats' => [
+                    ['value' => '10M+', 'label' => 'Monthly Listeners'],
+                    ['value' => '5', 'label' => 'Studio Albums'],
+                    ['value' => '200+', 'label' => 'Sold-Out Shows'],
+                    ['value' => '50+', 'label' => 'Music Awards'],
+                ],
+                'about_title' => 'The Sound of a Generation',
+                'about_body' => '<p>' . $celebrity->name . ' creates music that moves millions. From chart-topping hits to sold-out world tours, every performance is unforgettable.</p><p>This is the official fan community — your backstage pass to exclusive content, early access, and a community of passionate fans.</p>',
+                'features' => [
+                    'membership' => ['M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'Fan Membership', 'Get early access to new music drops, exclusive merch drops, and priority concert ticket access.'],
+                    'meet_greet' => ['M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', 'Meet & Greet', 'VIP concert experiences, soundcheck access, and photo opportunities with the artist.'],
+                    'membership_card' => ['M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', 'Fan Card', 'Your official fan club card for concert priority entry, merch discounts, and VIP access.'],
+                    'private_meetup' => ['M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Private Meetup', 'Request a personal meet-up with the artist. A moment you\'ll never forget.'],
+                    'messaging' => ['M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', 'Fan Mail', 'Send messages to the management team and stay connected with the fan community.'],
+                    'fan_applications' => ['M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Fan Verification', 'Apply to become a verified fan and unlock the full music fan experience.'],
+                ],
+            ],
+        ];
+        $defaults = $catDefaults[$cat] ?? $catDefaults['musician'];
     @endphp
 
-    {{-- ─── HERO ─── --}}
-    <section class="relative min-h-[90vh] flex items-center overflow-hidden mesh-gradient-deep">
-        <div class="absolute inset-0 hero-gradient animate-gradient"></div>
-        <div class="absolute top-20 left-10 w-72 h-72 rounded-full opacity-20 animate-float" style="background: var(--accent); filter: blur(60px);"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-20 animate-blob-reverse" style="background: var(--accent-secondary); filter: blur(80px);"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10 animate-spin-slow" style="background: conic-gradient(from 0deg, var(--accent), var(--accent-secondary), var(--accent));"></div>
-
-        <div class="relative container-x w-full">
-            <div class="flex flex-col md:flex-row items-center gap-16">
-                <div class="flex-1 text-center md:text-left space-y-8">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold animate-pulse-glow" style="background: var(--accent-soft-bg); color: var(--accent-deep);">
-                        <span class="w-2 h-2 rounded-full live-dot" style="background: var(--accent);"></span>
-                        Official Fan Community
-                    </div>
-
-                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 leading-[1.05] tracking-tight">
-                        {!! $content['hero_title'] ?? '<span class="gradient-text-gold">Welcome</span> to the<br>Fan Community' !!}
-                    </h1>
-
-                    <p class="text-lg md:text-xl text-gray-600 max-w-xl leading-relaxed">
-                        {{ $content['hero_subtitle'] ?? 'Join the most exclusive fan community. Access premium content, attend events, and connect with the community.' }}
-                    </p>
-
-                    <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
-                        @if ($features['membership'] ?? false)
-                            <a href="{{ route('celebrity.membership', ['celebrity' => $celebrity->slug]) }}" class="btn-primary !px-10 !py-4 !text-base animate-shine">
-                                Explore Memberships
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                            </a>
-                        @endif
-                        @guest
-                            <a href="{{ route('register') }}" class="btn-ghost !px-10 !py-4 !text-base animate-shine">Join Now</a>
-                        @endguest
-                        @auth
-                            <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}" class="btn-ghost !px-10 !py-4 !text-base animate-shine">My Dashboard</a>
-                        @endauth
-                    </div>
-                </div>
-
-                <div class="flex-1 flex justify-center">
-                    <div class="relative animate-pulse-scale">
-                        <div class="absolute inset-0 rounded-3xl opacity-30 blur-2xl" style="background: var(--accent); transform: scale(0.85);"></div>
-                        <div class="relative w-80 h-80 md:w-96 md:h-96 rounded-3xl overflow-hidden shadow-2xl ring-2 ring-white/20" style="box-shadow: 0 30px 80px -20px var(--accent-glow);">
-                            @if ($celebrity->avatar)
-                                <img src="{{ $celebrity->avatar }}" alt="{{ $celebrity->name }}" class="w-full h-full object-cover">
-                            @elseif ($celebrity->cover_photo)
-                                <img src="{{ $celebrity->cover_photo }}" alt="{{ $celebrity->name }}" class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-8xl font-bold gradient-text">
-                                    {{ strtoupper(substr($celebrity->name, 0, 1)) }}
-                                </div>
-                            @endif
-                            <div class="absolute inset-0" style="background: linear-gradient(to top, color-mix(in srgb, var(--accent) 40%, transparent) 0%, transparent 50%);"></div>
-                        </div>
-                        <div class="price-badge absolute -bottom-4 -right-4 w-24 h-24 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg" style="background: var(--accent-gradient);">
-                            <div class="text-center leading-tight">
-                                <span class="block text-2xl">{{ count($tiers) }}</span>
-                                <span class="text-xs opacity-80">Tiers</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
-    </section>
+    @include('celebrity.partials.hero')
 
     <div class="section-divider"></div>
 
     {{-- ─── STATS ─── --}}
-    <section class="relative -mt-16 container-x z-10">
+    <section class="relative -mt-10 md:-mt-16 container-x z-10">
         <div class="glass-strong rounded-2xl p-8 md:p-12">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 @php
-                    $stats = $content['stats'] ?? [
-                        ['value' => '10M+', 'label' => 'Global Fans'],
-                        ['value' => '50+', 'label' => 'Events Held'],
-                        ['value' => '3', 'label' => 'Studio Albums'],
-                        ['value' => '8', 'label' => 'Years Active'],
-                    ];
+                    $stats = $content['stats'] ?? $defaults['stats'];
                 @endphp
                 @foreach ($stats as $stat)
                     <div class="space-y-1">
@@ -106,10 +153,10 @@
                 <div class="space-y-6">
                     <span class="eyebrow">About</span>
                     <h2 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                        {{ $content['about_title'] ?? 'The Story Behind ' . $celebrity->name }}
+                        {{ $content['about_title'] ?? $defaults['about_title'] }}
                     </h2>
                     <div class="text-gray-600 leading-relaxed space-y-4 text-lg">
-                        {!! $content['about_body'] ?? '<p>' . $celebrity->name . ' is a global artist and performer. This is the official fan community where you can connect, share, and experience exclusive moments together.</p>' !!}
+                        {!! $content['about_body'] ?? $defaults['about_body'] !!}
                     </div>
                     <div class="flex gap-4 pt-2">
                         @if ($celebrity->social_links['instagram'] ?? false)
@@ -123,7 +170,7 @@
                 <div class="relative">
                     <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-xl">
                         @if ($celebrity->cover_photo)
-                            <img src="{{ $celebrity->cover_photo }}" alt="{{ $celebrity->name }}" class="w-full h-full object-cover">
+                            <img src="{{ $celebrity->getCoverUrl() }}" alt="{{ $celebrity->name }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full mesh-gradient flex items-center justify-center">
                                 <span class="text-9xl font-bold gradient-text opacity-50">{{ strtoupper(substr($celebrity->name, 0, 1)) }}</span>
@@ -148,21 +195,14 @@
     <section class="section" style="background: var(--accent-light);">
         <div class="container-x">
             <div class="text-center mb-16 space-y-4">
-                <span class="eyebrow">Features</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Everything for <span class="gradient-text-gold">Real Fans</span></h2>
-                <p class="text-gray-500 max-w-2xl mx-auto text-lg">Premium features designed to bring you closer to the moments and the community.</p>
+                <span class="eyebrow">{{ $content['features_badge'] ?? $defaults['section_heading'] }}</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">{!! $content['features_heading'] ?? $defaults['features_heading'] !!}</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto text-lg">{{ $content['features_subheading'] ?? $defaults['features_subheading'] }}</p>
             </div>
 
             <div class="flex flex-wrap justify-center gap-8 [&>*]:grow [&>*]:basis-80 [&>*]:max-w-sm">
                 @php
-                    $featureIcons = [
-                        'membership' => ['M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'Membership Tiers', 'Choose from exclusive membership tiers. Each level unlocks unique perks and privileges.'],
-                        'meet_greet' => ['M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', 'Meet & Greet', 'Attend exclusive events. Get tickets to intimate meet & greet sessions with the celebrity.'],
-                        'membership_card' => ['M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', 'Membership Card', 'Get your exclusive digital membership card for VIP access at all events.'],
-                        'private_meetup' => ['M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Private Meetups', 'Request one-on-one private meetups for an unforgettable personal experience.'],
-                        'messaging' => ['M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', 'Direct Messaging', 'Send messages directly to the management team. We\'re here for you always.'],
-                        'fan_applications' => ['M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'Fan Applications', 'Apply to become a verified fan and unlock the full community experience.'],
-                    ];
+                    $featureIcons = $defaults['features'];
                     $featureNames = [
                         'membership' => 'Membership',
                         'meet_greet' => 'Meet & Greet',
@@ -210,9 +250,9 @@
     <section class="section">
         <div class="container-x">
             <div class="text-center mb-16 space-y-4">
-                <span class="eyebrow">Pricing</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Choose Your <span class="gradient-text-gold">Tier</span></h2>
-                <p class="text-gray-500 max-w-2xl mx-auto text-lg">Select the membership that fits your passion. Upgrade anytime.</p>
+                <span class="eyebrow">{{ $content['pricing_badge'] ?? $defaults['section_heading'] }}</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">{!! $content['pricing_heading'] ?? $defaults['pricing_heading'] !!}</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto text-lg">{{ $content['pricing_subheading'] ?? $defaults['pricing_subheading'] }}</p>
             </div>
 
             <div class="flex flex-wrap justify-center gap-6 [&>*]:grow [&>*]:basis-60 [&>*]:max-w-sm">
@@ -260,9 +300,9 @@
     <section class="section" style="background: var(--accent-light);">
         <div class="container-x">
             <div class="text-center mb-16 space-y-4">
-                <span class="eyebrow">Events</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Upcoming <span class="gradient-text-gold">Events</span></h2>
-                <p class="text-gray-500 max-w-2xl mx-auto text-lg">Don't miss your chance to meet the celebrity in person.</p>
+                <span class="eyebrow">{{ $content['events_badge'] ?? $defaults['section_heading'] }}</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">{!! $content['events_heading'] ?? $defaults['events_heading'] !!}</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto text-lg">{{ $content['events_subheading'] ?? $defaults['events_subheading'] }}</p>
             </div>
 
             <div class="flex flex-wrap justify-center gap-8 [&>*]:grow [&>*]:basis-80 [&>*]:max-w-sm">
@@ -350,9 +390,9 @@
         </div>
         <div class="relative container-x text-center">
             <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                Ready to Join <span class="opacity-80">{{ $celebrity->name }}'s</span> Community?
+                {!! $content['cta_heading'] ?? $defaults['cta_heading'] !!}
             </h2>
-            <p class="text-white/80 text-lg mb-10 max-w-xl mx-auto">Start your journey as a verified fan. Choose a membership tier and unlock exclusive perks.</p>
+            <p class="text-white/80 text-lg mb-10 max-w-xl mx-auto">{{ $content['cta_subheading'] ?? $defaults['cta_subheading'] }}</p>
             <div class="flex flex-wrap justify-center gap-4">
                 @guest
                     <a href="{{ route('register') }}" class="bg-white text-gray-900 px-10 py-4 rounded-full text-lg font-bold hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 cta-pulse animate-shine">

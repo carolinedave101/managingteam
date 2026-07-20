@@ -12,9 +12,54 @@ class Celebrity extends Model
     }
 
     protected $fillable = [
-        'name', 'slug', 'avatar', 'cover_photo', 'bio',
+        'name', 'slug', 'avatar', 'cover_photo', 'bio', 'category',
+        'gender', 'country',
         'social_links', 'config', 'is_active', 'created_by',
     ];
+
+    public static array $categories = [
+        'general' => 'General',
+        'movie_star' => 'Movie Star',
+        'country_singer' => 'Country Singer',
+        'musician' => 'Musician',
+        'adult_star' => 'Adult Star',
+    ];
+
+    public function scopeCategory($query, string $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    public function getAvatarUrl(): string
+    {
+        if ($this->avatar) {
+            return $this->avatar;
+        }
+        return static::avatarUrlFor($this->name);
+    }
+
+    public function getCoverUrl(): string
+    {
+        if ($this->cover_photo) {
+            return $this->cover_photo;
+        }
+        return static::coverUrlFor($this->slug);
+    }
+
+    public function categoryLabel(): string
+    {
+        return static::$categories[$this->category] ?? 'General';
+    }
+
+    public static function avatarUrlFor(string $name): string
+    {
+        return 'https://ui-avatars.com/api/?name='.urlencode($name).'&size=400&background=random&color=fff&bold=true';
+    }
+
+    public static function coverUrlFor(string $slug): string
+    {
+        return 'https://picsum.photos/seed/'.$slug.'/1200/600';
+    }
 
     protected function casts(): array
     {

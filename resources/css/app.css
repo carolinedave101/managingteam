@@ -21,6 +21,17 @@
     --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
 }
 
+/* ─── CATEGORY VIBE ─── */
+body[data-category="movie_star"] {
+    --page-bg-color: #0a0a0f;
+}
+body[data-category="country_singer"] {
+    --page-bg-color: #fdf8f3;
+}
+body[data-category="adult_star"] {
+    --page-bg-color: #0d0d0d;
+}
+
 @layer base {
     [x-cloak] { display: none !important; }
 

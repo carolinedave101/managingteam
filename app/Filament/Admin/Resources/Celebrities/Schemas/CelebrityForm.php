@@ -51,9 +51,23 @@ class CelebrityForm
                                     ->maxLength(255)
                                     ->unique(ignoreRecord: true)
                                     ->helperText('URL slug that determines the portal subdomain: {slug}.'.parse_url(config('app.url'), PHP_URL_HOST).'. Auto-generated from the name but can be customized. Use lowercase letters, numbers, and hyphens only. This cannot be changed after fans have accessed the portal.'),
+                                Select::make('category')
+                                    ->options(\App\Models\Celebrity::$categories)
+                                    ->default('general')
+                                    ->live()
+                                    ->helperText('The industry category determines the portal\'s visual theme and design vibe. Movie Star = cinematic/red carpet, Country Singer = rustic/warm, Musician = energetic/concert, Adult Star = sleek/premium. Changes take effect immediately on all fan-facing pages.'),
+                                Select::make('gender')
+                                    ->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])
+                                    ->native(false)
+                                    ->placeholder('Select gender')
+                                    ->helperText('Displayed on the celebrity directory listing page.'),
+                                TextInput::make('country')
+                                    ->maxLength(100)
+                                    ->placeholder('e.g. United States, United Kingdom, South Korea')
+                                    ->helperText('Celebrity\'s country of origin. Shown on the directory listing page.'),
                                 TextInput::make('avatar')
                                     ->url()
-                                    ->helperText('URL to the celebrity avatar image. Displayed as a circular profile picture on the portal header, sidebar, and fan dashboard. Recommended size: 400x400px minimum, square aspect ratio. Use a publicly accessible image URL (https).'),
+                                    ->helperText('URL to the celebrity avatar image. Displayed as a circular profile picture on the portal header, sidebar, and fan dashboard. Recommended size: 400x400px minimum, square aspect ratio. Use a publicly accessible image URL (https). Leave empty to auto-generate from initials.'),
                                 TextInput::make('cover_photo')
                                     ->url()
                                     ->helperText('URL to the hero/cover banner image displayed at the top of the portal homepage. Recommended size: 1920x600px minimum, landscape orientation. A high-quality professional photo or branded graphic works best. Use a publicly accessible image URL (https).'),

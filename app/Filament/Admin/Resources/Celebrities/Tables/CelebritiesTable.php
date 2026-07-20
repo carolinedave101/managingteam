@@ -19,11 +19,33 @@ class CelebritiesTable
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('category')
+                    ->badge()
+                    ->colors([
+                        'primary' => 'general',
+                        'indigo' => 'movie_star',
+                        'warning' => 'country_singer',
+                        'danger' => 'musician',
+                        'purple' => 'adult_star',
+                    ])
+                    ->sortable(),
+                TextColumn::make('gender')
+                    ->badge()
+                    ->colors([
+                        'info' => 'male',
+                        'pink' => 'female',
+                    ])
+                    ->sortable(),
+                TextColumn::make('country')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('slug')
                     ->searchable()
                     ->sortable()
                     ->copyable()
-                    ->copyMessage('Subdomain slug copied!'),
+                    ->copyMessage('Subdomain slug copied!')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('portal_url')
                     ->label('Portal URL')
                     ->state(fn (Celebrity $record) => $record->getPortalUrl())
