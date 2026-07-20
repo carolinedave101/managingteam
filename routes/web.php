@@ -120,69 +120,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// TEMPORARY: add pricing to celebrities missing it (remove after running)
-Route::get('/_add-pricing', function () {
-    if (request('key') !== hash('sha256', 'add-pricing-managingteam-2026')) abort(403);
-    set_time_limit(300);
-    $count = 0;
-    $errors = 0;
-    $pricingTemplate = [
-        'membership_tiers' => [
-            ['name' => 'Standard', 'price' => 3000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
-            ['name' => 'Premium', 'price' => 5000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
-            ['name' => 'VIP', 'price' => 10000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
-        ],
-        'pricing' => [
-            'fan_application_fee' => 5000,
-            'membership_card_fee' => 5000,
-            'meet_greet_default_price' => 1000,
-            'private_meetup' => [
-                ['duration' => 30, 'price' => 5000],
-                ['duration' => 60, 'price' => 10000],
-            ],
-        ],
-    ];
-
-    try {
-        \App\Models\Celebrity::chunk(50, function ($celebrities) use ($pricingTemplate, &$count, &$errors) {
-            foreach ($celebrities as $c) {
-                try {
-                    $config = $c->config;
-                    // Handle double-encoded config string (safety net)
-                    if (is_string($config)) {
-                        $decoded = json_decode($config, true);
-                        $config = is_array($decoded) ? $decoded : [];
-                    }
-                    if (! is_array($config)) $config = [];
-
-                    $hasPricing = isset($config['pricing']) || isset($config['membership_tiers']);
-                    if (! $hasPricing) {
-                        $config = array_merge($config, $pricingTemplate);
-                        $c->config = $config;
-                        $c->saveQuietly();
-                        $count++;
-                    }
-                } catch (\Throwable $e) {
-                    $errors++;
-                    \Illuminate\Support\Facades\Log::warning("_add-pricing error for {$c->slug}: {$e->getMessage()}");
-                }
-            }
-        });
-    } catch (\Throwable $e) {
-        return "Error: " . e($e->getMessage());
-    }
-
-    $total = \App\Models\Celebrity::count();
-    $skipped = $total - $count;
-    $msg = "Added pricing to {$count} celebrities (out of {$total} total). Errors: {$errors}. Skipped {$skipped} already had pricing.";
-
-    try {
-        \Illuminate\Support\Facades\Log::info($msg);
-    } catch (\Throwable $e) {}
-
-    return nl2br(e($msg));
-});
-
 // Debug: check error log
 Route::middleware('auth')->get('/_debug-edit', function () {
     if (! auth()->user()->isAdmin()) abort(403);
