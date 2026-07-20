@@ -2585,7 +2585,59 @@ Pricing section:
 | DefaultDataSeeder (K-pop) | 3 |
 | MovieStarSeeder | 66 |
 | MoreMovieStarSeeder | 131 |
-| CountryMaleSingersSeeder | 200 ✅ (now added) |
-| FemaleMovieActressesSeeder | 200 ✅ (now added) |
-| FemaleCountrySingersSeeder | 199 ✅ (now added) |
-| **Grand Total** | **799** (1 duplicate slug skipped during seeding) |
+| CountryMaleSingersSeeder | 200 |
+| FemaleMovieActressesSeeder | 200 |
+| FemaleCountrySingersSeeder | 199 |
+| MaleEuropeanActorsSeeder | 200 |
+| MaleEuropeanSingersSeeder | 200 |
+| **Grand Total** | **1199** |
+
+---
+
+### Session 58 — Remove Membership Card Tiers
+**Date**: 2026-07-20  
+**Status**: Executed (production)
+
+### Problem
+The membership card ordering page required fans to select a membership tier from a dropdown, but the card itself has a single flat fee (`config.pricing.membership_card_fee`). The tier selection was unnecessary complexity — all cards should cost the same regardless of which membership tier the fan holds.
+
+### Changes
+1. **Fan-facing view** (`resources/views/celebrity/membership-card.blade.php`): Removed the tier `<select>` dropdown and its validation. The form now only asks for payment method.
+2. **Controller** (`app/Http/Controllers/MembershipCardController.php`): Removed `tier` from validation rules. Hardcoded `'tier' => 'Standard'` in the card creation array.
+3. **PDF template** (`resources/views/pdf/membership-card.blade.php`): Removed the `membership_tiers` config lookup and benefits display — now simply displays the hardcoded tier badge.
+4. **Filament admin form** (`app/Filament/Admin/Resources/MembershipCards/Schemas/MembershipCardForm.php`): Made `tier` not required, defaults to `'Standard'`.
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `resources/views/celebrity/membership-card.blade.php` | Removed tier dropdown |
+| `app/Http/Controllers/MembershipCardController.php` | Removed tier validation, hardcoded `'Standard'` |
+| `resources/views/pdf/membership-card.blade.php` | Removed tier config lookup + benefits |
+| `app/Filament/Admin/Resources/MembershipCards/Schemas/MembershipCardForm.php` | Tier optional, defaults to `Standard` |
+
+---
+
+### Session 59 — Seed 400 Male European Celebrities
+**Date**: 2026-07-20  
+**Status**: Executed (production)
+
+### Completed
+- [x] Created `database/seeders/MaleEuropeanActorsSeeder.php` — 200 European male movie actors (UK, France, Spain, Italy, Scandinavia, Germany, Eastern Europe, Benelux, Greece)
+- [x] Created `database/seeders/MaleEuropeanSingersSeeder.php` — 200 European male singers (UK pop/rock, Irish, Scandinavian, Southern Europe, German, French, Italian)
+- [x] Both seeders include the same pricing template (Standard/Premium/VIP tiers + pricing section) as MovieStarSeeder
+- [x] Deployed and seeded on production via `/_seed-europe` route
+- [x] Production total: **1199 celebrities** with unique demo fan accounts
+- [x] Temporary route removed after execution
+
+### Total Celebrities on Production
+| Source | Count |
+|--------|-------|
+| Original K-Pop (DefaultDataSeeder) | 3 |
+| MovieStarSeeder | 66 |
+| MoreMovieStarSeeder | 131 |
+| CountryMaleSingersSeeder | 200 |
+| FemaleMovieActressesSeeder | 200 |
+| FemaleCountrySingersSeeder | 199 |
+| MaleEuropeanActorsSeeder | 200 |
+| MaleEuropeanSingersSeeder | 200 |
+| **Grand Total** | **1199** |
