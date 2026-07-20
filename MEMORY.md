@@ -2590,7 +2590,9 @@ Pricing section:
 | FemaleCountrySingersSeeder | 199 |
 | MaleEuropeanActorsSeeder | 200 |
 | MaleEuropeanSingersSeeder | 200 |
-| **Grand Total** | **1199** |
+| FemaleEuropeanActressesSeeder | 200 |
+| FemaleEuropeanMusiciansSeeder | 200 |
+| **Grand Total** | **1599** |
 
 ---
 
@@ -2640,4 +2642,20 @@ The membership card ordering page required fans to select a membership tier from
 | FemaleCountrySingersSeeder | 199 |
 | MaleEuropeanActorsSeeder | 200 |
 | MaleEuropeanSingersSeeder | 200 |
-| **Grand Total** | **1199** |
+| FemaleEuropeanActressesSeeder | 200 |
+| FemaleEuropeanMusiciansSeeder | 200 |
+| **Grand Total** | **1599** |
+
+---
+
+### Session 60 — Seed 400 Female European Celebrities
+**Date**: 2026-07-20  
+**Status**: Executed (production)
+
+### Completed
+- [x] Created `database/seeders/FemaleEuropeanActressesSeeder.php` — 200 European female movie actresses (UK, France, Spain, Italy, Scandinavia, Germany, Eastern Europe)
+- [x] Created `database/seeders/FemaleEuropeanMusiciansSeeder.php` — 200 European female musicians/singers (UK pop, Irish, Scandinavian, French, Italian, Spanish, German)
+- [x] Both seeders include pricing template (Standard/Premium/VIP tiers + pricing section)
+- [x] Deployed and seeded on production via separate `/_seed-actresses` and `/_seed-musicians` routes
+- [x] Production total: **1599 celebrities** with unique demo fan accounts
+- [x] Temporary routes removed after execution
