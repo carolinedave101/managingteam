@@ -173,7 +173,8 @@ Route::get('/_add-pricing', function () {
     }
 
     $total = \App\Models\Celebrity::count();
-    $msg = "Added pricing to {$count} celebrities (out of {$total} total). Errors: {$errors}. Skipped {$total - $count} already had pricing.";
+    $skipped = $total - $count;
+    $msg = "Added pricing to {$count} celebrities (out of {$total} total). Errors: {$errors}. Skipped {$skipped} already had pricing.";
 
     try {
         \Illuminate\Support\Facades\Log::info($msg);
