@@ -5,21 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Celebrity Management Portal') }}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="manifest" href="/site.webmanifest">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" style="font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;">
     <div class="hero-gradient min-h-screen flex flex-col items-center justify-center px-4">
         <div class="w-full max-w-lg mx-auto text-center">
             <div class="mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-6">
-                    <span class="text-3xl font-bold gradient-text">J</span>
-                </div>
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+                <a href="/" class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-6 group transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
+                    <svg class="w-7 h-7 gradient-text" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </a>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-3" style="font-family: 'Playfair Display', ui-serif, Georgia, serif;">
                     Celebrity<br><span class="gradient-text">Management</span>
                 </h1>
                 <p class="text-gray-500 text-lg">Enter a celebrity name to visit their portal.</p>
@@ -63,7 +72,26 @@
                     <a href="{{ route('login') }}" class="text-pink-600 hover:underline">Sign in</a>
                 </p>
             </div>
+            <div class="mt-10 text-center">
+                <a href="/" class="inline-flex items-center gap-2 group">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-0.5"
+                         style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-bold" style="background: linear-gradient(90deg, #ec4899, #8b5cf6, #ec4899); background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'Playfair Display', ui-serif, Georgia, serif; animation: shine 3s ease-in-out infinite;">ManagingTeam</span>
+                </a>
+                <p class="text-xs text-gray-400 mt-2">Premium fan community platform</p>
+            </div>
         </div>
     </div>
+
+    <style>
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+    </style>
 </body>
 </html>

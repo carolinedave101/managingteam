@@ -4,16 +4,20 @@
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center gap-10">
                 <a href="{{ $celebrity ? url('/') : '/' }}" class="flex items-center gap-2 group">
-                    <span class="w-8 h-8 rounded-full flex items-center justify-center text-white font-display font-bold shadow-glow accent-bg">
-                        {{ $celebrity ? strtoupper(substr($celebrity->name, 0, 1)) : 'J' }}
-                    </span>
-                    <span class="text-xl font-display font-bold text-gray-900">
-                        @if ($celebrity)
+                    @if ($celebrity)
+                        <img src="{{ $celebrity->getLogoUrl() }}" alt="{{ $celebrity->name }}"
+                             class="w-8 h-8 rounded-full object-cover">
+                        <span class="text-xl font-display font-bold text-gray-900">
                             {{ $celebrity->name }}
-                        @else
+                        </span>
+                    @else
+                        <span class="w-8 h-8 rounded-full flex items-center justify-center text-white font-display font-bold shadow-glow accent-bg">
+                            J
+                        </span>
+                        <span class="text-xl font-display font-bold text-gray-900">
                             Jennie<span class="accent-text">Kim</span>
-                        @endif
-                    </span>
+                        </span>
+                    @endif
                 </a>
                 @if ($celebrity)
                 <div class="hidden md:flex items-center gap-1">

@@ -3059,3 +3059,80 @@ Remaining 1023 'general' celebrities use the default musician/energetic hero tem
 ### Known Issues
 - 102 male adult star names had slug conflicts — skipped gracefully.
 - `BaseCelebritySeeder` does NOT create demo fans for bulk celebrities (fan creation removed for speed). Existing celebrities retain their demo fans.
+
+### Session 70 — Favicon & Logo: Avatar-Based Dynamic Display
+**Date**: 2026-07-22  
+**Status**: Complete (deployed to production)
+
+### Completed
+- [x] **Added `getFaviconUrl()` to Celebrity model** — returns avatar URL (falls back to ui-avatars.com generated image via existing `getAvatarUrl()`)
+- [x] **Added `getLogoUrl()` to Celebrity model** — returns `config.theme.logo_url` if set, otherwise falls back to avatar URL
+- [x] **Dynamic favicon** — `layouts/app.blade.php` and `layouts/guest.blade.php` now use `<link rel="icon" href="{{ $celebrity ? $celebrity->getFaviconUrl() : '/favicon.ico' }}">` with apple-touch-icon support
+- [x] **Dynamic logo in navigation** — `livewire/navigation.blade.php` replaced the colored circle + first letter with actual logo image from `getLogoUrl()`. Falls back to avatar if no logo URL configured. Name text still shown alongside.
+- [x] **Dynamic logo in footer** — `components/footer.blade.php` same treatment: image + name instead of text-only
+- [x] **Admin panel favicon** — `AdminPanelProvider.php` set to `/favicon.ico`
+- [x] **Landing page favicon** — Added `<link rel="icon" href="/favicon.ico">` to `pages/landing.blade.php`
+- [x] **Deployed to production** — 7 files uploaded to cPanel via UAPI `Fileman/upload_files` with `overwrite=1`
+- [x] **Pre-production 500 error noted** — Site returns 500 error due to pre-existing `Filament\Schemas\Components\Html::make()` issue (from Jul 20), unrelated to this deployment
+
+### Files Changed (7 files)
+| File | Change |
+|------|--------|
+| `app/Models/Celebrity.php` | Added `getFaviconUrl()`, `getLogoUrl()` methods |
+| `resources/views/layouts/app.blade.php` | Dynamic favicon + apple-touch-icon via `getFaviconUrl()` |
+| `resources/views/layouts/guest.blade.php` | Added favicon + apple-touch-icon |
+| `resources/views/livewire/navigation.blade.php` | Logo image via `getLogoUrl()` instead of text circle |
+| `resources/views/components/footer.blade.php` | Logo image via `getLogoUrl()` instead of text-only |
+| `app/Providers/Filament/AdminPanelProvider.php` | Added `->favicon('/favicon.ico')` |
+| `resources/views/pages/landing.blade.php` | Added favicon link |
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **`getLogoUrl()` checks `config.theme.logo_url` first** | If admin uploaded a custom logo via the existing Logo URL field, that takes precedence over avatar |
+| **Avatar as fallback for both favicon + logo** | Always produces a branded result — either the real photo or ui-avatars.com generated initial |
+| **Name still shown alongside logo image** | The image alone (especially a circular avatar) is not sufficient for brand recognition — the name anchors it |
+| **Admin panel gets static favicon** | No celebrity context in admin — hardcoded `/favicon.ico` is appropriate |
+
+### Next Steps
+1. Fix pre-existing 500 error on production (`Filament\Schemas\Components\Html::make()`)
+2. Run queue worker for production email delivery
+
+---
+
+### Session 71 — Production 500 Fix: Stale Bootstrap Cache Causing "Class view/files does not exist"
+**Date**: 2026-07-22  
+**Status**: Complete
+
+### Completed
+- [x] **Diagnosed blank screen** — Production site (`managingteam.info`) returned 500 on every page. Error log showed `Class "view" does not exist`, `Class "files" does not exist`, and `Log [] is not defined` — core Laravel service bindings missing from container
+- [x] **Root cause**: Stale cached config files in `bootstrap/cache/` (`config.php`, `packages.php`, `services.php`, `filament/`) from a previous deployment had hardcoded paths or outdated service provider mappings that didn't match the current vendor layout
+- [x] **Fix**: Cleared `bootstrap/cache/` config files + deleted 125 stale compiled Blade views in `storage/framework/views/`. Site immediately returned 200 on all pages
+- [x] **Deployed logo/favicon improvements** — Uploaded 5 updated files to production:
+  - `public/favicon.svg` — SVG favicon with gradient user icon (NEW)
+  - `public/site.webmanifest` — PWA web app manifest (NEW)
+  - `resources/views/pages/landing.blade.php` — Proper branding with person-icon SVG, "Celebrity Management" title, animated "ManagingTeam" wordmark footer
+  - `resources/views/layouts/app.blade.php` — Added favicon.svg + site.webmanifest references
+  - `resources/views/layouts/guest.blade.php` — Added favicon.svg + site.webmanifest references
+- [x] **Cleaned up temp files** — Removed diagnostic scripts (`phpinfo.php`, `check-env.php`, `show-log.php`, `clear-cache.php`) from production `public/`
+- [x] **Verified** — `managingteam.info` (200), admin redirects (302), `jennie.managingteam.info` (200)
+
+### Root Cause Detail
+The cached `bootstrap/cache/config.php` contained stale service provider registrations. When Laravel loaded in production mode (`APP_ENV=production`), it reads from the cached config instead of live files. The `files` binding (registered by `FilesystemServiceProvider`) and `view` binding (registered by `ViewServiceProvider`) were missing from the cached config, causing `ReflectionException: Class "files/view does not exist"` during boot. The logger then fell back to emergency mode with `Log [] is not defined`.
+
+### Files Changed (production)
+| File | Change |
+|------|--------|
+| `public/favicon.svg` | **New** — SVG favicon (gradient user icon on pink-purple bg) |
+| `public/site.webmanifest` | **New** — PWA manifest pointing to SVG icon |
+| `resources/views/pages/landing.blade.php` | Added Playfair Display/Manrope fonts, person-icon SVG logo, "Celebrity Management" title, animated "ManagingTeam" wordmark |
+| `resources/views/layouts/app.blade.php` | Added `favicon.svg` (SVG type) + `site.webmanifest` link; falls back to dynamic favicon on celebrity subdomains |
+| `resources/views/layouts/guest.blade.php` | Same favicon/manifest treatment |
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **Clear caches instead of rebuilding** | Fastest fix — Laravel rebuilds config cache on next request from live files. No need to run `php artisan optimize` on shared hosting without terminal |
+| **Overwrite temp files instead of delete** | cPanel UAPI has no `delete_files` function for this version; overwriting with empty content removes sensitive info and effectively disables the scripts |
+| **Deploy views + static assets only** | The 7 PHP files from Session 70 (model, providers, controllers) were already on production and working — only the view files and new public assets needed updating |
+| **Keep favicon.ico as fallback** | Safari and some older browsers don't support SVG favicons; `.ico` fallback ensures compatibility |

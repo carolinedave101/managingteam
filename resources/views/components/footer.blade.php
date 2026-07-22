@@ -2,11 +2,15 @@
     <div class="container-x py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
             <div class="md:col-span-1">
-                <a href="{{ ($celebrity ?? null) ? url('/') : '/' }}" class="text-2xl font-display font-bold text-white">
+                <a href="{{ ($celebrity ?? null) ? url('/') : '/' }}" class="inline-flex items-center gap-3">
                     @if ($celebrity ?? null)
-                        {{ $celebrity->name }}
+                        <img src="{{ $celebrity->getLogoUrl() }}" alt="{{ $celebrity->name }}"
+                             class="w-10 h-10 rounded-full object-cover">
+                        <span class="text-2xl font-display font-bold text-white">{{ $celebrity->name }}</span>
                     @else
-                        Jennie<span class="accent-text">Kim</span>
+                        <span class="text-2xl font-display font-bold text-white">
+                            Jennie<span class="accent-text">Kim</span>
+                        </span>
                     @endif
                 </a>
                 <p class="mt-4 text-sm text-gray-400 leading-relaxed">

@@ -1,0 +1,14 @@
+{
+    "name": "Celebrity Management Portal",
+    "short_name": "ManagingTeam",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ],
+    "theme_color": "#ec4899",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

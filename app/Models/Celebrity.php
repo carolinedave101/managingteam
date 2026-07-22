@@ -44,6 +44,22 @@ class Celebrity extends Model
         return static::avatarUrlFor($this->name);
     }
 
+    public function getFaviconUrl(): string
+    {
+        return $this->getAvatarUrl();
+    }
+
+    public function getLogoUrl(): ?string
+    {
+        $logoUrl = $this->config['theme']['logo_url'] ?? null;
+
+        if ($logoUrl) {
+            return $logoUrl;
+        }
+
+        return $this->getAvatarUrl();
+    }
+
     public function getCoverUrl(): string
     {
         if ($this->cover_photo) {

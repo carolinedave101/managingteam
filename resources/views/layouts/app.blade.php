@@ -13,7 +13,10 @@
             }
         @endphp
         <meta name="wallet-balance" content="{{ $navWallet }}">
-        <link rel="icon" href="/favicon.ico">
+        <link rel="icon" href="{{ $celebrity ? $celebrity->getFaviconUrl() : '/favicon.svg' }}" type="image/svg+xml">
+        <link rel="icon" href="{{ $celebrity ? $celebrity->getFaviconUrl() : '/favicon.ico' }}" sizes="any">
+        <link rel="apple-touch-icon" href="{{ $celebrity ? $celebrity->getAvatarUrl() : '/favicon.ico' }}">
+        @if(!$celebrity)<link rel="manifest" href="/site.webmanifest">@endif
 
         <title>{{ $celebrity ? $celebrity->name . ' — Official Fan Community' : config('app.name', 'JennieKim') . ' — Official Fan Community' }}</title>
         <meta name="description" content="{{ $celebrity ? 'Join the official ' . $celebrity->name . ' fan community.' : 'Join the official Jennie Kim fan community. Exclusive memberships, meet & greet events, and unforgettable fan moments.' }}">

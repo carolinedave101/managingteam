@@ -16,6 +16,10 @@
 
     <title>{{ $celeb ? $celeb->name . ' — Official Fan Community' : config('app.name', 'Laravel') }}</title>
     <meta name="description" content="{{ $celeb ? 'Join the official ' . $celeb->name . ' fan community.' : '' }}">
+    <link rel="icon" href="{{ $celeb ? $celeb->getFaviconUrl() : '/favicon.svg' }}" type="image/svg+xml">
+    <link rel="icon" href="{{ $celeb ? $celeb->getFaviconUrl() : '/favicon.ico' }}" sizes="any">
+    <link rel="apple-touch-icon" href="{{ $celeb ? $celeb->getAvatarUrl() : '/favicon.ico' }}">
+    @if(!$celeb)<link rel="manifest" href="/site.webmanifest">@endif
 
     @if ($celeb)
         <style>
