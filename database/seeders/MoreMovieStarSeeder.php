@@ -283,7 +283,7 @@ class MoreMovieStarSeeder extends Seeder
                     ],
                 ],
                 'category' => 'movie_star',
-                'avatar' => Celebrity::avatarUrlFor($name),
+                'avatar' => Celebrity::avatarUrlFor($actor['name']),
                 'cover_photo' => Celebrity::coverUrlFor($slug),
                 'gender' => 'male',
                 'country' => 'United States',

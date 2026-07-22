@@ -19,5 +19,17 @@ class DatabaseSeeder extends Seeder
         $this->call(FemaleEuropeanActressesSeeder::class);
         $this->call(FemaleEuropeanMusiciansSeeder::class);
         $this->call(FemaleAdultStarsSeeder::class);
+        $this->call(MaleAdultStarsSeeder::class);
+
+        $this->call(GermanCelebritiesSeeder::class);
+        $this->call(FrenchCelebritiesSeeder::class);
+        $this->call(SpanishCelebritiesSeeder::class);
+        $this->call(ItalianCelebritiesSeeder::class);
+        $this->call(DutchCelebritiesSeeder::class);
+        $this->call(JapaneseCelebritiesSeeder::class);
+        $this->call(ChineseCelebritiesSeeder::class);
+        $this->call(SouthKoreanCelebritiesSeeder::class);
+        $this->call(PhilippineCelebritiesSeeder::class);
+        $this->call(ThaiCelebritiesSeeder::class);
     }
 }

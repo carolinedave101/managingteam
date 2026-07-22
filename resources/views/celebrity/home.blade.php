@@ -146,6 +146,110 @@
         </div>
     </section>
 
+    {{-- ─── GALLERY ─── --}}
+    @php $gallery = $celebrity->getGalleryImages(); @endphp
+    <section class="section" style="background: var(--accent-light);">
+        <div class="container-x">
+            <div class="text-center mb-12 space-y-4">
+                <span class="eyebrow">Gallery</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Moments with <span class="gradient-text-gold">{{ $celebrity->name }}</span></h2>
+                <p class="text-gray-500 max-w-2xl mx-auto text-lg">A glimpse into the world of your favorite celebrity through exclusive photos and memories.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                @foreach ($gallery as $index => $img)
+                    <div class="group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 @if($index < 2) md:col-span-2 md:row-span-2 @endif @if($index === 0) lg:col-span-1 @endif cursor-pointer" onclick="openLightbox({{ $index }})">
+                        <img src="{{ $img }}" alt="{{ $celebrity->name }} gallery image {{ $index + 1 }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ─── LIGHTBOX ─── --}}
+    <div id="lightbox" class="fixed inset-0 z-50 bg-black/95 hidden items-center justify-center" onclick="closeLightbox(event)">
+        <button onclick="closeLightbox(event)" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition z-10" type="button">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <button onclick="prevImage()" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition z-10" type="button">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button onclick="nextImage()" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition z-10" type="button">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            @foreach ($gallery as $index => $img)
+                <button onclick="event.stopPropagation(); goToImage({{ $index }})" class="lightbox-dot w-2.5 h-2.5 rounded-full bg-white/30 hover:bg-white/60 transition" data-index="{{ $index }}" type="button"></button>
+            @endforeach
+        </div>
+        <img id="lightbox-img" class="max-w-[90vw] max-h-[90vh] object-contain rounded-2xl shadow-2xl" alt="">
+    </div>
+
+    <script>
+        const galleryImages = {!! json_encode($gallery) !!};
+        let currentIndex = 0;
+
+        function openLightbox(index) {
+            currentIndex = index;
+            const lb = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = galleryImages[index];
+            lb.classList.remove('hidden');
+            lb.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            updateDots();
+        }
+
+        function closeLightbox(e) {
+            if (e && e.target !== e.currentTarget) return;
+            const lb = document.getElementById('lightbox');
+            lb.classList.add('hidden');
+            lb.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+            document.getElementById('lightbox-img').src = galleryImages[currentIndex];
+            updateDots();
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % galleryImages.length;
+            document.getElementById('lightbox-img').src = galleryImages[currentIndex];
+            updateDots();
+        }
+
+        function goToImage(index) {
+            currentIndex = index;
+            document.getElementById('lightbox-img').src = galleryImages[index];
+            updateDots();
+        }
+
+        function updateDots() {
+            document.querySelectorAll('.lightbox-dot').forEach(dot => {
+                dot.classList.toggle('bg-white/80', parseInt(dot.dataset.index) === currentIndex);
+                dot.classList.toggle('bg-white/30', parseInt(dot.dataset.index) !== currentIndex);
+            });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('lightbox').classList.contains('hidden')) {
+                if (e.key === 'Escape') closeLightbox(e);
+                if (e.key === 'ArrowLeft') prevImage();
+                if (e.key === 'ArrowRight') nextImage();
+            }
+        });
+    </script>
+
+    <div class="section-divider"></div>
+
     {{-- ─── ABOUT ─── --}}
     <section class="section">
         <div class="container-x">

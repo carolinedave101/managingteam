@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Celebrity;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,7 @@ class FanIsolationMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return $next($request);
         }
 
@@ -28,7 +29,7 @@ class FanIsolationMiddleware
                 ->where('celebrity_id', $celebrity->id)
                 ->exists();
 
-            if (!$belongsTo) {
+            if (! $belongsTo) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
@@ -41,12 +42,12 @@ class FanIsolationMiddleware
         return $next($request);
     }
 
-    private function resolveCelebrity(Request $request): ?\App\Models\Celebrity
+    private function resolveCelebrity(Request $request): ?Celebrity
     {
         $slug = $request->route('celebrity');
 
         if ($slug) {
-            return \App\Models\Celebrity::where('slug', $slug)->first();
+            return Celebrity::where('slug', $slug)->first();
         }
 
         return null;

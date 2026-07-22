@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectLinkController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
+use App\Models\Celebrity;
 use Illuminate\Support\Facades\Route;
 
 $baseDomain = parse_url(config('app.url'), PHP_URL_HOST);
@@ -104,10 +105,11 @@ Route::get('/', function () {
 Route::post('/redirect', [LandingController::class, 'redirect'])->name('landing.redirect');
 
 Route::get('/celebrities', function () {
-    $celebrities = \App\Models\Celebrity::where('is_active', true)
+    $celebrities = Celebrity::where('is_active', true)
         ->orderBy('category')
         ->orderBy('name')
         ->get();
+
     return view('pages.celebrities', compact('celebrities'));
 })->name('celebrities.index');
 
@@ -129,7 +131,3 @@ Route::middleware('auth')->group(function () {
 });
 
 // Debug: check error log
-
-
-
-

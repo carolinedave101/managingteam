@@ -100,6 +100,7 @@ class MaleEuropeanActorsSeeder extends Seeder
             if (Celebrity::where('slug', $slug)->exists()) {
                 $this->command?->warn("Skipping {$name} — slug already exists.");
                 $skipped++;
+
                 continue;
             }
 
@@ -138,11 +139,11 @@ class MaleEuropeanActorsSeeder extends Seeder
                 'created_by' => $admin->id,
             ]);
 
-            $email = $slug . '1@demo.com';
+            $email = $slug.'1@demo.com';
             $user = User::firstOrCreate(
                 ['email' => $email],
                 [
-                    'name' => $name . ' Fan',
+                    'name' => $name.' Fan',
                     'password' => Hash::make('demo1234!'),
                     'role' => 'fan',
                     'is_verified' => true,

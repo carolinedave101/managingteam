@@ -11,10 +11,15 @@ class Celebrity extends Model
         return 'slug';
     }
 
+    protected $attributes = [
+        'social_links' => '[]',
+        'gallery_images' => '[]',
+    ];
+
     protected $fillable = [
         'name', 'slug', 'avatar', 'cover_photo', 'bio', 'category',
         'gender', 'country',
-        'social_links', 'config', 'is_active', 'created_by',
+        'social_links', 'gallery_images', 'config', 'is_active', 'created_by',
     ];
 
     public static array $categories = [
@@ -35,6 +40,7 @@ class Celebrity extends Model
         if ($this->avatar) {
             return $this->avatar;
         }
+
         return static::avatarUrlFor($this->name);
     }
 
@@ -43,6 +49,7 @@ class Celebrity extends Model
         if ($this->cover_photo) {
             return $this->cover_photo;
         }
+
         return static::coverUrlFor($this->slug);
     }
 
@@ -61,10 +68,35 @@ class Celebrity extends Model
         return 'https://picsum.photos/seed/'.$slug.'/1200/600';
     }
 
+    public function getGalleryImages(): array
+    {
+        $images = $this->gallery_images ?? [];
+
+        if (!is_array($images)) {
+            return [];
+        }
+
+        $urls = [];
+        foreach ($images as $img) {
+            if (is_string($img) && strlen($img) > 0) {
+                $urls[] = $img;
+            } elseif (is_array($img) && isset($img['url']) && is_string($img['url']) && strlen($img['url']) > 0) {
+                $urls[] = $img['url'];
+            }
+        }
+
+        while (count($urls) < 6) {
+            $urls[] = 'https://picsum.photos/seed/'.$this->slug.'-gallery-'.(count($urls) + 1).'/800/600';
+        }
+
+        return array_slice($urls, 0, 6);
+    }
+
     protected function casts(): array
     {
         return [
             'social_links' => 'array',
+            'gallery_images' => 'array',
             'config' => 'array',
             'is_active' => 'boolean',
         ];

@@ -53,7 +53,7 @@ class FemaleCountrySingersSeeder extends Seeder
         ],
     ];
 
-            private array $names = [
+    private array $names = [
         'Patsy Cline', 'Loretta Lynn', 'Dolly Parton', 'Tammy Wynette', 'Kitty Wells',
         'June Carter Cash', 'Brenda Lee', 'Connie Smith', 'Jean Shepard', 'Skeeter Davis',
         'Rose Maddox', 'Lynn Anderson', 'Jeannie C Riley', 'Bobbie Gentry', 'Wanda Jackson',
@@ -114,6 +114,7 @@ class FemaleCountrySingersSeeder extends Seeder
             if (Celebrity::where('slug', $slug)->exists()) {
                 $this->command?->warn("Skipping {$name} — slug already exists.");
                 $skipped++;
+
                 continue;
             }
 
@@ -169,11 +170,11 @@ class FemaleCountrySingersSeeder extends Seeder
                 'created_by' => $admin->id,
             ]);
 
-            $email = $slug . '1@demo.com';
+            $email = $slug.'1@demo.com';
             $user = User::firstOrCreate(
                 ['email' => $email],
                 [
-                    'name' => $name . ' Fan',
+                    'name' => $name.' Fan',
                     'password' => Hash::make('demo1234!'),
                     'role' => 'fan',
                     'is_verified' => true,

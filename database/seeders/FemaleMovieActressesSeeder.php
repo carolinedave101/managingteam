@@ -53,7 +53,7 @@ class FemaleMovieActressesSeeder extends Seeder
         ],
     ];
 
-        private array $names = [
+    private array $names = [
         'Marilyn Monroe', 'Audrey Hepburn', 'Katharine Hepburn', 'Bette Davis', 'Grace Kelly',
         'Ingrid Bergman', 'Elizabeth Taylor', 'Vivien Leigh', 'Marlene Dietrich', 'Greta Garbo',
         'Rita Hayworth', 'Lauren Bacall', 'Judy Garland', 'Lana Turner', 'Ava Gardner',
@@ -114,6 +114,7 @@ class FemaleMovieActressesSeeder extends Seeder
             if (Celebrity::where('slug', $slug)->exists()) {
                 $this->command?->warn("Skipping {$name} — slug already exists.");
                 $skipped++;
+
                 continue;
             }
 
@@ -169,11 +170,11 @@ class FemaleMovieActressesSeeder extends Seeder
                 'created_by' => $admin->id,
             ]);
 
-            $email = $slug . '1@demo.com';
+            $email = $slug.'1@demo.com';
             $user = User::firstOrCreate(
                 ['email' => $email],
                 [
-                    'name' => $name . ' Fan',
+                    'name' => $name.' Fan',
                     'password' => Hash::make('demo1234!'),
                     'role' => 'fan',
                     'is_verified' => true,
