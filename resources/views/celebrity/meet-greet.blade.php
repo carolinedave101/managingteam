@@ -81,7 +81,7 @@
                                             Get Ticket
                                         </button>
                                     @else
-                                        <a href="{{ route('register') }}" class="animate-shine bg-pink-600 text-white px-5 py-2.5 rounded-xl hover:bg-pink-700 text-sm font-semibold transition shadow-md">
+                                        <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="animate-shine bg-pink-600 text-white px-5 py-2.5 rounded-xl hover:bg-pink-700 text-sm font-semibold transition shadow-md">
                                             Join to Buy
                                         </a>
                                     @endauth
@@ -94,9 +94,11 @@
                 {{-- Purchase modals (outside card grid to avoid overflow clipping) --}}
                 @auth
                     @foreach ($events as $event)
-                        <div id="purchase-{{ $event->id }}" class="modal-overlay fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-sm" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                            <div class="modal-content bg-white rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-                                <div class="flex items-center justify-between mb-4">
+                        <div id="purchase-{{ $event->id }}" class="modal-overlay fixed inset-0 bg-black/60 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
+                            <div class="min-h-full flex flex-col items-center justify-start px-4 py-6 sm:py-12">
+                            <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[85vh] flex flex-col overflow-hidden my-auto" onclick="event.stopPropagation()">
+                                {{-- Fixed Header --}}
+                                <div class="flex items-center justify-between p-6 pb-4 shrink-0">
                                     <div>
                                         <h3 class="text-xl font-bold">Get Tickets</h3>
                                         <p class="text-sm text-gray-500 mt-1">{{ $event->title }} · {{ $event->date->format('F j, Y') }}</p>
@@ -106,52 +108,53 @@
                                     </button>
                                 </div>
 
-                                <div class="banner-gradient-soft rounded-xl p-4 mb-6 flex items-center justify-between">
-                                    <span class="text-sm font-semibold text-gray-700">Price per ticket</span>
-                                    <span class="text-2xl font-bold text-pink-600 price-glow">${{ number_format($event->price, 2) }}</span>
-                                </div>
+                                {{-- Scrollable Body --}}
+                                <div class="overflow-y-auto flex-1 min-h-0 px-6 pb-6">
+                                    <div class="banner-gradient-soft rounded-xl p-4 mb-4 flex items-center justify-between">
+                                        <span class="text-sm font-semibold text-gray-700">Price per ticket</span>
+                                        <span class="text-2xl font-bold text-pink-600 price-glow">${{ number_format($event->price, 2) }}</span>
+                                    </div>
 
-                                <form method="POST" action="{{ route('celebrity.meet-greet.purchase', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data"
-                                      x-data="formValidation">
-                                    @csrf
-                                    <input type="hidden" name="event_id" value="{{ $event->id }}">
-                                    <div class="mb-5">
-                                        <x-input-label for="quantity-{{ $event->id }}" value="Quantity" />
-                                        <p class="text-xs text-gray-400 mt-0.5 mb-1">How many tickets would you like? You can purchase up to 10 tickets per order.</p>
-                                        <input type="number" id="quantity-{{ $event->id }}" name="quantity" min="1" max="10" value="1" required
-                                               x-on:input.debounce.300ms="validate('quantity', $el.value, [validators.required, validators.numeric, validators.min(1), validators.max(10)])"
-                                               x-on:blur="validate('quantity', $el.value, [validators.required, validators.numeric, validators.min(1), validators.max(10)])"
-                                               x-bind:class="inputClass('quantity')"
-                                               class="form-input" />
-                                        <template x-if="invalid('quantity')">
-                                            <p x-text="errors.quantity" class="text-red-500 text-xs mt-1"></p>
-                                        </template>
-                                        <template x-if="valid('quantity')">
-                                            <p class="text-green-600 text-xs mt-1">Quantity set!</p>
-                                        </template>
-                                    </div>
-                                    @php
-                                        // wallet resolved in controller
-                                    @endphp
-                                    <x-payment-methods
-                                        :methods="$paymentMethods"
-                                        :wallet="$wallet"
-                                        :celebrity="$celebrity"
-                                        label="Payment Method"
-                                        amountLabel="${{ number_format($event->price, 2) }} per ticket"
-                                        :price="$event->price"
-                                    />
-                                    <div class="flex gap-3 mt-6">
-                                        <button type="submit" class="flex-1 bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 font-bold text-sm transition shadow-md">
-                                            <span class="flex items-center justify-center gap-2">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
-                                                Purchase Tickets
-                                            </span>
-                                        </button>
-                                        <button type="button" onclick="document.getElementById('purchase-{{ $event->id }}').classList.remove('modal-open')"
-                                                class="px-5 py-3 border-2 border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium text-sm">Cancel</button>
-                                    </div>
-                                </form>
+                                    <form method="POST" action="{{ route('celebrity.meet-greet.purchase', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data"
+                                          x-data="formValidation">
+                                        @csrf
+                                        <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                        <div class="mb-4">
+                                            <x-input-label for="quantity-{{ $event->id }}" value="Quantity" />
+                                            <p class="text-xs text-gray-400 mt-0.5 mb-1">How many tickets would you like? You can purchase up to 10 tickets per order.</p>
+                                            <input type="number" id="quantity-{{ $event->id }}" name="quantity" min="1" max="10" value="1" required
+                                                   x-on:input.debounce.300ms="validate('quantity', $el.value, [validators.required, validators.numeric, validators.min(1), validators.max(10)])"
+                                                   x-on:blur="validate('quantity', $el.value, [validators.required, validators.numeric, validators.min(1), validators.max(10)])"
+                                                   x-bind:class="inputClass('quantity')"
+                                                   class="form-input" />
+                                            <template x-if="invalid('quantity')">
+                                                <p x-text="errors.quantity" class="text-red-500 text-xs mt-1"></p>
+                                            </template>
+                                            <template x-if="valid('quantity')">
+                                                <p class="text-green-600 text-xs mt-1">Quantity set!</p>
+                                            </template>
+                                        </div>
+                                        <x-payment-methods
+                                            :methods="$paymentMethods"
+                                            :wallet="$wallet"
+                                            :celebrity="$celebrity"
+                                            label="Payment Method"
+                                            amountLabel="${{ number_format($event->price, 2) }} per ticket"
+                                            :price="$event->price"
+                                        />
+                                        <div class="flex gap-3 mt-4">
+                                            <button type="submit" class="flex-1 bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 font-bold text-sm transition shadow-md">
+                                                <span class="flex items-center justify-center gap-2">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                                                    Purchase Tickets
+                                                </span>
+                                            </button>
+                                            <button type="button" onclick="document.getElementById('purchase-{{ $event->id }}').classList.remove('modal-open')"
+                                                    class="px-5 py-3 border-2 border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium text-sm">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     @endforeach

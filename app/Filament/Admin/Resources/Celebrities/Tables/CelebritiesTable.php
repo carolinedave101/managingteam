@@ -53,7 +53,8 @@ class CelebritiesTable
                     ->copyable()
                     ->copyMessage('Portal URL copied to clipboard!')
                     ->icon('heroicon-o-link')
-                    ->extraAttributes(['class' => 'font-mono text-xs']),
+                    ->extraAttributes(['class' => 'font-mono text-xs'])
+                    ->description(fn (Celebrity $record) => $record->config['custom_portal_url'] ?? null ? 'Custom' : null),
                 TextColumn::make('fans_count')
                     ->label('Fans')
                     ->counts('fans')

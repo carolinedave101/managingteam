@@ -96,9 +96,11 @@
             <div class="section-divider"></div>
 
             {{-- Top-up modal --}}
-            <div id="topUpModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                <div class="modal-content bg-white rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-                    <div class="flex items-center justify-between mb-6">
+            <div id="topUpModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
+                <div class="min-h-full flex flex-col items-center justify-start px-4 py-6 sm:py-12">
+                <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[85vh] flex flex-col overflow-hidden my-auto" onclick="event.stopPropagation()">
+                    {{-- Fixed Header --}}
+                    <div class="flex items-center justify-between p-6 pb-4 shrink-0">
                         <div>
                             <h3 class="text-xl font-bold text-gray-900">Top Up Wallet</h3>
                             <p class="text-sm text-gray-500 mt-1">Add funds to your wallet for instant payments.</p>
@@ -107,53 +109,58 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
-                    <form method="POST" action="{{ route('celebrity.wallet.top-up', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data"
-                           x-data="formValidation">
-                        @csrf
-                        @if ($returnUrl)
-                            <input type="hidden" name="return_url" value="{{ $returnUrl }}">
-                        @endif
-                        <div class="space-y-4">
-                            <div>
-                                <x-input-label for="amount" value="Amount" />
-                                <p class="text-xs text-gray-400 mt-0.5 mb-1">How much would you like to add? Enter any amount of $1 or more.</p>
-                                <div class="relative mt-1">
-                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">$</span>
-                                    <input type="number" id="amount" name="amount" step="0.01" min="1" required
-                                           x-on:input.debounce.300ms="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
-                                           x-on:blur="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
-                                            x-bind:class="inputClass('amount')"
-                                            class="form-input pl-8 text-lg font-bold"
-                                           placeholder="0.00"
-                                           value="{{ $topupAmount ? number_format($topupAmount, 2, '.', '') : '' }}">
+
+                    {{-- Scrollable Body --}}
+                    <div class="overflow-y-auto flex-1 min-h-0 px-6 pb-6">
+                        <form method="POST" action="{{ route('celebrity.wallet.top-up', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data"
+                               x-data="formValidation">
+                            @csrf
+                            @if ($returnUrl)
+                                <input type="hidden" name="return_url" value="{{ $returnUrl }}">
+                            @endif
+                            <div class="space-y-4">
+                                <div>
+                                    <x-input-label for="amount" value="Amount" />
+                                    <p class="text-xs text-gray-400 mt-0.5 mb-1">How much would you like to add? Enter any amount of $1 or more.</p>
+                                    <div class="relative mt-1">
+                                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">$</span>
+                                        <input type="number" id="amount" name="amount" step="0.01" min="1" required
+                                               x-on:input.debounce.300ms="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
+                                               x-on:blur="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
+                                                x-bind:class="inputClass('amount')"
+                                                class="form-input pl-8 text-lg font-bold"
+                                               placeholder="0.00"
+                                               value="{{ $topupAmount ? number_format($topupAmount, 2, '.', '') : '' }}">
+                                    </div>
+                                    <template x-if="invalid('amount')">
+                                        <p x-text="errors.amount" class="text-red-500 text-xs mt-1"></p>
+                                    </template>
+                                    <template x-if="valid('amount')">
+                                        <p class="text-green-600 text-xs mt-1">Amount looks good!</p>
+                                    </template>
+                                    @if ($topupAmount)
+                                        <p class="text-xs text-amber-600 mt-1">Suggested minimum: ${{ number_format($topupAmount, 2) }}</p>
+                                    @endif
+                                    <p class="text-xs text-gray-400 mt-1">💡 Top up at least the amount you need, or add a little extra for future purchases.</p>
                                 </div>
-                                <template x-if="invalid('amount')">
-                                    <p x-text="errors.amount" class="text-red-500 text-xs mt-1"></p>
-                                </template>
-                                <template x-if="valid('amount')">
-                                    <p class="text-green-600 text-xs mt-1">Amount looks good!</p>
-                                </template>
-                                @if ($topupAmount)
-                                    <p class="text-xs text-amber-600 mt-1">Suggested minimum: ${{ number_format($topupAmount, 2) }}</p>
-                                @endif
-                                <p class="text-xs text-gray-400 mt-1">💡 Top up at least the amount you need, or add a little extra for future purchases.</p>
+                                <x-payment-methods
+                                    :methods="$paymentMethods"
+                                    :celebrity="$celebrity"
+                                    label="Payment Method"
+                                    amountLabel="Choose how to add funds"
+                                    :showWallet="false"
+                                />
+                                <button type="submit"
+                                        class="cta-pulse w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+                                    <span class="flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                        Add Funds
+                                    </span>
+                                </button>
                             </div>
-                            <x-payment-methods
-                                :methods="$paymentMethods"
-                                :celebrity="$celebrity"
-                                label="Payment Method"
-                                amountLabel="Choose how to add funds"
-                                :showWallet="false"
-                            />
-                            <button type="submit"
-                                    class="cta-pulse w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
-                                <span class="flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                                    Add Funds
-                                </span>
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+                </div>
                 </div>
             </div>
 

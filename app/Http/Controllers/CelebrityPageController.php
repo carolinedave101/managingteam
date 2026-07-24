@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Celebrity;
 use App\Models\FanApplication;
+use App\Models\Giveaway;
 use App\Models\MeetGreetEvent;
 use App\Models\Wallet;
 
@@ -151,6 +152,28 @@ class CelebrityPageController extends Controller
             'application', 'card', 'tickets', 'meetups',
             'upcomingEvents', 'features', 'pricing', 'wallet'
         ));
+    }
+
+    public function giveaways()
+    {
+        $giveaways = Giveaway::where('celebrity_id', $this->celebrity->id)
+            ->where('status', '!=', 'draft')
+            ->accessibleBy(auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $paymentMethods = $this->celebrity->enabledPaymentMethods;
+        $wallet = null;
+        $myEntries = collect();
+        if (auth()->check()) {
+            $wallet = Wallet::findOrCreateForUser(auth()->user(), $this->celebrity);
+            $myEntries = auth()->user()->giveawayEntries()
+                ->where('celebrity_id', $this->celebrity->id)
+                ->with('giveaway')
+                ->get();
+        }
+
+        return view('celebrity.giveaways', compact('giveaways', 'paymentMethods', 'wallet', 'myEntries'));
     }
 
     public function customPage(string $pageSlug)

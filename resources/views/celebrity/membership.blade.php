@@ -100,7 +100,7 @@
                             <h3 class="text-xl font-bold text-gray-900">{{ $tier['name'] }}</h3>
                             <div class="mt-3 mb-4">
                                 <span class="price-glow text-4xl font-bold">${{ number_format($tier['price'], 0) }}</span>
-                                <span class="text-sm text-gray-400">/month</span>
+                                <span class="text-sm text-gray-400">/year</span>
                             </div>
                             <ul class="space-y-3 mb-6">
                                 @foreach ($tier['benefits'] as $benefit)
@@ -121,7 +121,7 @@
                                 @endif
                             @endauth
                             @guest
-                                <a href="{{ route('register') }}" class="animate-shine cta-pulse block w-full bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 text-sm font-semibold text-center transition shadow-md">Join to Subscribe</a>
+                                <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="animate-shine cta-pulse block w-full bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 text-sm font-semibold text-center transition shadow-md">Join to Subscribe</a>
                             @endguest
                         </div>
                     </div>
@@ -132,9 +132,11 @@
             @auth
                 @if (!$activeMembership)
                     @foreach ($tiers as $tier)
-                        <div id="subscribe-{{ Str::slug($tier['name']) }}" class="modal-overlay fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-sm" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                            <div class="modal-content" onclick="event.stopPropagation()">
-                                <div class="flex items-center justify-between mb-4">
+                        <div id="subscribe-{{ Str::slug($tier['name']) }}" class="modal-overlay fixed inset-0 bg-black/60 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
+                            <div class="min-h-full flex flex-col items-center justify-start px-4 py-6 sm:py-12">
+                            <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[85vh] flex flex-col overflow-hidden my-auto" onclick="event.stopPropagation()">
+                                {{-- Fixed Header --}}
+                                <div class="flex items-center justify-between p-6 pb-4 shrink-0">
                                     <div>
                                         <h3 class="text-xl font-bold">Subscribe to {{ $tier['name'] }}</h3>
                                         <p class="text-sm text-gray-500 mt-1">You're about to subscribe to the {{ $tier['name'] }} plan.</p>
@@ -144,37 +146,38 @@
                                     </button>
                                 </div>
 
-                                <div class="banner-gradient-soft rounded-xl p-4 mb-6 flex items-center justify-between">
-                                    <span class="text-sm font-semibold text-gray-700">Total</span>
-                                    <span class="price-gold text-2xl font-bold">${{ number_format($tier['price'], 2) }}</span>
-                                </div>
-
-                                <form method="POST" action="{{ route('celebrity.membership.subscribe', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="tier" value="{{ $tier['name'] }}">
-                                    <input type="hidden" name="price" value="{{ $tier['price'] }}">
-                                    @php
-                                        // wallet resolved in controller
-                                    @endphp
-                                    <x-payment-methods
-                                        :methods="$paymentMethods"
-                                        :wallet="$wallet"
-                                        :celebrity="$celebrity"
-                                        label="Payment Method"
-                                        amountLabel="Plan: {{ $tier['name'] }} — ${{ number_format($tier['price'], 2) }}/mo"
-                                        :price="$tier['price']"
-                                    />
-                                    <div class="flex gap-3 mt-6">
-                                        <button type="submit" class="animate-shine cta-pulse flex-1 bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 font-bold text-sm transition shadow-md">
-                                            <span class="flex items-center justify-center gap-2">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                Complete Payment
-                                            </span>
-                                        </button>
-                                        <button type="button" onclick="document.getElementById('subscribe-{{ Str::slug($tier['name']) }}').classList.remove('modal-open')"
-                                                class="px-5 py-3 border-2 border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium text-sm">Cancel</button>
+                                {{-- Scrollable Body --}}
+                                <div class="overflow-y-auto flex-1 min-h-0 px-6 pb-6">
+                                    <div class="banner-gradient-soft rounded-xl p-4 mb-4 flex items-center justify-between">
+                                        <span class="text-sm font-semibold text-gray-700">Total</span>
+                                        <span class="price-gold text-2xl font-bold">${{ number_format($tier['price'], 2) }}</span>
                                     </div>
-                                </form>
+
+                                    <form method="POST" action="{{ route('celebrity.membership.subscribe', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="tier" value="{{ $tier['name'] }}">
+                                        <input type="hidden" name="price" value="{{ $tier['price'] }}">
+                                        <x-payment-methods
+                                            :methods="$paymentMethods"
+                                            :wallet="$wallet"
+                                            :celebrity="$celebrity"
+                                            label="Payment Method"
+                                            amountLabel="Plan: {{ $tier['name'] }} — ${{ number_format($tier['price'], 2) }}/yr"
+                                            :price="$tier['price']"
+                                        />
+                                        <div class="flex gap-3 mt-4">
+                                            <button type="submit" class="animate-shine cta-pulse flex-1 bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 font-bold text-sm transition shadow-md">
+                                                <span class="flex items-center justify-center gap-2">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                    Complete Payment
+                                                </span>
+                                            </button>
+                                            <button type="button" onclick="document.getElementById('subscribe-{{ Str::slug($tier['name']) }}').classList.remove('modal-open')"
+                                                    class="px-5 py-3 border-2 border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium text-sm">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     @endforeach

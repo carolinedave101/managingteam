@@ -41,6 +41,11 @@ class CelebrityForm
                                         .'</div>'
                                     ) : new HtmlString('<span class="text-gray-400 text-sm">Save the celebrity to generate the portal URL.</span>'))
                                     ->visible(fn ($operation) => $operation === 'edit'),
+                                TextInput::make('config.custom_portal_url')
+                                    ->label('Custom Portal URL')
+                                    ->url()
+                                    ->placeholder('https://example.com')
+                                    ->helperText('Override the default portal URL with a custom domain or vanity URL. Leave blank to use the auto-generated subdomain URL above. Useful if you have set up a custom domain for this celebrity.'),
                                 TextInput::make('name')
                                     ->required()
                                     ->maxLength(255)
@@ -217,13 +222,14 @@ class CelebrityForm
                                                     ->numeric()
                                                     ->prefix('$')
                                                     ->default(3000)
-                                                    ->helperText('The recurring price for this membership tier in USD. Enter a numeric value only.'),
+                                                    ->helperText('The yearly price for this membership tier in USD. Enter a numeric value only.'),
                                                 TextInput::make('color')
                                                     ->placeholder('#C0C0C0')
                                                     ->helperText('Hex color code that visually distinguishes this tier, used for the tier badge and card accent.'),
                                                 TagsInput::make('benefits')
                                                     ->placeholder('Add benefit')
-                                                    ->helperText('List of individual perks/benefits included with this membership tier.'),
+                                                    ->splitKeys([',', "\n"])
+                                                    ->helperText('Type each benefit and press Enter, or paste multiple benefits separated by commas or new lines (e.g. "Early access, VIP chat, Monthly call").'),
                                             ])
                                             ->defaultItems(0)
                                             ->addActionLabel('Add Tier')
@@ -400,6 +406,27 @@ class CelebrityForm
                                         Toggle::make('config.features.messaging')
                                             ->label('Messaging')
                                             ->default(true),
+                                        Toggle::make('config.features.giveaways')
+                                            ->label('Giveaways')
+                                            ->default(true),
+                                    ]),
+
+                                Section::make('Management Portal Link')
+                                    ->description('Add an external link to a management/booking portal that appears in the fan portal navigation and footer. Fans will see a "Management Portal" button linking to the URL you set below.')
+                                    ->schema([
+                                        Toggle::make('config.management_portal.enabled')
+                                            ->label('Show Management Portal Link')
+                                            ->helperText('When enabled, a "Management Portal" link appears in the nav, footer, and dashboard quick actions for fans.'),
+                                        TextInput::make('config.management_portal.url')
+                                            ->label('Portal URL')
+                                            ->url()
+                                            ->placeholder('https://example.com/management')
+                                            ->helperText('The full URL (including https://) that fans will be sent to when they click the Management Portal link.'),
+                                        TextInput::make('config.management_portal.label')
+                                            ->label('Link Label')
+                                            ->maxLength(255)
+                                            ->placeholder('Management Portal')
+                                            ->helperText('Custom label for the link. Defaults to "Management Portal" if left empty.'),
                                     ]),
                             ]),
                     ])->columnSpanFull(),
