@@ -114,10 +114,10 @@
                          <div id="enter-giveaway-{{ $giveaway->id }}" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm overflow-y-auto hidden" style="animation: fadeIn 0.15s ease;"
                               x-data="{ step: 'question', note: '' }"
                               x-on:giveaway-reset-{{ $giveaway->id }}.window="step = 'question'; note = ''">
-                             <div class="min-h-full w-full flex flex-col items-center justify-center px-4 pt-16 pb-12 sm:py-12">
-                             <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl" @click.stop>
+                              <div class="min-h-full w-full flex flex-col items-start sm:items-center justify-center px-4 pt-16 pb-12 sm:py-12">
+                             <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl max-h-[85vh] flex flex-col overflow-hidden" @click.stop>
 
-                                <div class="flex items-start justify-between p-6 pb-4">
+                                <div class="flex items-start justify-between p-6 pb-4 shrink-0">
                                     <div>
                                         <h3 class="text-xl font-bold text-gray-900" x-text="step === 'question' ? 'Enter Giveaway' : 'Complete Entry'"></h3>
                                         <p class="text-sm text-gray-500 mt-1">{{ $giveaway->title }}</p>
@@ -127,7 +127,7 @@
                                     </button>
                                 </div>
 
-                                <div class="px-6 pb-6">
+                                <div class="overflow-y-auto flex-1 min-h-0 px-6 pb-6">
                                     {{-- Prize Summary --}}
                                     <div class="bg-gray-50 rounded-xl p-4 space-y-2 text-sm mb-5">
                                         <div class="flex justify-between">

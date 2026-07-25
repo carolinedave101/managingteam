@@ -87,9 +87,9 @@
 
             {{-- Top-up modal --}}
             <div id="topUpModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                <div class="min-h-full flex flex-col items-center justify-center px-4 pt-16 pb-12 sm:py-12">
-                <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl" onclick="event.stopPropagation()">
-                    <div class="flex items-center justify-between p-6 pb-4">
+                <div class="min-h-full flex flex-col items-start sm:items-center justify-center px-4 pt-16 pb-12 sm:py-12">
+                <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl max-h-[85vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
+                    <div class="flex items-center justify-between p-6 pb-4 shrink-0">
                         <div>
                             <h3 class="text-xl font-bold text-gray-900">Top Up Wallet</h3>
                             <p class="text-sm text-gray-500 mt-1">Add funds to your wallet for instant payments.</p>
@@ -99,7 +99,7 @@
                         </button>
                     </div>
 
-                    <div class="px-6 pb-6">
+                    <div class="overflow-y-auto flex-1 min-h-0 px-6 pb-6">
                         <form method="POST" action="{{ route('celebrity.wallet.top-up', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data"
                                x-data="formValidation">
                             @csrf
