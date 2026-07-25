@@ -87,7 +87,7 @@
 
             {{-- Top-up modal --}}
             <div id="topUpModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                <div class="min-h-full flex flex-col items-center justify-center px-4 py-12">
+                <div class="min-h-full flex flex-col items-center justify-center px-4 pt-16 pb-12 sm:py-12">
                 <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl" onclick="event.stopPropagation()">
                     <div class="flex items-center justify-between p-6 pb-4">
                         <div>

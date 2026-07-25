@@ -269,7 +269,7 @@
             100% { transform: rotateY(180deg); }
         }
         @media (max-width: 640px) {
-            .scene { max-height: 380px; }
+            .scene { aspect-ratio: 1.2 / 1; max-height: 400px; }
         }
     </style>
 
