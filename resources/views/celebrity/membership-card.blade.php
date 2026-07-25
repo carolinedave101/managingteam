@@ -4,6 +4,7 @@
         $primaryColor = $theme['primary_color'] ?? '#ec4899';
         $secondaryColor = $theme['secondary_color'] ?? '#8b5cf6';
         $cardFee = $celebrity->config['pricing']['membership_card_fee'] ?? 0;
+        $userName = auth()->check() ? auth()->user()->name : null;
     @endphp
     <div class="min-h-screen py-12 relative overflow-hidden" style="background:linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #eef2ff 100%);">
         <div class="max-w-3xl mx-auto px-4 relative">
@@ -59,11 +60,7 @@
                                     <div class="flex flex-col gap-1">
                                         <span class="text-[7px] tracking-[0.2em] uppercase text-white/40 font-semibold">Card Holder</span>
                                         <span class="text-sm sm:text-base font-semibold text-white/90 tracking-wider">
-                                            @if ($card)
-                                                {{ $card->user->name }}
-                                            @else
-                                                —
-                                            @endif
+                                            {{ $card ? $card->user->name : ($userName ?? '—') }}
                                         </span>
                                     </div>
                                     <div class="flex flex-col gap-1">
