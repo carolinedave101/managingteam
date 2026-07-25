@@ -175,37 +175,56 @@
 
     <div class="card-wrapper">
         <div class="card" style="background:linear-gradient(135deg, {{ $primary }}ee, {{ $secondary }}dd);color:#fff;">
-            <div class="card-inner">
-                <div class="card-header" style="background:rgba(0,0,0,0.12);">
-                    <span class="label">Official Membership Card</span>
-                    <span class="celeb-name">{{ $celeb->name }}</span>
+            <div class="card-inner" style="padding:28px 32px 20px;display:flex;flex-direction:column;gap:18px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div style="background:linear-gradient(135deg,#fbbf24,#d97706);border-radius:6px;width:50px;height:38px;position:relative;overflow:hidden;box-shadow:inset 0 1px 2px rgba(255,255,255,0.4),0 2px 4px rgba(0,0,0,0.2);">
+                            <div style="position:absolute;top:8px;left:10px;right:10px;height:3px;border-radius:2px;background:rgba(255,255,255,0.25);"></div>
+                            <div style="position:absolute;bottom:8px;left:12px;right:12px;height:3px;border-radius:2px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);"></div>
+                        </div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="width:46px;height:32px;border-radius:6px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:11px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,0.7);">MT</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card-body">
-                    <div class="member-name">{{ $card->user->name }}</div>
+                <div>
                     <div class="member-id">{{ $card->card_number }}</div>
+                </div>
 
-                    <div class="tier-badge" style="border-color:rgba(255,255,255,0.35);">
-                        {{ $card->tier }}
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+                    <div>
+                        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:0.4;margin-bottom:2px;">Card Holder</div>
+                        <div style="font-size:16px;font-weight:700;letter-spacing:0.5px;">{{ $card->user->name }}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:0.4;margin-bottom:2px;">Valid Thru</div>
+                        <div style="font-size:14px;font-weight:700;font-family:'DejaVu Sans Mono',monospace;">{{ $card->expires_at?->format('m/y') ?? '--' }}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:0.4;margin-bottom:2px;">Tier</div>
+                        <div style="font-size:12px;font-weight:700;text-transform:uppercase;">{{ $card->tier }}</div>
                     </div>
                 </div>
 
-                <div class="card-footer" style="background:rgba(0,0,0,0.08);">
-                    <div class="date-item">
-                        <div class="date-label">Issued</div>
-                        <div class="date-value">{{ $card->issued_at?->format('d M Y') ?? '—' }}</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;{{ $card->is_active ? 'background:#34d399;' : 'background:#fbbf24;' }}"></span>
+                        <span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;{{ $card->is_active ? 'color:#6ee7b7;' : 'color:#fde68a;' }}">{{ $card->is_active ? 'Active' : 'Pending' }}</span>
                     </div>
-                    <div class="date-item">
-                        <div class="date-label">Status</div>
-                        <div class="date-value">{{ $card->is_active ? 'Active' : 'Pending' }}</div>
-                    </div>
-                    <div class="date-item">
-                        <div class="date-label">Expires</div>
-                        <div class="date-value">{{ $card->expires_at?->format('d M Y') ?? 'Lifetime' }}</div>
-                    </div>
+                    <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:0.4;">{{ $celeb->name }}</span>
                 </div>
 
-                <div class="bottom-bar" style="background:linear-gradient(90deg, {{ $primary }}, {{ $secondary }});"></div>
+                <div class="bottom-bar" style="height:4px;width:100%;background:linear-gradient(90deg,{{ $primary }},{{ $secondary }});border-radius:2px;margin-top:2px;"></div>
+
+                <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;display:flex;justify-content:space-between;font-size:8px;opacity:0.5;letter-spacing:0.5px;">
+                    <span>Issued: {{ $card->issued_at?->format('d M Y') ?? '—' }}</span>
+                    <span>Status: {{ $card->is_active ? 'Active' : 'Pending' }}</span>
+                    <span>Expires: {{ $card->expires_at?->format('d M Y') ?? 'Lifetime' }}</span>
+                </div>
             </div>
         </div>
 

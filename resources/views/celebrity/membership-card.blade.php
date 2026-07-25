@@ -15,7 +15,7 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-1">Membership <span style="background:linear-gradient(135deg,{{ $primaryColor }},{{ $secondaryColor }});-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Card</span></h1>
             </div>
 
-            {{-- Gift Card --}}
+            {{-- Membership Card --}}
             <div class="max-w-xl mx-auto mb-8"
                  x-data="card3d()"
                  x-init="init()"
@@ -28,62 +28,105 @@
 
                         {{-- Front --}}
                         <div class="card-face card-front">
-                            <div class="h-full flex flex-col">
-                                {{-- Top branding bar --}}
-                                <div class="bg-black/20 px-5 sm:px-7 py-2.5 flex items-center justify-between">
-                                    <span class="text-[10px] tracking-[0.25em] uppercase text-white/60 font-mono font-semibold">Gift Card</span>
-                                    <span class="text-[10px] tracking-[0.25em] uppercase text-white/60 font-mono">{{ $celebrity->name }}</span>
+                            <div class="h-full flex flex-col justify-between p-5 sm:p-7">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex flex-col gap-3">
+                                        <div class="chip" style="background:linear-gradient(135deg, #fbbf24, #d97706);border-radius:6px;width:42px;height:32px;position:relative;overflow:hidden;box-shadow:inset 0 1px 2px rgba(255,255,255,0.4),0 2px 4px rgba(0,0,0,0.2);">
+                                            <div style="position:absolute;top:6px;left:8px;right:8px;height:3px;border-radius:2px;background:rgba(255,255,255,0.25);"></div>
+                                            <div style="position:absolute;bottom:6px;left:10px;right:10px;height:3px;border-radius:2px;background:rgba(255,255,255,0.15);"></div>
+                                            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);"></div>
+                                        </div>
+                                        <svg class="w-7 h-7 text-white/60" viewBox="0 0 48 48" fill="none">
+                                            <path d="M24 4L28 16L40 18L30 27L34 40L24 32L14 40L18 27L8 18L20 16L24 4Z" fill="currentColor" opacity="0.5"/>
+                                        </svg>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="w-10 h-7 rounded-md bg-white/20 border border-white/10 flex items-center justify-center">
+                                            <span class="text-[8px] font-bold text-white/70 tracking-widest">MT</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="flex-1 flex flex-col justify-center px-5 sm:px-7 py-4">
+                                <div class="flex flex-col gap-1.5">
                                     @if ($card)
-                                        <div class="flex items-center gap-2 mb-2">
-                                            <span class="w-1.5 h-1.5 rounded-full {{ $card->is_active ? 'bg-emerald-400' : 'bg-amber-400' }}"></span>
-                                            <span class="text-[10px] font-semibold tracking-wider uppercase {{ $card->is_active ? 'text-emerald-300' : 'text-amber-300' }}">{{ $card->is_active ? 'Redeemed' : 'Pending' }}</span>
-                                        </div>
-                                        <p class="text-lg sm:text-2xl font-bold text-white/90 font-mono tracking-[0.15em]">{{ $card->card_number }}</p>
-                                        <p class="text-xs text-white/50 mt-1 font-medium tracking-wider uppercase">{{ $card->tier }}</p>
-                                        <div class="mt-auto pt-3 flex justify-between text-[10px] text-white/40 font-mono">
-                                            <span>{{ $card->issued_at?->format('M Y') }}</span>
-                                            <span>{{ $card->expires_at?->format('M Y') }}</span>
-                                        </div>
+                                        <p class="text-lg sm:text-2xl font-bold text-white/90 font-mono tracking-[0.18em]">{{ $card->card_number }}</p>
                                     @else
-                                        <div class="flex-1 flex flex-col justify-center">
-                                            <p class="text-[10px] tracking-[0.25em] uppercase text-white/50 font-mono mb-3">Redeemable Gift Card</p>
-                                            <p class="text-2xl sm:text-3xl font-bold text-white/20 font-mono tracking-[0.12em] select-none">•••• &nbsp; •••• &nbsp; •••• &nbsp; ••••</p>
-                                            <div class="mt-3 flex items-center gap-2">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-white/30"></span>
-                                                <span class="text-[10px] tracking-wider uppercase text-white/40 font-mono">Awaiting Redemption</span>
-                                            </div>
-                                            <p class="mt-auto text-[10px] text-white/30 font-mono tracking-wider uppercase">Valid for one membership card</p>
-                                        </div>
+                                        <p class="text-lg sm:text-2xl font-bold text-white/20 font-mono tracking-[0.18em] select-none">•••• &nbsp; •••• &nbsp; •••• &nbsp; ••••</p>
                                     @endif
                                 </div>
 
-                                {{-- Bottom accent --}}
-                                <div class="h-1 w-full" style="background:linear-gradient(90deg, {{ $primaryColor }}, {{ $secondaryColor }});"></div>
+                                <div class="flex items-end justify-between">
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-[7px] tracking-[0.2em] uppercase text-white/40 font-semibold">Card Holder</span>
+                                        <span class="text-sm sm:text-base font-semibold text-white/90 tracking-wider">
+                                            @if ($card)
+                                                {{ $card->user->name }}
+                                            @else
+                                                —
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-[7px] tracking-[0.2em] uppercase text-white/40 font-semibold">Valid Thru</span>
+                                        <span class="text-sm sm:text-base font-mono font-semibold text-white/90">
+                                            @if ($card && $card->expires_at)
+                                                {{ $card->expires_at->format('m/y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-col items-end gap-1">
+                                        <span class="text-[7px] tracking-[0.2em] uppercase text-white/40 font-semibold">Tier</span>
+                                        <span class="text-xs font-bold text-white/80 tracking-wider uppercase">
+                                            @if ($card)
+                                                {{ $card->tier }}
+                                            @else
+                                                —
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        @if ($card)
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $card->is_active ? 'bg-emerald-400' : 'bg-amber-400' }}"></span>
+                                            <span class="text-[9px] font-semibold tracking-wider uppercase {{ $card->is_active ? 'text-emerald-300' : 'text-amber-300' }}">{{ $card->is_active ? 'Active' : 'Pending' }}</span>
+                                        @else
+                                            <span class="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+                                            <span class="text-[9px] tracking-wider uppercase text-white/30 font-mono">Not Issued</span>
+                                        @endif
+                                    </div>
+                                    <span class="text-[9px] tracking-[0.2em] uppercase text-white/40 font-semibold">{{ $celebrity->name }}</span>
+                                </div>
                             </div>
                         </div>
 
                         {{-- Back --}}
                         <div class="card-face card-back">
                             <div class="h-full flex flex-col">
-                                <div class="bg-black/20 px-5 sm:px-7 py-2.5 flex items-center justify-between">
-                                    <span class="text-[10px] tracking-[0.25em] uppercase text-white/60 font-mono font-semibold">Gift Card</span>
-                                    <span class="text-[10px] tracking-[0.2em] uppercase text-white/40 font-mono">{{ $celebrity->name }}</span>
-                                </div>
-                                <div class="flex-1 px-5 sm:px-7 py-4 flex flex-col justify-center gap-3">
-                                    <div class="h-8 sm:h-10 rounded bg-white/10 w-full border border-white/10"></div>
-                                    <div class="flex justify-center">
-                                        <div class="w-36 h-20 sm:w-44 sm:h-24 rounded bg-gradient-to-br from-white/5 to-white/10 border border-white/10 flex items-center justify-center">
-                                            <div class="text-[8px] sm:text-[10px] tracking-widest text-white/30 font-mono uppercase">{code}</div>
+                                <div class="h-10 sm:h-12 mt-6 bg-black/40 w-full" style="background:linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3));"></div>
+                                <div class="flex-1 px-5 sm:px-7 py-4 flex flex-col justify-between">
+                                    <div class="flex items-center justify-end gap-3">
+                                        <div class="h-8 sm:h-9 w-16 sm:w-20 rounded bg-white/10 border border-white/10 flex items-center justify-center">
+                                            <span class="text-[7px] sm:text-[8px] tracking-widest text-white/30 font-mono uppercase">cvc</span>
+                                        </div>
+                                        <div class="h-8 sm:h-9 flex-1 rounded bg-white/90 border border-white/20 flex items-center px-3">
+                                            @if ($card)
+                                                <span class="text-xs font-mono text-gray-800 italic tracking-widest">{{ substr($card->card_number, -4) }}</span>
+                                            @else
+                                                <span class="text-xs font-mono text-gray-300 italic">••••</span>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="text-[8px] sm:text-[9px] text-white/25 font-mono text-center leading-relaxed max-w-xs mx-auto">
-                                        This card is non-transferable. Valid only for the named celebrity portal. Terms &amp; conditions apply.
+                                    <div class="text-[7px] sm:text-[8px] text-white/25 font-mono text-center leading-relaxed max-w-xs mx-auto">
+                                        This card is non-transferable property of {{ $celebrity->name }} Management Team. Valid only for the named celebrity portal. Terms &amp; conditions apply.
+                                    </div>
+                                    <div class="text-[6px] tracking-[0.3em] uppercase text-white/15 font-mono text-center">
+                                        Authorized Signature — Not Valid Unless Signed
                                     </div>
                                 </div>
-                                <div class="h-1 w-full" style="background:linear-gradient(90deg, {{ $primaryColor }}, {{ $secondaryColor }});"></div>
                             </div>
                         </div>
                     </div>
@@ -96,14 +139,14 @@
             </div>
 
             @if (!$card)
-                {{-- Redeem section --}}
+                {{-- Order section --}}
                 <div class="max-w-lg mx-auto">
                     @if ($cardFee > 0)
                         <div class="mb-4 rounded-xl border p-4 flex items-center gap-3" style="background:#fefce8;border-color:#fde68a;">
                             <div class="w-9 h-9 rounded-lg shrink-0 flex items-center justify-center" style="background:#f59e0b20;">
                                 <svg class="w-4 h-4" style="color:#d97706;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
-                            <p class="text-sm text-gray-700"><span class="font-semibold">One-time fee: ${{ number_format($cardFee, 2) }}</span> &middot; Redeem your gift card to unlock exclusive perks.</p>
+                            <p class="text-sm text-gray-700"><span class="font-semibold">Issue fee: ${{ number_format($cardFee, 2) }}</span> &middot; Get your premium membership card for exclusive perks.</p>
                         </div>
                     @endif
 
@@ -111,7 +154,7 @@
                         <div class="px-6 py-4 border-b border-gray-100">
                             <h2 class="text-base font-semibold text-gray-900 flex items-center gap-2">
                                 <svg class="w-4 h-4" style="color:{{ $primaryColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
-                                Redeem Your Card
+                                Issue Your Card
                             </h2>
                         </div>
                         <div class="p-6">
@@ -133,7 +176,7 @@
                                     style="background:linear-gradient(135deg, {{ $primaryColor }}, {{ $secondaryColor }});">
                                     <span class="flex items-center justify-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                        {{ $cardFee > 0 ? 'Redeem for $' . number_format($cardFee, 2) : 'Redeem Free' }}
+                                        {{ $cardFee > 0 ? 'Issue Card — $' . number_format($cardFee, 2) : 'Issue Free Card' }}
                                     </span>
                                 </button>
                             </form>
@@ -141,17 +184,17 @@
                     </div>
                 </div>
             @else
-                {{-- Claimed card actions --}}
+                {{-- Card active actions --}}
                 <div class="max-w-lg mx-auto text-center">
                     <div class="rounded-2xl border shadow-sm p-6" style="background:white;border-color:#e5e7eb;">
                         <div class="flex items-center justify-center gap-2 mb-3">
                             <div class="w-2.5 h-2.5 rounded-full {{ $card->is_active ? 'bg-emerald-500' : 'bg-amber-500' }} animate-pulse"></div>
                             <span class="text-sm font-semibold {{ $card->is_active ? 'text-emerald-600' : 'text-amber-600' }}">
-                                {{ $card->is_active ? 'Card Redeemed — Ready to Use' : 'Card Pending Approval' }}
+                                {{ $card->is_active ? 'Card Active — Ready for Use' : 'Card Pending Approval' }}
                             </span>
                         </div>
                         @if ($card->is_active)
-                            <p class="text-sm text-gray-500 mb-4">Your gift card has been redeemed. Present it at events for VIP access.</p>
+                            <p class="text-sm text-gray-500 mb-4">Your membership card is active. Use it for purchases, event access, and VIP perks.</p>
                             <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}"
                                class="inline-flex items-center gap-2 px-5 py-2.5 text-white rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all"
                                style="background:linear-gradient(135deg, {{ $primaryColor }}, {{ $secondaryColor }});">
