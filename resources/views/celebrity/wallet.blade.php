@@ -97,8 +97,8 @@
 
             {{-- Top-up modal --}}
             <div id="topUpModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                <div class="min-h-full flex flex-col items-center justify-start px-4 py-6 sm:py-12">
-                <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[85vh] flex flex-col overflow-hidden my-auto" onclick="event.stopPropagation()">
+                <div class="min-h-full flex flex-col items-start sm:items-center justify-center px-4 py-6 sm:py-12">
+                <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[85vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
                     {{-- Fixed Header --}}
                     <div class="flex items-center justify-between p-6 pb-4 shrink-0">
                         <div>

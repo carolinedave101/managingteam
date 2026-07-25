@@ -230,8 +230,8 @@
         .scene {
             perspective: 1200px;
             width: 100%;
-            aspect-ratio: 1.55 / 1;
-            max-height: 360px;
+            aspect-ratio: 1.45 / 1;
+            max-height: 400px;
             cursor: pointer;
         }
         .scene.is-spinning .card-3d {
@@ -269,7 +269,7 @@
             100% { transform: rotateY(180deg); }
         }
         @media (max-width: 640px) {
-            .scene { max-height: 240px; }
+            .scene { max-height: 350px; }
         }
     </style>
 
