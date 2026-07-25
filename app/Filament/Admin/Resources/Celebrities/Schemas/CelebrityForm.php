@@ -276,6 +276,10 @@ class CelebrityForm
                                                 TextInput::make('details.swift_code')
                                                     ->label('SWIFT / BIC Code')
                                                     ->visible(fn ($get) => $get('type') === 'bank_transfer'),
+                                                Textarea::make('details.bank_address')
+                                                    ->label('Bank Address')
+                                                    ->rows(2)
+                                                    ->visible(fn ($get) => $get('type') === 'bank_transfer'),
                                                 TextInput::make('details.email')
                                                     ->label('PayPal Email')
                                                     ->visible(fn ($get) => $get('type') === 'paypal')
