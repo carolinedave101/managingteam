@@ -118,7 +118,7 @@
 
         <p class="text-center text-sm text-gray-500 pt-2">
             Already have an account?
-            <a href="{{ route('landing') }}"
+            <a href="{{ $celeb ? route('celebrity.login', ['celebrity' => $celeb->slug]) : route('landing') }}"
                class="auth-link font-semibold hover:underline">
                 Visit your celebrity's portal to sign in
             </a>

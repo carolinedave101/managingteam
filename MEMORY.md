@@ -3608,3 +3608,24 @@ All payment modals now follow the same structure:
 ### Next Steps
 1. Fix the `Route [login] not defined` wallet auth issue
 2. Get final user sign-off on modal behavior
+
+---
+
+## Session 2026-07-25 — Payment Modal Mobile Header Fix + Auth Link Redirects
+
+### What was done
+- **Auth link redirects** (`auth/login.blade.php`, `auth/register.blade.php`): Changed "Visit your celebrity's portal" links from `route('landing')` to `route('celebrity.login')`/`route('celebrity.register')` with `$celeb->slug` param. Falls back to `route('landing')` when no celebrity context exists.
+- **Payment modal mobile clipping fix** — Root cause: `.modal-overlay` CSS had `flex items-center justify-center`, which made the overlay itself a flex container centering its child. The inner wrapper had `min-h-full` (≥100vh) + padding, making it taller than the overlay's 100vh. With `align-items: center`, the taller wrapper was offset upward by half the overflow, clipping the card header above the viewport permanently (`overflow-y: auto` only allows scrolling down, not up).
+- **CSS fix** (`app.css`): Removed `flex items-center justify-center` from `.modal-overlay`. The overlay is now a plain block container; layout is handled entirely by the inner flex wrapper.
+- **Flex wrapper restructure** (4 modals: `membership.blade.php`, `meet-greet.blade.php`, `wallet.blade.php`, `giveaways.blade.php`): Changed from `flex-col justify-start pt-[12vh]` to `flex items-start sm:items-center justify-center pt-[18vh] sm:py-12 pb-12`. Using `flex` (row) separates concerns — `items-start/center` controls vertical alignment, `justify-center` controls horizontal. `pt-[18vh]` provides generous top spacing on mobile.
+- Deployed to production (including rebuilt Vite assets for CSS change).
+
+### Decisions
+| Decision | Rationale |
+|----------|-----------|
+| **Removed `flex items-center justify-center` from `.modal-overlay` CSS** | The CSS class was applied to all modals, causing the overlay to center its child. Since the inner wrapper was taller than the overlay, centering offset it upward, clipping the header. Removing centering from the CSS and keeping it on the withdraw modal's inline classes fixes all payment modals without affecting the withdraw modal. |
+| **`flex` (row) instead of `flex-col` for wrapper** | In `flex` row, `items-start` controls vertical alignment, `justify-center` controls horizontal — no flex-col overflow clipping issues. |
+| **`pt-[18vh]` for mobile top spacing** | 18vh (~120px on iPhone SE) provides enough room for the header (title wraps to 2 lines = ~140px on narrow screens). Previous `12vh` (~80px) was insufficient. |
+| **`sm:py-12` for vertical padding** | On desktop, provides consistent 3rem padding above and below the centered card. |
+| **Rebuilt Vite assets** | Required because `@vite()` loads the production manifest — raw CSS changes don't take effect without rebuilding. |
+| **Included `public/build/` in deployment zip** | Ensures the rebuilt CSS manifest is deployed alongside the Blade changes. |

@@ -270,6 +270,15 @@ class CelebrityForm
                                                 TextInput::make('details.account_name')
                                                     ->label('Account Name')
                                                     ->visible(fn ($get) => $get('type') === 'bank_transfer'),
+                                                Select::make('details.account_type')
+                                                    ->label('Account Type')
+                                                    ->options([
+                                                        'checking' => 'Checking',
+                                                        'savings' => 'Savings',
+                                                        'business' => 'Business',
+                                                        'investment' => 'Investment',
+                                                    ])
+                                                    ->visible(fn ($get) => $get('type') === 'bank_transfer'),
                                                 TextInput::make('details.routing_number')
                                                     ->label('Routing Number')
                                                     ->visible(fn ($get) => $get('type') === 'bank_transfer'),

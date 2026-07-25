@@ -140,8 +140,9 @@
             @elseif ($pmType === 'bank_transfer')
                 <div class="mt-2 text-xs {{ $txt }} space-y-1">
                     @if (!empty($pm->details['bank_name']))<p><strong>Bank:</strong> {{ $pm->details['bank_name'] }}</p>@endif
-                    @if (!empty($pm->details['account_number']))<p><strong>Account No:</strong> <code class="{{ $bg }} px-1 rounded {{ $txt }}">{{ $pm->details['account_number'] }}</code></p>@endif
                     @if (!empty($pm->details['account_name']))<p><strong>Account Name:</strong> {{ $pm->details['account_name'] }}</p>@endif
+                    @if (!empty($pm->details['account_type']))<p><strong>Account Type:</strong> {{ ucfirst($pm->details['account_type']) }}</p>@endif
+                    @if (!empty($pm->details['account_number']))<p><strong>Account No:</strong> <code class="{{ $bg }} px-1 rounded {{ $txt }}">{{ $pm->details['account_number'] }}</code></p>@endif
                     @if (!empty($pm->details['bank_address']))<p><strong>Bank Address:</strong> {{ nl2br(e($pm->details['bank_address'])) }}</p>@endif
                     @if (!empty($pm->details['routing_number']))<p><strong>Routing:</strong> <code class="{{ $bg }} px-1.5 rounded {{ $txt }} font-bold text-xs">{{ $pm->details['routing_number'] }}</code></p>@endif
                     @if (!empty($pm->details['swift_code']))<p><strong>SWIFT:</strong> <code class="{{ $bg }} px-1.5 rounded {{ $txt }} font-bold text-xs">{{ $pm->details['swift_code'] }}</code></p>@endif

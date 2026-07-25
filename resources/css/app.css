@@ -448,7 +448,7 @@ body[data-category="adult_star"] {
 }
 
 .modal-overlay {
-    @apply fixed inset-0 bg-black/70 z-50 flex items-center justify-center;
+    @apply fixed inset-0 bg-black/70 z-50;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 }

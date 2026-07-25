@@ -92,7 +92,7 @@
 
     <p class="text-center text-sm text-gray-500 mt-8 auth-fade-in auth-fade-in-delay-5">
         New here?
-        <a href="{{ route('landing') }}"
+        <a href="{{ $celeb ? route('celebrity.register', ['celebrity' => $celeb->slug]) : route('landing') }}"
            class="auth-link font-semibold hover:underline">
             Visit your celebrity's portal to sign up
         </a>
