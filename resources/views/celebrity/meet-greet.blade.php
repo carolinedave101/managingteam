@@ -95,21 +95,19 @@
                 @auth
                     @foreach ($events as $event)
                         <div id="purchase-{{ $event->id }}" class="modal-overlay fixed inset-0 bg-black/60 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                             <div class="min-h-full flex flex-col items-start sm:items-center justify-center px-4 py-6 sm:py-12">
-                             <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[85vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
-                                {{-- Fixed Header --}}
-                                <div class="flex items-center justify-between p-6 pb-4 shrink-0">
-                                    <div>
-                                        <h3 class="text-xl font-bold">Get Tickets</h3>
-                                        <p class="text-sm text-gray-500 mt-1">{{ $event->title }} · {{ $event->date->format('F j, Y') }}</p>
-                                    </div>
-                                    <button onclick="document.getElementById('purchase-{{ $event->id }}').classList.remove('modal-open')" class="text-gray-400 hover:text-gray-600">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                    </button>
-                                </div>
+                             <div class="min-h-full flex flex-col items-center justify-center px-4 py-12">
+                             <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl" onclick="event.stopPropagation()">
+                                 <div class="flex items-center justify-between p-6 pb-4">
+                                     <div>
+                                         <h3 class="text-xl font-bold">Get Tickets</h3>
+                                         <p class="text-sm text-gray-500 mt-1">{{ $event->title }} · {{ $event->date->format('F j, Y') }}</p>
+                                     </div>
+                                     <button onclick="document.getElementById('purchase-{{ $event->id }}').classList.remove('modal-open')" class="text-gray-400 hover:text-gray-600">
+                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                     </button>
+                                 </div>
 
-                                {{-- Scrollable Body --}}
-                                <div class="overflow-y-auto flex-1 min-h-0 px-6 pb-6">
+                                 <div class="px-6 pb-6">
                                     <div class="banner-gradient-soft rounded-xl p-4 mb-4 flex items-center justify-between">
                                         <span class="text-sm font-semibold text-gray-700">Price per ticket</span>
                                         <span class="text-2xl font-bold text-pink-600 price-glow">${{ number_format($event->price, 2) }}</span>

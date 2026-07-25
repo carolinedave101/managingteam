@@ -16,11 +16,7 @@
     $insufficient = $showWallet && $wallet && $price > 0 && $wallet->balance < $price;
     $shortfall = $insufficient ? number_format($price - $wallet->balance, 2, '.', '') : '0';
     $topUpUrl = $insufficient && $celebrity
-        ? route('celebrity.wallet', [
-            'celebrity' => $celebrity->slug,
-            'topup' => $shortfall,
-            'return' => url()->current(),
-        ])
+        ? route('celebrity.wallet', ['celebrity' => $celebrity->slug])
         : '';
 @endphp
 

@@ -14,17 +14,7 @@
                 </div>
             </div>
 
-            @if ($topupAmount)
-                <div class="banner-gradient-soft rounded-xl p-4 mb-6 flex items-start gap-3" x-data x-init="$nextTick(() => document.getElementById('topUpModal').classList.add('modal-open'))">
-                    <svg class="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <div>
-                        <p class="font-semibold text-amber-800">Insufficient Balance</p>
-                        <p class="text-sm text-amber-700">You need at least <strong>${{ number_format($topupAmount, 2) }}</strong> to complete your purchase. Please top up below, then you'll be redirected back automatically.</p>
-                    </div>
-                </div>
-            @endif
+
 
             {{-- How it works --}}
             <div class="reveal is-visible glass-strong rounded-2xl border border-emerald-100 shadow-md p-5 mb-8">
@@ -97,10 +87,9 @@
 
             {{-- Top-up modal --}}
             <div id="topUpModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 backdrop-blur-sm overflow-y-auto" onclick="if(event.target===this)this.classList.remove('modal-open')">
-                <div class="min-h-full flex flex-col items-start sm:items-center justify-center px-4 py-6 sm:py-12">
-                <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[85vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
-                    {{-- Fixed Header --}}
-                    <div class="flex items-center justify-between p-6 pb-4 shrink-0">
+                <div class="min-h-full flex flex-col items-center justify-center px-4 py-12">
+                <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl" onclick="event.stopPropagation()">
+                    <div class="flex items-center justify-between p-6 pb-4">
                         <div>
                             <h3 class="text-xl font-bold text-gray-900">Top Up Wallet</h3>
                             <p class="text-sm text-gray-500 mt-1">Add funds to your wallet for instant payments.</p>
@@ -110,8 +99,7 @@
                         </button>
                     </div>
 
-                    {{-- Scrollable Body --}}
-                    <div class="overflow-y-auto flex-1 min-h-0 px-6 pb-6">
+                    <div class="px-6 pb-6">
                         <form method="POST" action="{{ route('celebrity.wallet.top-up', ['celebrity' => $celebrity->slug]) }}" enctype="multipart/form-data"
                                x-data="formValidation">
                             @csrf
