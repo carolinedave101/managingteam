@@ -114,7 +114,7 @@
                          <div id="enter-giveaway-{{ $giveaway->id }}" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm overflow-y-auto hidden" style="animation: fadeIn 0.15s ease;"
                               x-data="{ step: 'question', note: '' }"
                               x-on:giveaway-reset-{{ $giveaway->id }}.window="step = 'question'; note = ''">
-                              <div class="min-h-full w-full flex flex-col items-start sm:items-center justify-center px-4 pt-16 pb-12 sm:py-12">
+                              <div class="min-h-full w-full flex flex-col items-start sm:items-center justify-center px-4 pt-28 pb-12 sm:py-12">
                              <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl max-h-[85vh] flex flex-col overflow-hidden" @click.stop>
 
                                 <div class="flex items-start justify-between p-6 pb-4 shrink-0">
