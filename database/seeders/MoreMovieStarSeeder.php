@@ -225,7 +225,7 @@ class MoreMovieStarSeeder extends Seeder
                     'membership_tiers' => [
                         [
                             'name' => 'Standard',
-                            'price' => 3000,
+                            'price' => 30000,
                             'color' => '#C0C0C0',
                             'benefits' => [
                                 'Exclusive community access',
@@ -237,7 +237,7 @@ class MoreMovieStarSeeder extends Seeder
                         ],
                         [
                             'name' => 'Premium',
-                            'price' => 5000,
+                            'price' => 50000,
                             'color' => '#FFD700',
                             'benefits' => [
                                 'Everything in Standard',
@@ -250,7 +250,7 @@ class MoreMovieStarSeeder extends Seeder
                         ],
                         [
                             'name' => 'VIP',
-                            'price' => 10000,
+                            'price' => 100000,
                             'color' => '#E5E4E2',
                             'benefits' => [
                                 'Everything in Premium',

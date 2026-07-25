@@ -44,10 +44,59 @@ A multi-celebrity fan management portal built on Laravel. Super admin creates ce
 ## Deployment
 - **Production**: `https://managingteam.info` (cPanel on UltraProHost)
 - **cPanel**: `https://server.ultraprohost.com:2083` — user: `managingteam`
+- **cPanel/SSH Password**: `^.o3J3mg+]=&6Xk=` (store in variable: `CPASS='^.o3J3mg+]=&6Xk='`)
 - **Production DB**: MySQL — DB: `managingteam_celeb`, user: `managingteam_celeb`
-- **Production path**: `/public_html/` on the server
+- **Production path**: `/home/managingteam/public_html/` on the server (web root is `public/` inside)
 - **Credentials stored**: `.env.production` (gitignored — do not commit)
-- **Deploy method**: Upload files via cPanel File Manager API, run seeders via web route
+- **Deploy method**: cPanel UAPI via curl (no sshpass/SFTP needed)
+
+### Proven Deployment Commands (cPanel UAPI via curl)
+```bash
+CPASS='^.o3J3mg+]=&6Xk='
+
+# 1. Build deployment zip (run from project root)
+zip -r managingteam-deploy.zip . -x 'node_modules/*' '.git/*' 'vendor/*' 'public/build/*' 'storage/*.key' '.env' 'managingteam-deploy.zip' 'database/managingteam_celeb.sql'
+
+# 2. Upload zip to server
+curl -s -k -u "managingteam:${CPASS}" \
+  -X POST "https://server.ultraprohost.com:2083/execute/Fileman/upload_files" \
+  --form "dir=/home/managingteam/public_html" \
+  --form "overwrite=1" \
+  --form "file=@managingteam-deploy.zip"
+
+# 3. Write+run extractor script (uploads to public/, executes, self-deletes)
+#    Put this in /tmp/extract.php on your local machine first:
+echo '<?php $z=new ZipArchive(); if($z->open("../managingteam-deploy.zip")===TRUE){$z->extractTo("..");$z->close();echo "OK";}else{echo "FAILED";} unlink("extract.php");' > /tmp/extract.php
+curl -s -k -u "managingteam:${CPASS}" \
+  -X POST "https://server.ultraprohost.com:2083/execute/Fileman/upload_files" \
+  --form "dir=/home/managingteam/public_html/public" \
+  --form "overwrite=1" \
+  --form "file=@/tmp/extract.php"
+curl -s -k -m 60 "https://managingteam.info/extract.php"
+
+# 4. Clear bootstrap cache (if site shows 500 — stale cache issue)
+#    Write a script that unlinks bootstrap/cache/config.php + cached views:
+echo '<?php foreach(["../bootstrap/cache/config.php","../bootstrap/cache/packages.php","../bootstrap/cache/services.php","../bootstrap/cache/routes-v7.php","../bootstrap/cache/events.php"] as$f){if(file_exists($f))unlink($f);} foreach(glob("../storage/framework/views/*")as$vf){if(is_file($vf))unlink($vf);} echo "OK"; unlink(__FILE__);' > /tmp/clear-cache.php
+curl -s -k -u "managingteam:${CPASS}" \
+  -X POST "https://server.ultraprohost.com:2083/execute/Fileman/upload_files" \
+  --form "dir=/home/managingteam/public_html/public" \
+  --form "overwrite=1" \
+  --form "file=@/tmp/clear-cache.php"
+curl -s -k -m 30 "https://managingteam.info/clear-cache.php"
+
+# 5. Verify
+curl -s -o /dev/null -w "%{http_code}" "https://managingteam.info"
+curl -s -o /dev/null -w "%{http_code}" "https://jennie.managingteam.info"
+```
+
+### Production Troubleshooting Recipes
+| Symptom | Fix |
+|---------|-----|
+| **500 error on all pages** | Stale `bootstrap/cache/config.php` — clear it (step 4 above) |
+| **404 on fan portals** | Wildcard subdomain not set up in cPanel or DNS |
+| **Login redirect fails** | Check `APP_URL` in `.env.production` |
+| **File uploads not showing** | Run `php artisan storage:link` (storage symlink) |
+| **Stale views shown** | Old compiled Blade views — clear `storage/framework/views/` |
 
 ## Architecture Principles
 1. **Celebrity config JSON** is the single source of truth for all per-celebrity customization (theme, content, pricing, features, payments)

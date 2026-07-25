@@ -19,7 +19,7 @@
         @endif
     </div>
 
-    <form method="POST" action="{{ $celeb ? url()->current() : route('register') }}" class="space-y-5">
+    <form method="POST" action="{{ url()->current() }}" class="space-y-5">
         @csrf
 
         <div class="input-group">
@@ -118,9 +118,9 @@
 
         <p class="text-center text-sm text-gray-500 pt-2">
             Already have an account?
-            <a href="{{ $celeb ? route('celebrity.login', ['celebrity' => $celeb->slug]) : route('login') }}"
+            <a href="{{ route('landing') }}"
                class="auth-link font-semibold hover:underline">
-                Sign in
+                Visit your celebrity's portal to sign in
             </a>
         </p>
     </form>

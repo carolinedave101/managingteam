@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CelebrityPageController;
+use App\Http\Controllers\GiveawayController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MeetGreetController;
 use App\Http\Controllers\MembershipCardController;
@@ -66,6 +67,10 @@ Route::domain('{celebrity}.'.$baseDomain)->middleware('fan.isolation')->group(fu
     Route::get('/private-meetup', [CelebrityPageController::class, 'privateMeetup'])->name('celebrity.private-meetup');
     Route::post('/private-meetup', [PrivateMeetupController::class, 'store'])
         ->middleware('auth')->name('celebrity.private-meetup.store');
+
+    Route::get('/giveaways', [CelebrityPageController::class, 'giveaways'])->name('celebrity.giveaways');
+    Route::post('/giveaways/{giveaway}/enter', [GiveawayController::class, 'enter'])
+        ->middleware('auth')->name('celebrity.giveaways.enter');
 
     // Authenticated fan routes
     Route::middleware('auth')->group(function () {

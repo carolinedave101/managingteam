@@ -21,7 +21,7 @@
 
     <x-auth-session-status class="mb-6" :status="session('status')" />
 
-    <form method="POST" action="{{ $celeb ? url()->current() : route('login') }}" class="space-y-5">
+    <form method="POST" action="{{ url()->current() }}" class="space-y-5">
         @csrf
 
         <div class="input-group">
@@ -92,9 +92,9 @@
 
     <p class="text-center text-sm text-gray-500 mt-8 auth-fade-in auth-fade-in-delay-5">
         New here?
-        <a href="{{ $celeb ? route('celebrity.register', ['celebrity' => $celeb->slug]) : route('register') }}"
+        <a href="{{ route('landing') }}"
            class="auth-link font-semibold hover:underline">
-            Create your account
+            Visit your celebrity's portal to sign up
         </a>
     </p>
 </x-guest-layout>

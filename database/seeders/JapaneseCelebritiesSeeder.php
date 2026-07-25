@@ -4,69 +4,6 @@ namespace Database\Seeders;
 
 class JapaneseCelebritiesSeeder extends BaseCelebritySeeder
 {
-    private array $maleFirstNames = [
-        'Hiroshi', 'Takeshi', 'Kenji', 'Satoshi', 'Yoshiki',
-        'Taro', 'Shinji', 'Koji', 'Ryo', 'Kazuki',
-        'Daiki', 'Haruki', 'Yuto', 'Sota', 'Kaito',
-        'Ren', 'Yamato', 'Sora', 'Hinata', 'Minato',
-        'Ryota', 'Sho', 'Takumi', 'Kenta', 'Tsubasa',
-        'Akira', 'Makoto', 'Isamu', 'Tetsuya', 'Noboru',
-        'Osamu', 'Mamoru', 'Susumu', 'Yukio', 'Hideki',
-        'Kunio', 'Masao', 'Shigeru', 'Takeo', 'Fumio',
-        'Hajime', 'Jiro', 'Katsuo', 'Masaru', 'Shiro',
-        'Akio', 'Eiji', 'Goro', 'Hideo', 'Iwao',
-        'Kazuo', 'Minoru', 'Norio', 'Rokuro', 'Saburo',
-        'Toshiro', 'Umeo', 'Yoshio', 'Zenji', 'Atsushi',
-        'Daisuke', 'Fumihiko', 'Genji', 'Hitoshi', 'Katsuya',
-        'Masashi', 'Nagisa', 'Ryuichi', 'Shun', 'Tadahiro',
-        'Wataru', 'Yuichi', 'Asuka', 'Hayato', 'Keita',
-        'Naoki', 'Rikuto', 'Shota', 'Taiga', 'Yuma',
-    ];
-
-    private array $femaleFirstNames = [
-        'Yuki', 'Sakura', 'Haruka', 'Aoi', 'Hina',
-        'Rin', 'Yua', 'Miyu', 'Riko', 'Mei',
-        'Yuna', 'Akari', 'Moe', 'Misa', 'Nana',
-        'Yui', 'Sora', 'Aya', 'Miki', 'Kana',
-        'Ayumi', 'Rina', 'Mai', 'Eri', 'Yuka',
-        'Miyabi', 'Natsuki', 'Marina', 'Yoshino', 'Chie',
-        'Tomoko', 'Keiko', 'Yoshiko', 'Fumiko', 'Kazuko',
-        'Setsuko', 'Hisako', 'Toshiko', 'Sachiko', 'Yasuko',
-        'Midori', 'Miyoko', 'Hideko', 'Masako', 'Reiko',
-        'Kimiko', 'Harumi', 'Shizuka', 'Akemi', 'Megumi',
-        'Anzu', 'Rin', 'Suzu', 'Ume', 'Tsubaki',
-        'Sumire', 'Ayame', 'Kiku', 'Botan', 'Fuji',
-        'Iris', 'Lily', 'Momo', 'Ran', 'Yuri',
-        'Airi', 'Erika', 'Kotone', 'Mizuki', 'Nagi',
-        'Reina', 'Sayo', 'Tsukiko', 'Kohana', 'Miyabi',
-        'Tamami', 'Yoshimi', 'Chiharu', 'Nobuko', 'Teruyo',
-    ];
-
-    private array $lastNames = [
-        'Sato', 'Suzuki', 'Takahashi', 'Tanaka', 'Watanabe',
-        'Ito', 'Yamamoto', 'Nakamura', 'Ogawa', 'Kato',
-        'Yoshida', 'Yamada', 'Sasaki', 'Yamaguchi', 'Matsumoto',
-        'Inoue', 'Kimura', 'Shimizu', 'Hayashi', 'Saito',
-        'Kobayashi', 'Morita', 'Sakamoto', 'Aoki', 'Fujita',
-        'Ishikawa', 'Nakajima', 'Maeda', 'Fujii', 'Ono',
-        'Nishimura', 'Kondo', 'Nakagawa', 'Tamura', 'Hara',
-        'Ueda', 'Taniguchi', 'Kawakami', 'Ishii', 'Yoshimura',
-        'Okada', 'Yamashita', 'Ando', 'Endo', 'Nakano',
-        'Sugiyama', 'Kikuchi', 'Sato', 'Sato', 'Kudo',
-        'Miyazaki', 'Tsuji', 'Ikeda', 'Nishida', 'Hasegawa',
-        'Katsura', 'Yagami', 'Fujiwara', 'Kawaguchi', 'Yamazaki',
-        'Murakami', 'Miyamoto', 'Hashimoto', 'Shinoda', 'Wada',
-        'Kishimoto', 'Otsuka', 'Noguchi', 'Sakurai', 'Mori',
-        'Yoshino', 'Sato', 'Kojima', 'Takeda', 'Sakaguchi',
-        'Ishida', 'Kuroda', 'Shibata', 'Ogata', 'Abe',
-        'Matsushita', 'Kane', 'Hashida', 'Kita', 'Seki',
-        'Yano', 'Baba', 'Kanno', 'Yokoyama', 'Naito',
-        'Oishi', 'Nishiyama', 'Shirai', 'Kumagai', 'Tsuchiya',
-        'Matsuda', 'Shinohara', 'Tamura', 'Sano', 'Sugimoto',
-        'Fukuda', 'Iwasaki', 'Yoshimura', 'Yamane', 'Takeuchi',
-        'Komatsu', 'Nakayama', 'Kato', 'Wakabayashi', 'Nishikawa',
-    ];
-
     public function run(): void
     {
         set_time_limit(0);
@@ -74,16 +11,74 @@ class JapaneseCelebritiesSeeder extends BaseCelebritySeeder
 
         $this->command?->info("Seeding {$country}...");
 
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 1000), 'movie_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 1000), 'movie_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 400), 'musician', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 400), 'musician', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 100), 'country_singer', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 100), 'country_singer', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 250), 'adult_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 250), 'adult_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 250), 'general', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 250), 'general', 'female', $country);
+        $this->createCelebrities([
+            'Ken Watanabe', 'Toshiro Mifune', 'Hiroyuki Sanada', 'Tadanobu Asano',
+            'Ryunosuke Kamiki', 'Shohei Ohtani', 'Sosuke Ikematsu', 'Masaharu Fukuyama',
+            'Hiroshi Abe', 'Yoshio Harada', 'Eita Nagayama', 'Shun Oguri',
+            'Satoshi Tsumabuki', 'Ryo Kase', 'Goro Inagaki', 'Masanobu Ando',
+            'Takahiro Nishijima', 'Hiroshi Tamaki', 'Takao Osawa', 'Yōsuke Eguchi',
+        ], 'movie_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Rinko Kikuchi', 'Machiko Ono', 'Aoi Miyazaki', 'Haru Kuroki',
+            'Sakura Ando', 'Sakurako Ohara', 'Masami Nagasawa', 'Kou Shibasaki',
+            'Yui Aragaki', 'Ryoko Hirosue', 'Takako Matsu', 'Sayuri Yoshinaga',
+            'Kyoko Kagawa', 'Setsuko Hara', 'Hideko Takamine', 'Kinuyo Tanaka',
+            'Mitsuko Baisho', 'Miyuki Yano', 'Nana Komatsu', 'Aya Ueto',
+        ], 'movie_star', 'female', $country);
+
+        $this->createCelebrities([
+            'Ryuichi Sakamoto', 'Joe Hisaishi', 'Takeshi Kitano', 'Hikaru Utada',
+            'Kenshi Yonezu', 'Yoshiki', 'Takanori Nishikawa', 'Ken Hirai',
+            'Masaharu Fukuyama', 'Kazumasa Oda', 'Tatsuro Yamashita', 'Miyavi',
+            'Koji Wada', 'Gackt', 'HYDE', 'Daigo',
+            'Nobuaki Kakuda', 'Perfume', 'Kazama Kyosuke', 'SUGIZO',
+        ], 'musician', 'male', $country);
+
+        $this->createCelebrities([
+            'Hikaru Utada', 'Miyavi', 'Ayumi Hamasaki', 'Namie Amuro',
+            'Kumi Koda', 'Mika Nakashima', 'Maaya Sakamoto', 'Megumi Hayashibara',
+            'Yoko Takahashi', 'Yuki Kajiura', 'Yoshino Kimura', 'Mie Nakagawa',
+            'Aya Matsuura', 'Miki Fujimoto', 'Rola', 'Miyavi',
+            'Chisaki Morishita', 'Yui Horie', 'Rie Kugimiya', 'Aya Hirano',
+        ], 'musician', 'female', $country);
+
+        $this->createCelebrities([
+            'Minami Kizuki', 'Kiyoshi Hikawa', 'Takeshi Kitayama', 'Ichiro Mizuki',
+            'Saburo Kitajima', 'Shinichi Mori', 'Hibari Misora', 'Yujiro Ishihara',
+            'Hideo Murata', 'Haruo Minami',
+        ], 'country_singer', 'male', $country);
+
+        $this->createCelebrities([
+            'Hibari Misora', 'Sayuri Ishikawa', 'Miyako Otsuki', 'Fuyumi Sakamoto',
+            'Yoshiko Shimazu', 'Yoshiko Kishi', 'Aki Yashiro', 'Akiko Futaba',
+            'Matsu Toshi', 'Kazue Itsuki',
+        ], 'country_singer', 'female', $country);
+
+        $this->createCelebrities([
+            'Sho Aoyagi', 'Yusuke Kamiyama', 'Tetsuya Ogawa', 'Kaito Ito',
+            'Ryoichi Sugiura', 'Daiki Ito', 'Kenji Matsuda', 'Yuya Nishi',
+            'Takaaki Hirai', 'Satoshi Maruyama',
+        ], 'adult_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Sora Aoi', 'Maria Ozawa', 'Yua Mikami', 'Saki Aoyama',
+            'Yuna Ogura', 'Moe Hidaka', 'Yui Hatano', 'Ayumi Shinoda',
+            'Hitomi Tanaka', 'Asuka Kirara', 'Tomoda Ayaka', 'Konoa Sakura',
+        ], 'adult_star', 'female', $country);
+
+        $this->createCelebrities([
+            'Shohei Ohtani', 'Ichiro Suzuki', 'Yuzuru Hanyu', 'Naomi Osaka',
+            'Hideki Matsuyama', 'Kei Nishikori', 'Kohei Uchimura', 'Hideo Kojima',
+            'Shigeru Miyamoto', 'Hayao Miyazaki', 'Yoshinobu Yamamoto', 'Katsuya Nomura',
+            'Hiroki Kuroda', 'Yu Darvish', 'Rui Hachimura', 'Momota Kenshi',
+        ], 'general', 'male', $country);
+
+        $this->createCelebrities([
+            'Naomi Osaka', 'Yuna Kim', 'Mao Asada', 'Saori Yoshida',
+            'Ayaka Takahashi', 'Misaki Matsutomo', 'Mariana Yamamoto', 'Kaori Icho',
+            'Rino Sashihara', 'Ai Shibata', 'Arisa Tsubata', 'Kiyomi Watanabe',
+        ], 'general', 'female', $country);
 
         $this->command?->info("{$country} seeding complete.");
     }

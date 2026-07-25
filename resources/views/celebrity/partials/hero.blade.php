@@ -60,7 +60,7 @@
                         </a>
                     @endif
                     @guest
-                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:bg-white/20 hover:-translate-y-1" style="border: 2px solid rgba(255,255,255,0.25); color: #fff;">Join Now</a>
+                        <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:bg-white/20 hover:-translate-y-1" style="border: 2px solid rgba(255,255,255,0.25); color: #fff;">Join Now</a>
                     @endguest
                     @auth
                         <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:bg-white/20 hover:-translate-y-1" style="border: 2px solid rgba(255,255,255,0.25); color: #fff;">My Dashboard</a>
@@ -122,7 +122,7 @@
                         </a>
                     @endif
                     @guest
-                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:bg-white/10 hover:-translate-y-1" style="border: 2px solid rgba(245,158,11,0.35); color: #f59e0b;">Join Now</a>
+                        <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:bg-white/10 hover:-translate-y-1" style="border: 2px solid rgba(245,158,11,0.35); color: #f59e0b;">Join Now</a>
                     @endguest
                     @auth
                         <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:bg-white/10 hover:-translate-y-1" style="border: 2px solid rgba(245,158,11,0.35); color: #f59e0b;">My Dashboard</a>
@@ -185,7 +185,7 @@
                         </a>
                     @endif
                     @guest
-                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:-translate-y-1" style="border: 2px solid rgba(236,72,153,0.3); color: #ec4899;">Join Now</a>
+                        <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:-translate-y-1" style="border: 2px solid rgba(236,72,153,0.3); color: #ec4899;">Join Now</a>
                     @endguest
                     @auth
                         <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}" class="inline-flex items-center justify-center gap-2 px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-base font-semibold transition-all duration-300 hover:-translate-y-1" style="border: 2px solid rgba(236,72,153,0.3); color: #ec4899;">My Dashboard</a>
@@ -250,7 +250,7 @@
                         </a>
                     @endif
                     @guest
-                        <a href="{{ route('register') }}" class="btn-ghost !px-6 md:!px-10 !py-3 md:!py-4 !text-sm md:!text-base animate-shine">Join Now</a>
+                        <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="btn-ghost !px-6 md:!px-10 !py-3 md:!py-4 !text-sm md:!text-base animate-shine">Join Now</a>
                     @endguest
                     @auth
                         <a href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}" class="btn-ghost !px-6 md:!px-10 !py-3 md:!py-4 !text-sm md:!text-base animate-shine">My Dashboard</a>

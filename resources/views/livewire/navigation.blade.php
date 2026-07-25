@@ -37,6 +37,14 @@
                     @if ($celebrity->config['features']['private_meetup'] ?? false)
                         <x-nav-link href="{{ route('celebrity.private-meetup', ['celebrity' => $celebrity->slug]) }}" :active="request()->routeIs('celebrity.private-meetup')">Private Meetup</x-nav-link>
                     @endif
+                    @if ($celebrity->config['features']['giveaways'] ?? false)
+                        <x-nav-link href="{{ route('celebrity.giveaways', ['celebrity' => $celebrity->slug]) }}" :active="request()->routeIs('celebrity.giveaways')">Giveaways</x-nav-link>
+                    @endif
+                    @if (($celebrity->config['management_portal']['enabled'] ?? false) && ($celebrity->config['management_portal']['url'] ?? false))
+                        <x-nav-link href="{{ $celebrity->config['management_portal']['url'] }}" :active="false" target="_blank">
+                            {{ $celebrity->config['management_portal']['label'] ?: 'Management Portal' }}
+                        </x-nav-link>
+                    @endif
                     @auth
                         <x-nav-link href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}" :active="request()->routeIs('celebrity.dashboard')">
                             Dashboard
@@ -79,8 +87,8 @@
                         <button type="submit" class="text-sm text-gray-500 hover:text-gray-900 transition">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:accent-text transition">Login</a>
-                    <a href="{{ route('register') }}" class="btn-primary !py-2 !px-5">Join</a>
+                    <a href="{{ $celebrity ? route('celebrity.login', ['celebrity' => $celebrity->slug]) : route('landing') }}" class="text-sm font-medium text-gray-700 hover:accent-text transition">Login</a>
+                    <a href="{{ $celebrity ? route('celebrity.register', ['celebrity' => $celebrity->slug]) : route('landing') }}" class="btn-primary !py-2 !px-5">Join</a>
                 @endauth
                 <button @click="mobileOpen = !mobileOpen" class="md:hidden p-2 text-gray-700" aria-label="Menu">
                     <svg x-show="!mobileOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -108,6 +116,14 @@
             @if ($celebrity->config['features']['private_meetup'] ?? false)
                 <x-responsive-nav-link href="{{ route('celebrity.private-meetup', ['celebrity' => $celebrity->slug]) }}">Private Meetup</x-responsive-nav-link>
             @endif
+            @if ($celebrity->config['features']['giveaways'] ?? false)
+                <x-responsive-nav-link href="{{ route('celebrity.giveaways', ['celebrity' => $celebrity->slug]) }}">Giveaways</x-responsive-nav-link>
+            @endif
+            @if (($celebrity->config['management_portal']['enabled'] ?? false) && ($celebrity->config['management_portal']['url'] ?? false))
+                <x-responsive-nav-link href="{{ $celebrity->config['management_portal']['url'] }}" target="_blank">
+                    {{ $celebrity->config['management_portal']['label'] ?: 'Management Portal' }}
+                </x-responsive-nav-link>
+            @endif
             @auth
                 <x-responsive-nav-link href="{{ route('celebrity.dashboard', ['celebrity' => $celebrity->slug]) }}">
                     Dashboard
@@ -132,8 +148,8 @@
                     <button type="submit" class="block w-full text-left px-3 py-2 text-sm text-red-600">Logout</button>
                 </form>
             @else
-                <x-responsive-nav-link href="{{ route('login') }}">Login</x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('register') }}">Join</x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ $celebrity ? route('celebrity.login', ['celebrity' => $celebrity->slug]) : route('landing') }}">Login</x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ $celebrity ? route('celebrity.register', ['celebrity' => $celebrity->slug]) : route('landing') }}">Join</x-responsive-nav-link>
             @endauth
         </div>
     </div>

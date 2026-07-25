@@ -4,73 +4,6 @@ namespace Database\Seeders;
 
 class PhilippineCelebritiesSeeder extends BaseCelebritySeeder
 {
-    private array $maleFirstNames = [
-        'Juan', 'Jose', 'Manuel', 'Carlos', 'Antonio',
-        'Pedro', 'Miguel', 'Ramon', 'Francisco', 'Andres',
-        'Jose', 'Rafael', 'Eduardo', 'Fernando', 'Ricardo',
-        'Alberto', 'Emilio', 'Enrique', 'Gabriel', 'Hector',
-        'Ismael', 'Jaime', 'Joaquin', 'Leonardo', 'Luis',
-        'Marcos', 'Nicolas', 'Orlando', 'Pablo', 'Raul',
-        'Rodrigo', 'Salvador', 'Sergio', 'Tomas', 'Vicente',
-        'Alejandro', 'Benito', 'Cesar', 'Diego', 'Esteban',
-        'Felipe', 'Gonzalo', 'Ignacio', 'Julian', 'Lorenzo',
-        'Mateo', 'Nelson', 'Oscar', 'Pascual', 'Rolando',
-        'Adrian', 'Bienvenido', 'Cristobal', 'Dante', 'Elmer',
-        'Fidel', 'Gaudencio', 'Herminio', 'Isidro', 'Jerome',
-        'Kevin', 'Leo', 'Mario', 'Noel', 'Omar',
-        'Paulo', 'Quirino', 'Roderick', 'Simeon', 'Teodoro',
-        'Urbano', 'Victor', 'Wilfredo', 'Xavier', 'Zosimo',
-        'Arnel', 'Bong', 'Crispin', 'Danilo', 'Edgardo',
-        'Froilan', 'Gregorio', 'Hilario', 'Joven', 'Kendrick',
-        'Lito', 'Monico', 'Nilo', 'Ponciano', 'Romeo',
-    ];
-
-    private array $femaleFirstNames = [
-        'Maria', 'Josefina', 'Teresa', 'Carmen', 'Elena',
-        'Gloria', 'Luzviminda', 'Corazon', 'Leticia', 'Mercedes',
-        'Fe', 'Rosario', 'Concepcion', 'Remedios', 'Milagros',
-        'Consuelo', 'Esperanza', 'Aurora', 'Dolores', 'Natividad',
-        'Soledad', 'Lourdes', 'Guadalupe', 'Pilar', 'Visitacion',
-        'Imelda', 'Ligaya', 'Luz', 'Cristina', 'Adelaida',
-        'Belen', 'Caridad', 'Divina', 'Erminda', 'Flor',
-        'Graciana', 'Honorata', 'Iluminada', 'Jovita', 'Lilia',
-        'Marilyn', 'Nenita', 'Ofelia', 'Perlita', 'Rosalinda',
-        'Salud', 'Trinidad', 'Virginia', 'Wilma', 'Zenaida',
-        'Angelina', 'Bianca', 'Celia', 'Diana', 'Elisa',
-        'Fatima', 'Gemma', 'Hilda', 'Isabel', 'Julia',
-        'Katrina', 'Lara', 'Martha', 'Nora', 'Oliva',
-        'Patricia', 'Queen', 'Rowena', 'Sandra', 'Tina',
-        'Ursula', 'Valerie', 'Wendy', 'Yvonne', 'Zarah',
-        'Aimee', 'Bernadette', 'Clarissa', 'Danica', 'Erica',
-        'Francine', 'Giselle', 'Hazel', 'Iris', 'Janine',
-    ];
-
-    private array $lastNames = [
-        'Santos', 'Cruz', 'Reyes', 'Gonzales', 'Bautista',
-        'Mendoza', 'Garcia', 'Torres', 'Rivera', 'Fernandez',
-        'Villanueva', 'Ramos', 'Aquino', 'Castillo', 'Francisco',
-        'Dela Cruz', 'Lopez', 'Gomez', 'Domingo', 'Magsaysay',
-        'Cortez', 'Aguilar', 'Navarro', 'Palma', 'Romero',
-        'Santiago', 'Alcantara', 'Burgos', 'Castro', 'De Leon',
-        'Enriquez', 'Flores', 'Guevarra', 'Hernandez', 'Ilustre',
-        'Jacinto', 'Lazaro', 'Martinez', 'Nacionales', 'Ortega',
-        'Pascual', 'Quizon', 'Ramirez', 'Salvador', 'Tolentino',
-        'Uy', 'Vargas', 'Yambao', 'Zamora', 'Abad',
-        'Alonzo', 'Belen', 'Cabrera', 'David', 'Espiritu',
-        'Fabia', 'Galang', 'Hermosa', 'Ibañez', 'Jimenez',
-        'Lozano', 'Marquez', 'Nunez', 'Ocampo', 'Peña',
-        'Quinto', 'Roldan', 'Sabino', 'Tavera', 'Valencia',
-        'Wagan', 'Yabut', 'Zaragoza', 'Abella', 'Alcantara',
-        'Baquiran', 'Cabangon', 'Dimagiba', 'Estrada', 'Fernandez',
-        'Gatdula', 'Hizon', 'Isidro', 'Javierto', 'Kapunan',
-        'Lansang', 'Manaloto', 'Nagtalon', 'Ondoy', 'Panganiban',
-        'Quiambao', 'Rongavilla', 'Sangalang', 'Tiangco', 'Umali',
-        'Vibar', 'Yango', 'Zulueta', 'Almario', 'Baluyot',
-        'Canlas', 'Dizon', 'Evangelista', 'Gutierrez', 'Herrera',
-        'Infante', 'Jocson', 'Katigbak', 'Lacson', 'Manansala',
-        'Narvasa', 'Oreta', 'Pardo', 'Quimbo', 'Romualdez',
-    ];
-
     public function run(): void
     {
         set_time_limit(0);
@@ -78,16 +11,72 @@ class PhilippineCelebritiesSeeder extends BaseCelebritySeeder
 
         $this->command?->info("Seeding {$country}...");
 
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 500), 'movie_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 500), 'movie_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 200), 'musician', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 200), 'musician', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 50), 'country_singer', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 50), 'country_singer', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 100), 'adult_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 100), 'adult_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 150), 'general', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 150), 'general', 'female', $country);
+        $this->createCelebrities([
+            'Coco Martin', 'Daniel Padilla', 'Alden Richards', 'Piolo Pascual',
+            'John Lloyd Cruz', 'Derek Ramsay', 'Jericho Rosales', 'Enrique Gil',
+            'Rico Blanco', 'James Reid', 'Rayver Cruz', 'Xian Lim',
+            'Ruru Madrid', 'Tom Rodriguez', 'Bg Gonzales', 'Ronnie Alonte',
+            'Gabby Concepcion', 'Aga Muhlach', 'Richard Gomez', 'Robin Padilla',
+        ], 'movie_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Kathryn Bernardo', 'Liza Soberano', 'Marian Rivera', 'Angel Locsin',
+            'Bea Alonzo', 'Sarah Geronimo', 'Kim Chiu', 'Nora Aunor',
+            'Sharon Cuneta', 'Maja Salvador', 'Julia Montes', 'Ruffa Gutierrez',
+            'Heart Evangelista', 'Jodi Sta Maria', 'Kris Aquino', 'Vilma Santos',
+            'Megan Young', 'Gloria Diaz', 'Vice Ganda', 'Pokwang',
+        ], 'movie_star', 'female', $country);
+
+        $this->createCelebrities([
+            'Jose Mari Chan', 'Regine Velasquez', 'Ogie Alcasid', 'Christian Bautista',
+            'Erik Santos', 'Gary Valenciano', 'Martin Nievera', 'Richard Poon',
+            'Jonalyn Viray', 'Jed Madela', 'Rico Blanco', 'Gloc-9',
+            'Abra', 'Sahid', 'Yeng Constantino', 'Bamboo Manalac',
+            'Jay Durias', 'Ryan Cayabyab', 'Jim Bondad', 'Jake Zyrus',
+        ], 'musician', 'male', $country);
+
+        $this->createCelebrities([
+            'Sarah Geronimo', 'Regine Velasquez', 'Lea Salonga', 'Zsa Zsa Padilla',
+            'Kuh Ledesma', 'Kyla', 'Jaya', 'Nina Girado',
+            'Yeng Constantino', 'Angeline Quinto', 'Morissette', 'Kylie Verzosa',
+            'Bituin Escalante', 'Angelina Cruz', 'Toni Gonzaga', 'Vice Ganda',
+            'Pati Cantu', 'ASAP', 'Lilet', 'Megan Young',
+        ], 'musician', 'female', $country);
+
+        $this->createCelebrities([
+            'Freddie Aguilar', 'Ruben Tagalog', 'Jose Valdez', 'Victor Wood',
+            'Diomedes Maturan', 'Donna Cruz', 'Rey Valera', 'Rudy Lozano',
+            'Eddie Peregrina', 'Esther Sanares',
+        ], 'country_singer', 'male', $country);
+
+        $this->createCelebrities([
+            'Pilita Corrales', 'Nora Aunor', 'Sylvia La Torre', 'Helen Tiongson',
+            'Rebecca del Rio', 'Carmencita Lopéz', 'Yolanda Guevarra', 'Josephine Rocha',
+            'Lydia G. Orosa', 'Carmina Razon',
+        ], 'country_singer', 'female', $country);
+
+        $this->createCelebrities([
+            'Allen Dee', 'Miko Cruz', 'Rodel Dalisay', 'Marco Villanueva',
+            'Bong Rojales', 'RJ Segismundo', 'Jimmy Mendez', 'Jao Alvarado',
+        ], 'adult_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Katrina Cruz', 'Megan Young', 'Bella Padilla', 'Sofia Alcantara',
+            'Chantelle Martinez', 'Diana Zubiri', 'Maui Taylor', 'Kylie Mendoza',
+        ], 'adult_star', 'female', $country);
+
+        $this->createCelebrities([
+            'Manny Pacquiao', 'Paeng Nepomuceno', 'Eugene Torre', 'Carlos Yulo',
+            'Hidilyn Diaz', 'Nesthy Petecio', 'Maine Mendoza', 'Enrique Gil',
+            'Jose Rizal', 'Ferdinand Marcos', 'Rodrigo Duterte', 'Bongbong Marcos',
+            'Benigno Aquino III', 'Isabel Preysler', 'Lou Diamond Phillips', 'Bruno Mars',
+        ], 'general', 'male', $country);
+
+        $this->createCelebrities([
+            'Megan Young', 'Pia Wurtzbach', 'Catriona Gray', 'Gloria Diaz',
+            'Margie Moran', 'Kris Aquino', 'Mel Tiangco', 'Karen Davila',
+            'Vilma Santos', 'Nora Aunor', 'Katherine Luna', 'Angel Aquino',
+        ], 'general', 'female', $country);
 
         $this->command?->info("{$country} seeding complete.");
     }

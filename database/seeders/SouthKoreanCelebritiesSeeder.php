@@ -4,73 +4,6 @@ namespace Database\Seeders;
 
 class SouthKoreanCelebritiesSeeder extends BaseCelebritySeeder
 {
-    private array $maleFirstNames = [
-        'Minho', 'Jinho', 'Sangho', 'Young', 'Hyun',
-        'Sung', 'Jae', 'Kyung', 'Seok', 'Woo',
-        'Taeyang', 'Jihoon', 'Junseo', 'DoHyun', 'Seung',
-        'Joon', 'Hwan', 'Chul', 'Soo', 'Ki',
-        'Dong', 'Gyu', 'Hee', 'Ho', 'Hwa',
-        'Il', 'Jin', 'Kang', 'Man', 'Myung',
-        'Ok', 'Phil', 'Shik', 'Tae', 'Uk',
-        'Wan', 'Yong', 'Jung', 'Chan', 'Gun',
-        'Hyuk', 'Jong', 'Kap', 'Kwang', 'Moon',
-        'Nak', 'Pyung', 'Ryun', 'Shin', 'Won',
-        'Bong', 'Chi', 'Eung', 'Geun', 'Ik',
-        'Jang', 'Kee', 'Nam', 'Pal', 'Ryul',
-        'Sik', 'Un', 'Yun', 'Bo', 'Doo',
-        'Eon', 'Gap', 'Hak', 'In', 'Jo',
-        'Kil', 'Lak', 'No', 'Pan', 'Sal',
-        'Sul', 'Wi', 'Yop', 'Baek', 'Cheol',
-    ];
-
-    private array $femaleFirstNames = [
-        'Soo', 'Young', 'Mi', 'Hye', 'Kyung',
-        'Eun', 'Jin', 'Sun', 'Hee', 'Sook',
-        'Ah', 'Ok', 'Ran', 'Hwa', 'Ja',
-        'Suk', 'Nan', 'Bok', 'Rye', 'Soon',
-        'Hee', 'Yun', 'Bin', 'Chae', 'Dam',
-        'Gyeong', 'Ha', 'Im', 'Ju', 'Kkot',
-        'Mal', 'Nim', 'Ri', 'Sin', 'Wol',
-        'Yang', 'Boon', 'Duk', 'Geum', 'Hyang',
-        'Jeong', 'Kil', 'Lye', 'Mae', 'Nyeo',
-        'Pok', 'Sam', 'Ui', 'Yeon', 'Jung',
-        'Yoon', 'Min', 'Seo', 'Na', 'Hye',
-        'Yoo', 'Ji', 'Su', 'Won', 'Ae',
-        'Byul', 'Dan', 'Eum', 'Gom', 'In',
-        'Lan', 'Mi', 'Nul', 'Pi', 'Seul',
-        'Yul', 'Bit', 'Dong', 'Gang', 'Hak',
-        'Kkul', 'Mok', 'Nae', 'San', 'Ye',
-        'Bae', 'Cho', 'Do', 'Gang', 'Joo',
-        'Kyul', 'Lil', 'Myo', 'Nok', 'Sol',
-    ];
-
-    private array $lastNames = [
-        'Kim', 'Lee', 'Park', 'Choi', 'Jung',
-        'Kang', 'Jo', 'Yoon', 'Chang', 'Jang',
-        'Lim', 'Han', 'Oh', 'Shin', 'Seo',
-        'Kwon', 'Hwang', 'Ahn', 'Song', 'Yoo',
-        'Hong', 'Jeon', 'Go', 'Moon', 'Yang',
-        'Bae', 'Baek', 'Heo', 'Nam', 'Noh',
-        'Ryu', 'Min', 'Jin', 'Bong', 'Chun',
-        'Do', 'Eom', 'Guk', 'Joo', 'Ma',
-        'Pan', 'Pyo', 'Sim', 'Son', 'Wi',
-        'Woo', 'Yun', 'Byun', 'Cha', 'Dong',
-        'Gang', 'Geum', 'Gong', 'Gu', 'Ha',
-        'Hyun', 'Im', 'Jang', 'Je', 'Kong',
-        'Koo', 'Kwon', 'Na', 'Nah', 'Pae',
-        'Pi', 'Po', 'Ra', 'Roh', 'Sang',
-        'Sok', 'Sung', 'Tak', 'Tan', 'Uhm',
-        'Wang', 'Won', 'Yeom', 'Yong', 'Yoon',
-        'Ban', 'Bok', 'Boo', 'Byeok', 'Chu',
-        'Duk', 'Eun', 'Gal', 'Ge', 'Gye',
-        'Hahm', 'Hwangbo', 'Jegal', 'Jin', 'Ju',
-        'Ki', 'Kil', 'Kum', 'Lyo', 'Mi',
-        'Mok', 'Mu', 'Myung', 'Nang', 'No',
-        'Ok', 'On', 'Paeng', 'Pung', 'Ra',
-        'Sah', 'Sa', 'Sam', 'Seon', 'Seung',
-        'Si', 'Tak', 'To', 'Won', 'Yeon',
-    ];
-
     public function run(): void
     {
         set_time_limit(0);
@@ -78,16 +11,72 @@ class SouthKoreanCelebritiesSeeder extends BaseCelebritySeeder
 
         $this->command?->info("Seeding {$country}...");
 
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 500), 'movie_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 500), 'movie_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 400), 'musician', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 400), 'musician', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 100), 'country_singer', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 100), 'country_singer', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 200), 'adult_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 200), 'adult_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 300), 'general', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 300), 'general', 'female', $country);
+        $this->createCelebrities([
+            'Song Kang-ho', 'Lee Byung-hun', 'Gong Yoo', 'Kim Dong-hee',
+            'Park Seo-joon', 'Hyun Bin', 'Jo In-sung', 'Won Bin',
+            'Jang Dong-gun', 'Choi Min-sik', 'Sol Kyung-gu', 'Lee Jung-jae',
+            'Jung Woo-sung', 'Yoo Ah-in', 'Kim Woo-bin', 'Park Bo-gum',
+            'Song Joong-ki', 'Kim Soo-hyun', 'Lee Min-ho', 'Ma Dong-seok',
+        ], 'movie_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Kim Tae-ri', 'Jun Ji-hyun', 'Kim Hye-soo', 'Son Ye-jin',
+            'Song Hye-kyo', 'Kim Go-eun', 'Bae Doona', 'Youn Yuh-jung',
+            'Park Shin-hye', 'Lee Jung-eun', 'Jang Hyuk', 'Ha Ji-won',
+            'Lee Young-ae', 'Kim Hee-ae', 'Moon So-ri', 'Jeon Do-yeon',
+            'Kim Min-hee', 'Kim Ok-bin', 'Go Hyun-jung', 'Kim Nam-joo',
+        ], 'movie_star', 'female', $country);
+
+        $this->createCelebrities([
+            'RM', 'Jin', 'SUGA', 'j-hope',
+            'Jimin', 'V', 'Jungkook', 'PSY',
+            'IU', 'G-Dragon', 'Taeyang', 'Zico',
+            'CL', 'Seventeen', 'EXO', 'Stray Kids',
+            'NCT', 'Leeteuk', 'Lee Seung-gi', 'Rain',
+        ], 'musician', 'male', $country);
+
+        $this->createCelebrities([
+            'Jennie', 'Lisa', 'Jisoo', 'Rosé',
+            'IU', 'Sunmi', 'Hyuna', 'Taeyeon',
+            'Yoona', 'BoA', 'Chung-ha', 'Heize',
+            'Ailee', 'Jeon Somi', 'Hwasa', 'Solar',
+            'Moonbyul', 'Wheein', 'Seulgi', 'Irene',
+        ], 'musician', 'female', $country);
+
+        $this->createCelebrities([
+            'Lim Young-woong', 'Kim Ho-joong', 'Lee Chan-won', 'Jang Min-ho',
+            'Park Seung-il', 'Yoon Tae-jin', 'Jung Dong-won', 'Kim Soo-chan',
+            'Na Hoon-a', 'Tae Jin-ah',
+        ], 'country_singer', 'male', $country);
+
+        $this->createCelebrities([
+            'Jang Yoon-jung', 'Hong Ji-yoon', 'Kim Seol-ah', 'Song Ga-in',
+            'Kwak Eun-ju', 'Kim Young-ja', 'Lee Mi-ja', 'Lee Eun-ha',
+            'Yoo Ji-na', 'Kim Hye-won',
+        ], 'country_singer', 'female', $country);
+
+        $this->createCelebrities([
+            'Kim Hyun-ki', 'Park Dong-jin', 'Lee Sang-woo', 'Seo Yoon-jun',
+            'Jang Min-ho', 'Choi Woo', 'Jang Hoon', 'Kim Tae-yong',
+        ], 'adult_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Kim Hyun-ah', 'Lee Da-hye', 'Yoo Na-mi', 'Kang Hye-jung',
+            'Seo Yoon', 'Park Gi-ryun', 'Oh Hee-young', 'Bae Soo-kyung',
+        ], 'adult_star', 'female', $country);
+
+        $this->createCelebrities([
+            'Son Heung-min', 'Kim Yuna', 'Ryu Hyun-jin', 'BTS',
+            'Son Ye-jin', 'Park Chan-wook', 'Bong Joon-ho', 'Ban Ki-moon',
+            'Kim Jong-un', 'Lee Kun-hee', 'Shin Seung-hwan', 'Park Tae-hwan',
+            'Kim Seung-woo', 'Lee Seung-yoon', 'Ahn Jung-hwan', 'Cha Seung-gi',
+        ], 'general', 'male', $country);
+
+        $this->createCelebrities([
+            'Kim Yuna', 'Son Ye-jin', 'Choi Min-ji', 'Park Ji-sung',
+            'Kim Sie-yeon', 'Yoon Chae-kyung', 'Ahn So-hee', 'Go Hye-sun',
+            'Kim Joo-eun', 'Lee Bo-young', 'Kang So-ra', 'Park Bo-young',
+        ], 'general', 'female', $country);
 
         $this->command?->info("{$country} seeding complete.");
     }

@@ -366,7 +366,7 @@
                         <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $tier['name'] }}</h3>
                         <div class="mb-6">
                             <span class="price-glow text-4xl font-bold text-gray-900">${{ number_format($tier['price'], 0) }}</span>
-                            <span class="text-gray-400 text-sm">/month</span>
+                            <span class="text-gray-400 text-sm">/year</span>
                         </div>
                         <ul class="space-y-3 mb-8">
                             @foreach ($tier['benefits'] ?? [] as $benefit)
@@ -436,7 +436,7 @@
                             @auth
                                 <a href="{{ route('celebrity.meet-greet', ['celebrity' => $celebrity->slug]) }}" class="btn-primary w-full text-center">Get Tickets</a>
                             @else
-                                <a href="{{ route('register') }}" class="btn-ghost w-full text-center">Join to Attend</a>
+                                <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="btn-ghost w-full text-center">Join to Attend</a>
                             @endauth
                         </div>
                     </div>
@@ -499,7 +499,7 @@
             <p class="text-white/80 text-lg mb-10 max-w-xl mx-auto">{{ $content['cta_subheading'] ?? $defaults['cta_subheading'] }}</p>
             <div class="flex flex-wrap justify-center gap-4">
                 @guest
-                    <a href="{{ route('register') }}" class="bg-white text-gray-900 px-10 py-4 rounded-full text-lg font-bold hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 cta-pulse animate-shine">
+                    <a href="{{ route('celebrity.register', ['celebrity' => $celebrity->slug]) }}" class="bg-white text-gray-900 px-10 py-4 rounded-full text-lg font-bold hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 cta-pulse animate-shine">
                         Create Your Account
                     </a>
                 @endguest

@@ -4,74 +4,6 @@ namespace Database\Seeders;
 
 class GermanCelebritiesSeeder extends BaseCelebritySeeder
 {
-    private array $maleFirstNames = [
-        'Lukas', 'Felix', 'Maximilian', 'Jonas', 'Leon',
-        'Noah', 'Elias', 'Paul', 'Julian', 'Finn',
-        'Niklas', 'Luis', 'Milan', 'Luca', 'Jakob',
-        'Philipp', 'Alexander', 'Tobias', 'Christian', 'Stefan',
-        'Andreas', 'Michael', 'Sebastian', 'Daniel', 'Thomas',
-        'Johannes', 'Florian', 'Markus', 'Patrick', 'Christoph',
-        'Benjamin', 'Nico', 'Kai', 'Jan', 'Tim',
-        'Marco', 'Fabian', 'Sven', 'Dennis', 'Marcel',
-        'Lars', 'Jens', 'Robert', 'Matthias', 'Oliver',
-        'Martin', 'Jürgen', 'Frank', 'Peter', 'Klaus',
-        'Dieter', 'Hans', 'Wolfgang', 'Manfred', 'Heinz',
-        'Ralf', 'Uwe', 'Bernd', 'Horst', 'Günter',
-        'Lennard', 'Marlo', 'Emil', 'Theo', 'Anton',
-        'Erik', 'Oskar', 'Arthur', 'Kurt', 'Willi',
-        'Ernst', 'Alfred', 'Rudolf', 'Bastian', 'Carsten',
-        'Holger', 'Jörg', 'Volker', 'Axel', 'Detlef',
-    ];
-
-    private array $femaleFirstNames = [
-        'Emma', 'Mia', 'Hannah', 'Sophie', 'Lea',
-        'Anna', 'Lena', 'Marie', 'Emily', 'Lilli',
-        'Lina', 'Amelie', 'Johanna', 'Nele', 'Clara',
-        'Laura', 'Julia', 'Sarah', 'Lisa', 'Katharina',
-        'Sabine', 'Susanne', 'Petra', 'Monika', 'Birgit',
-        'Ursula', 'Renate', 'Heike', 'Angelika', 'Brigitte',
-        'Marlene', 'Gertrud', 'Ilse', 'Ingrid', 'Ruth',
-        'Mona', 'Lotte', 'Frieda', 'Alma', 'Paula',
-        'Ida', 'Ella', 'Nora', 'Lara', 'Maja',
-        'Luise', 'Grete', 'Elfi', 'Hannelore', 'Rosemarie',
-        'Gisela', 'Erika', 'Margot', 'Edith', 'Waltraud',
-        'Mathilda', 'Helene', 'Elisa', 'Greta', 'Leni',
-        'Romy', 'Senta', 'Hilde', 'Dora', 'Eva',
-        'Carolin', 'Annika', 'Jana', 'Nadine', 'Stefanie',
-        'Vanessa', 'Nicole', 'Anne', 'Kerstin', 'Britta',
-    ];
-
-    private array $lastNames = [
-        'Müller', 'Schmidt', 'Schneider', 'Fischer', 'Weber',
-        'Meyer', 'Wagner', 'Becker', 'Schulz', 'Hoffmann',
-        'Schäfer', 'Koch', 'Bauer', 'Richter', 'Klein',
-        'Wolf', 'Schröder', 'Neumann', 'Schwarz', 'Zimmermann',
-        'Braun', 'Krüger', 'Hofmann', 'Hartmann', 'Lange',
-        'Schmitt', 'Werner', 'Schmitz', 'Krause', 'Meier',
-        'Lehmann', 'Schmid', 'Schulze', 'Maier', 'Köhler',
-        'Herrmann', 'König', 'Walter', 'Mayer', 'Huber',
-        'Kaiser', 'Fuchs', 'Peters', 'Lang', 'Möller',
-        'Weiß', 'Jung', 'Hahn', 'Schubert', 'Vogel',
-        'Friedrich', 'Keller', 'Günther', 'Frank', 'Berger',
-        'Winkler', 'Roth', 'Beck', 'Lorenz', 'Baumann',
-        'Franke', 'Albrecht', 'Schuster', 'Simon', 'Ludwig',
-        'Böhm', 'Winter', 'Kraus', 'Martin', 'Schumacher',
-        'Jäger', 'Stein', 'Schreiber', 'Vogt', 'Sommer',
-        'Engel', 'Seidel', 'Brandt', 'Horn', 'Sauer',
-        'Arnold', 'Thomas', 'Bergmann', 'Busch', 'Dietrich',
-        'Ziegler', 'Pohl', 'Reuter', 'Wolff', 'Beyer',
-        'Groß', 'Seifert', 'Binder', 'Schilling', 'Ritter',
-        'Baier', 'Henning', 'Kunz', 'Reich', 'Fiedler',
-        'Haas', 'Ernst', 'Wirth', 'Adam', 'Schindler',
-        'Riedel', 'Geiger', 'Heinrich', 'Unger', 'Graf',
-        'Frey', 'Walter', 'Fritz', 'Brenner', 'Bartsch',
-        'Moritz', 'Kern', 'Wiedemann', 'Scherer', 'Mertens',
-        'Göbel', 'Lutz', 'Thiel', 'Förster', 'Reimann',
-        'Bühler', 'Ackermann', 'Burkhardt', 'Steiner', 'Herzog',
-        'Ebert', 'Michel', 'Konrad', 'Brückner', 'Schlegel',
-        'Schuler', 'Lohmann', 'Glaser', 'Stark', 'Stahl',
-    ];
-
     public function run(): void
     {
         set_time_limit(0);
@@ -79,55 +11,72 @@ class GermanCelebritiesSeeder extends BaseCelebritySeeder
 
         $this->command?->info("Seeding {$country}...");
 
-        $this->createCelebrities(
-            $this->generateNames($this->maleFirstNames, $this->lastNames, 1000),
-            'movie_star', 'male', $country
-        );
+        $this->createCelebrities([
+            'Til Schweiger', 'Daniel Brühl', 'Matthias Schweighöfer', 'Christoph Waltz',
+            'Moritz Bleibtreu', 'Jan Josef Liefers', 'Tom Schilling', 'Alexander Fehling',
+            'Franz Rogowski', 'Albrecht Schuch', 'Oliver Masucci', 'Armin Mueller-Stahl',
+            'Bruno Ganz', 'Hardy Krüger', 'Heiner Lauterbach', 'Uwe Ochsenknecht',
+            'Klaus Kinski', 'Maximilian Schell', 'Götz George', 'Mario Adorf',
+        ], 'movie_star', 'male', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->femaleFirstNames, $this->lastNames, 1000),
-            'movie_star', 'female', $country
-        );
+        $this->createCelebrities([
+            'Diane Kruger', 'Franka Potente', 'Sandra Hüller', 'Nina Hoss',
+            'Martina Gedeck', 'Hanna Schygulla', 'Marlene Dietrich', 'Romy Schneider',
+            'Senta Berger', 'Karoline Herfurth', 'Iris Berben', 'Veronica Ferres',
+            'Barbara Sukowa', 'Hannelore Elsner', 'Nina Kunzendorf', 'Bibiana Beglau',
+            'Anna Thalbach', 'Jessica Schwarz', 'Alexandra Maria Lara', 'Heike Makatsch',
+        ], 'movie_star', 'female', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->maleFirstNames, $this->lastNames, 400),
-            'musician', 'male', $country
-        );
+        $this->createCelebrities([
+            'Till Lindemann', 'Richard Kruspe', 'Paul Landers', 'Oliver Riedel',
+            'Herbert Grönemeyer', 'Klaus Meine', 'Rudolf Schenker', 'Peter Maffay',
+            'Udo Lindenberg', 'Xavier Naidoo', 'Marius Müller-Westernhagen', 'Dieter Bohlen',
+            'Mark Forster', 'Max Giesinger', 'Adel Tawil', 'Johannes Strate',
+            'Sasha', 'Mickie Krause', 'Wolfgang Petry', 'Andreas Gabalier',
+        ], 'musician', 'male', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->femaleFirstNames, $this->lastNames, 400),
-            'musician', 'female', $country
-        );
+        $this->createCelebrities([
+            'Helene Fischer', 'Nena', 'Sarah Connor', 'Lena Meyer-Landrut',
+            'Andrea Berg', 'Yvonne Catterfeld', 'Anett Louisan', 'LaFee',
+            'Jeanette Biedermann', 'Nadja Benaissa', 'Sandy Mölling', 'Lucy Diakovska',
+            'Vanessa Mai', 'Michelle', 'Beatrice Egli', 'Marianne Rosenberg',
+            'Cindy Berger', 'Claudia Jung', 'Kristina Bach', 'Anna-Carina Woitschack',
+        ], 'musician', 'female', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->maleFirstNames, $this->lastNames, 100),
-            'country_singer', 'male', $country
-        );
+        $this->createCelebrities([
+            'Heino', 'Florian Silbereisen', 'Stefan Mross', 'Andy Borg',
+            'Hansi Hinterseer', 'Patrick Lindner', 'Semino Rossi', 'Nik P.',
+            'Giovanni Zarrella', 'Ben Zucker',
+        ], 'country_singer', 'male', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->femaleFirstNames, $this->lastNames, 100),
-            'country_singer', 'female', $country
-        );
+        $this->createCelebrities([
+            'Marianne Rosenberg', 'Claudia Jung', 'Kristina Bach', 'Anna-Carina Woitschack',
+            'Nicole', 'Gitte Hænning', 'Peggy March', 'Wencke Myhre',
+            'Siw Malmkvist', 'Vicky Leandros',
+        ], 'country_singer', 'female', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->maleFirstNames, $this->lastNames, 250),
-            'adult_star', 'male', $country
-        );
+        $this->createCelebrities([
+            'Horst Baron', 'Conny Dachs', 'Steve Holmes', 'David Perry',
+            'Frank Major', 'Markus Waxenegger', 'Tony Rocket', 'Kevin Long',
+        ], 'adult_star', 'male', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->femaleFirstNames, $this->lastNames, 250),
-            'adult_star', 'female', $country
-        );
+        $this->createCelebrities([
+            'Dolly Buster', 'Kelly Trump', 'Gina Wild', 'Conny',
+            'Sharon Da Vale', 'Tina Born', 'Mandy Mystery', 'Sandy',
+        ], 'adult_star', 'female', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->maleFirstNames, $this->lastNames, 250),
-            'general', 'male', $country
-        );
+        $this->createCelebrities([
+            'Michael Schumacher', 'Bastian Schweinsteiger', 'Manuel Neuer', 'Toni Kroos',
+            'Thomas Müller', 'Dirk Nowitzki', 'Boris Becker', 'Sebastian Vettel',
+            'Nico Rosberg', 'Miroslav Klose', 'Lothar Matthäus', 'Oliver Kahn',
+            'Jürgen Klopp', 'Franz Beckenbauer', 'Gerd Müller', 'Stefan Raab',
+        ], 'general', 'male', $country);
 
-        $this->createCelebrities(
-            $this->generateNames($this->femaleFirstNames, $this->lastNames, 250),
-            'general', 'female', $country
-        );
+        $this->createCelebrities([
+            'Steffi Graf', 'Heidi Klum', 'Claudia Schiffer', 'Angela Merkel',
+            'Magdalena Neuner', 'Katarina Witt', 'Anke Engelke', 'Caroline Beil',
+            'Natalia Wörner', 'Marion Kracht', 'Marcia Gresch', 'Martina Navratilova',
+        ], 'general', 'female', $country);
 
         $this->command?->info("{$country} seeding complete.");
     }

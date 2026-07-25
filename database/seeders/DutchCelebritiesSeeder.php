@@ -4,68 +4,6 @@ namespace Database\Seeders;
 
 class DutchCelebritiesSeeder extends BaseCelebritySeeder
 {
-    private array $maleFirstNames = [
-        'Daan', 'Sem', 'Lukas', 'Jesse', 'Thomas',
-        'Tim', 'Ruben', 'Max', 'Levi', 'Finn',
-        'Thijs', 'Lars', 'Sander', 'Dirk', 'Pieter',
-        'Jan', 'Willem', 'Hendrik', 'Kees', 'Bram',
-        'Gijs', 'Michiel', 'Jasper', 'Martijn', 'Wouter',
-        'Stefan', 'Mark', 'Niels', 'Bas', 'Sjoerd',
-        'Jeroen', 'Peter', 'Erik', 'Henk', 'Joost',
-        'Maarten', 'Remco', 'Bart', 'Arnoud', 'Gerard',
-        'Karel', 'Wim', 'Freek', 'Guus', 'Hugo',
-        'Job', 'Koen', 'Pim', 'Roel', 'Teun',
-        'Arjen', 'Coen', 'Dennis', 'Frank', 'Harry',
-        'Ivo', 'Jaap', 'Lex', 'Menno', 'Olaf',
-        'Piet', 'Quirijn', 'Rob', 'Simon', 'Tom',
-        'Victor', 'Ward', 'Yorick', 'Aart', 'Ben',
-        'Cornelis', 'Ewoud', 'Floris', 'Geert', 'Herman',
-        'Jacob', 'Klaas', 'Luuk', 'Noud', 'Oscar',
-    ];
-
-    private array $femaleFirstNames = [
-        'Emma', 'Anna', 'Lisa', 'Lotte', 'Eva',
-        'Sophie', 'Sanne', 'Noa', 'Feline', 'Mila',
-        'Roos', 'Lieke', 'Sara', 'Tess', 'Milou',
-        'Fenna', 'Britt', 'Laura', 'Julia', 'Linda',
-        'Maria', 'Petra', 'Johanna', 'Elisabeth', 'Cornelia',
-        'Alida', 'Antje', 'Beatrix', 'Catharina', 'Dirkje',
-        'Elsje', 'Femke', 'Greetje', 'Hendrika', 'Ineke',
-        'Joke', 'Katrien', 'Lena', 'Marjolein', 'Nelleke',
-        'Otto', 'Pietje', 'Renske', 'Truus', 'Wilma',
-        'Yvonne', 'Adriana', 'Bianca', 'Claudia', 'Deborah',
-        'Esmee', 'Floor', 'Greta', 'Helma', 'Isabel',
-        'Jantine', 'Karlijn', 'Liesbeth', 'Mirjam', 'Nadine',
-        'Odette', 'Paulien', 'Renate', 'Silvia', 'Tineke',
-        'Ulrike', 'Vivian', 'Willeke', 'Xandra', 'Zwaan',
-        'Aukje', 'Bo', 'Charlotte', 'Danique', 'Esther',
-        'Fleur', 'Hanna', 'Ilse', 'Jolien', 'Kim',
-    ];
-
-    private array $lastNames = [
-        'de Jong', 'Jansen', 'de Vries', 'van den Berg', 'van Dijk',
-        'Bakker', 'Visser', 'Smit', 'Meijer', 'de Boer',
-        'Mulder', 'Bos', 'Vos', 'Peters', 'Hendriks',
-        'van Leeuwen', 'Dekker', 'Brouwer', 'de Wit', 'Dijkstra',
-        'Smits', 'de Graaf', 'van der Veen', 'van der Heiden', 'Jacobs',
-        'van der Wal', 'Kuiper', 'Vermeulen', 'van Dam', 'Prins',
-        'Kok', 'Kuipers', 'van Beek', 'van der Meer', 'de Bruijn',
-        'Scholten', 'Willems', 'van Loon', 'Jonker', 'Kramer',
-        'Hofman', 'Huisman', 'van der Laan', 'Schouten', 'de Haan',
-        'van der Linden', 'Gerritsen', 'Cornelissen', 'Hoekstra', 'Molenaar',
-        'van den Bosch', 'Veenstra', 'Koning', 'Bruinsma', 'de Groot',
-        'Postma', 'Timmermans', 'Driessen', 'Boonstra', 'van der Zee',
-        'Anema', 'Blom', 'van der Sluis', 'Evers', 'Hermans',
-        'Keizer', 'Oosten', 'Rutgers', 'Schippers', 'ter Horst',
-        'van der Veen', 'Wiersma', 'Zondervan', 'van Aken', 'Beekman',
-        'van der Heijde', 'Claassen', 'Deckers', 'Eijkelboom', 'Franken',
-        'Gielen', 'Hazebroek', 'IJzerman', 'Jochems', 'Kerkhof',
-        'Leenders', 'Manders', 'Nijs', 'Oomens', 'Peeters',
-        'Reinders', 'Smeets', 'Thijssen', 'Uijen', 'Verhoeven',
-        'Wagemakers', 'Zijlstra', 'van Bergen', 'Dijkman', 'Elbers',
-        'Fransen', 'Geurts', 'Heijmans', 'Janssens', 'Lambrechts',
-    ];
-
     public function run(): void
     {
         set_time_limit(0);
@@ -73,16 +11,67 @@ class DutchCelebritiesSeeder extends BaseCelebritySeeder
 
         $this->command?->info("Seeding {$country}...");
 
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 500), 'movie_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 500), 'movie_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 200), 'musician', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 200), 'musician', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 50), 'country_singer', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 50), 'country_singer', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 100), 'adult_star', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 100), 'adult_star', 'female', $country);
-        $this->createCelebrities($this->generateNames($this->maleFirstNames, $this->lastNames, 150), 'general', 'male', $country);
-        $this->createCelebrities($this->generateNames($this->femaleFirstNames, $this->lastNames, 150), 'general', 'female', $country);
+        $this->createCelebrities([
+            'Rutger Hauer', 'Michiel Huisman', 'Jeroen Krabbé', 'Huub Stapel',
+            'Derek de Lint', 'Gijsbert Roelofs', 'Marwan Kenzari', 'Barry Atsma',
+            'Cas Jansen', 'Mark van Eeuwen', 'Loek Kemps', 'Guy Clemens',
+            'Thijs Römer', 'Bobbi Eden', 'Jim Bakkum', 'Edwin Jonker',
+        ], 'movie_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Carice van Houten', 'Famke Janssen', 'Katja Schuurman', 'Maruschka Detmers',
+            'Monique van de Ven', 'Renée Soutendijk', 'Johanna ter Steege', 'Thekla Reuten',
+            'Halina Reijn', 'Anna Drijver', 'Sylvia Kristel', 'Liesbeth Stassen',
+            'Willeke van Ammelrooy', 'Nelly Frijda', 'Olga Zuiderhoek', 'Anneke Grönloh',
+        ], 'movie_star', 'female', $country);
+
+        $this->createCelebrities([
+            'Eddie van Halen', 'Alex van Halen', 'Armin van Buuren', 'Martin Garrix',
+            'DJ Tiësto', 'Afrojack', 'Hardwell', 'Don Diablo',
+            'Oliver Heldens', 'Nicky Romero', 'Blasterjaxx', 'Marco V',
+            'W&W', 'Ran-D', 'Angerfist', 'Dennis van der Geest',
+        ], 'musician', 'male', $country);
+
+        $this->createCelebrities([
+            'Anouk', 'Carrie van Houten', 'Glennis Grace', 'Ruth Jacott',
+            'Ilse DeLange', 'Eva Simons', 'Kim-Lian van der Meij', 'Sanna van der Vliet',
+            'Leona Philippo', 'Britt Dekker', 'Maan', 'Trijntje Oosterhuis',
+            'Edsilia Rombley', 'Margriet Eshuys', 'Sandy Kandau', 'Liza de Moret',
+        ], 'musician', 'female', $country);
+
+        $this->createCelebrities([
+            'Marco Borsato', 'André Hazes', 'Frans Bauer', 'Jan Smit',
+            'René Froger', 'Danny Vera', 'Jos Brink', 'Gert Timmerman',
+            'Boer Koekoek', 'Willem Alexander',
+        ], 'country_singer', 'male', $country);
+
+        $this->createCelebrities([
+            'Annie Schilder', 'Tineke Schouten', 'Hanny Vogts', 'Liesbeth List',
+            'Jannette van Wijk', 'Anouk', 'Maya', 'Ellen ten Damme',
+        ], 'country_singer', 'female', $country);
+
+        $this->createCelebrities([
+            'Milan van der Burg', 'Dennis Bier', 'Mark van der Wal', 'Bob van der Hulst',
+            'Chris van de Velde', 'Lennart van Zanten', 'Jeroen van Dijk', 'Peter van der Heyden',
+        ], 'adult_star', 'male', $country);
+
+        $this->createCelebrities([
+            'Bobbi Eden', 'Bianca Trump', 'Kim Holland', 'Samantha Fox',
+            'Stella Cox', 'Shalina Devine', 'Tiffany Rousso', 'Dominique van de Pol',
+        ], 'adult_star', 'female', $country);
+
+        $this->createCelebrities([
+            'Johan Cruyff', 'Ruud Gullit', 'Marco van Basten', 'Arjen Robben',
+            'Virgil van Dijk', 'Dennis Bergkamp', 'Wesley Sneijder', 'Robin van Persie',
+            'Edwin van der Sar', 'Ruud van Nistelrooy', 'Max Verstappen', 'Tom Dumoulin',
+            'Sven Kramer', 'Ireen Wüst', 'Pieter van den Hoogenband', 'Inge de Bruijn',
+        ], 'general', 'male', $country);
+
+        $this->createCelebrities([
+            'Marianne Vos', 'Leontien van Moorsel', 'Lieke Martens', 'Dafne Schippers',
+            'Ellen van Dijk', 'Joanna Leighton', 'Vivianne Miedema', 'Sofia Johansson',
+            'Mona Keijzer', 'Marlies Veldhuijzen', 'Sylvia van der Heiden', 'Ellie Lust',
+        ], 'general', 'female', $country);
 
         $this->command?->info("{$country} seeding complete.");
     }

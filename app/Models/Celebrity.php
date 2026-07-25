@@ -197,8 +197,23 @@ class Celebrity extends Model
         return $this->hasMany(CelebrityPaymentMethod::class)->enabled()->ordered();
     }
 
+    public function giveaways()
+    {
+        return $this->hasMany(Giveaway::class);
+    }
+
+    public function giveawayEntries()
+    {
+        return $this->hasMany(GiveawayEntry::class);
+    }
+
     public function getPortalUrl(): string
     {
+        $customUrl = $this->config['custom_portal_url'] ?? null;
+        if ($customUrl) {
+            return $customUrl;
+        }
+
         $appUrl = config('app.url');
         $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'https';
         $host = parse_url($appUrl, PHP_URL_HOST);

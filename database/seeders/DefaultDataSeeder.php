@@ -35,10 +35,10 @@ class DefaultDataSeeder extends Seeder
         // ─── GLOBAL SYSTEM CONFIG ─────────────────────
         SystemConfig::updateOrCreate(['key' => 'membership_tiers'], [
             'value' => [
-                ['id' => 'bronze', 'name' => 'Bronze', 'price' => 1000, 'features' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Fan badge', 'Direct messaging with management']],
-                ['id' => 'silver', 'name' => 'Silver', 'price' => 2500, 'features' => ['Everything in Bronze', 'Monthly Zoom hangout', 'Early access to merch', 'Exclusive photos', 'Priority response to messages']],
-                ['id' => 'gold', 'name' => 'Gold', 'price' => 5000, 'features' => ['Everything in Silver', 'Quarterly 1-on-1 chat', 'Signed merchandise', 'Priority meet & greet access', 'Private Discord role', 'Dedicated management contact']],
-                ['id' => 'platinum', 'name' => 'Platinum', 'price' => 10000, 'features' => ['Everything in Gold', 'Monthly 1-on-1 video call', 'Private meetup invitations', 'All-access pass', 'Personalized video message', 'Lifetime membership card', '24/7 priority support']],
+                ['id' => 'bronze', 'name' => 'Bronze', 'price' => 10000, 'features' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Fan badge', 'Direct messaging with management']],
+                ['id' => 'silver', 'name' => 'Silver', 'price' => 25000, 'features' => ['Everything in Bronze', 'Monthly Zoom hangout', 'Early access to merch', 'Exclusive photos', 'Priority response to messages']],
+                ['id' => 'gold', 'name' => 'Gold', 'price' => 50000, 'features' => ['Everything in Silver', 'Quarterly 1-on-1 chat', 'Signed merchandise', 'Priority meet & greet access', 'Private Discord role', 'Dedicated management contact']],
+                ['id' => 'platinum', 'name' => 'Platinum', 'price' => 100000, 'features' => ['Everything in Gold', 'Monthly 1-on-1 video call', 'Private meetup invitations', 'All-access pass', 'Personalized video message', 'Lifetime membership card', '24/7 priority support']],
             ],
         ]);
 
@@ -128,9 +128,9 @@ class DefaultDataSeeder extends Seeder
                     ],
                 ],
                 'membership_tiers' => [
-                    ['name' => 'Standard', 'price' => 3000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
-                    ['name' => 'Premium', 'price' => 5000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
-                    ['name' => 'VIP', 'price' => 10000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
+                    ['name' => 'Standard', 'price' => 30000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
+                    ['name' => 'Premium', 'price' => 50000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
+                    ['name' => 'VIP', 'price' => 100000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
                 ],
                 'features' => [
                     'fan_applications' => true,
@@ -207,9 +207,9 @@ class DefaultDataSeeder extends Seeder
                     ],
                 ],
                 'membership_tiers' => [
-                    ['name' => 'Standard', 'price' => 3000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
-                    ['name' => 'Premium', 'price' => 5000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
-                    ['name' => 'VIP', 'price' => 10000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
+                    ['name' => 'Standard', 'price' => 30000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
+                    ['name' => 'Premium', 'price' => 50000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
+                    ['name' => 'VIP', 'price' => 100000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
                 ],
                 'features' => [
                     'fan_applications' => true,
@@ -286,9 +286,9 @@ class DefaultDataSeeder extends Seeder
                     ],
                 ],
                 'membership_tiers' => [
-                    ['name' => 'Standard', 'price' => 3000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
-                    ['name' => 'Premium', 'price' => 5000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
-                    ['name' => 'VIP', 'price' => 10000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
+                    ['name' => 'Standard', 'price' => 30000, 'color' => '#C0C0C0', 'benefits' => ['Exclusive community access', 'Monthly newsletter', 'Digital membership card', 'Exclusive fan badge', 'Direct messaging with team']],
+                    ['name' => 'Premium', 'price' => 50000, 'color' => '#FFD700', 'benefits' => ['Everything in Standard', 'Early access to events', 'Priority messaging', 'Exclusive monthly content', 'Member-only livestreams', 'Priority support']],
+                    ['name' => 'VIP', 'price' => 100000, 'color' => '#E5E4E2', 'benefits' => ['Everything in Premium', 'Quarterly 1-on-1 video call', 'Signed merchandise', 'Private meetup invitations', 'All-access pass', 'Personalized video message', '24/7 priority support', 'Lifetime status badge']],
                 ],
                 'features' => [
                     'fan_applications' => true,
@@ -402,11 +402,11 @@ class DefaultDataSeeder extends Seeder
     private function createMemberships(array $fans, Celebrity $jennie, Celebrity $jungkook, Celebrity $lisa): void
     {
         $data = [
-            ['user' => $fans['jennie'][0], 'celeb' => $jennie, 'tier' => 'Platinum', 'price' => 79.99, 'active' => true],
-            ['user' => $fans['jennie'][2], 'celeb' => $jennie, 'tier' => 'Gold', 'price' => 39.99, 'active' => true],
-            ['user' => $fans['jungkook'][0], 'celeb' => $jungkook, 'tier' => 'Diamond', 'price' => 69.99, 'active' => true],
-            ['user' => $fans['lisa'][0], 'celeb' => $lisa, 'tier' => 'Premium', 'price' => 24.99, 'active' => true],
-            ['user' => $fans['lisa'][2], 'celeb' => $lisa, 'tier' => 'VIP', 'price' => 59.99, 'active' => false],
+            ['user' => $fans['jennie'][0], 'celeb' => $jennie, 'tier' => 'Platinum', 'price' => 799.99, 'active' => true],
+            ['user' => $fans['jennie'][2], 'celeb' => $jennie, 'tier' => 'Gold', 'price' => 399.99, 'active' => true],
+            ['user' => $fans['jungkook'][0], 'celeb' => $jungkook, 'tier' => 'Diamond', 'price' => 699.99, 'active' => true],
+            ['user' => $fans['lisa'][0], 'celeb' => $lisa, 'tier' => 'Premium', 'price' => 249.99, 'active' => true],
+            ['user' => $fans['lisa'][2], 'celeb' => $lisa, 'tier' => 'VIP', 'price' => 599.99, 'active' => false],
         ];
 
         foreach ($data as $d) {

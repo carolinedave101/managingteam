@@ -52,8 +52,14 @@
                         @if ($celebrity->config['features']['private_meetup'] ?? false)
                             <li><a href="{{ route('celebrity.private-meetup', ['celebrity' => $celebrity->slug]) }}" class="hover:accent-text transition">Private Meetups</a></li>
                         @endif
+                        @if ($celebrity->config['features']['giveaways'] ?? false)
+                            <li><a href="{{ route('celebrity.giveaways', ['celebrity' => $celebrity->slug]) }}" class="hover:accent-text transition">Giveaways</a></li>
+                        @endif
                         @if ($celebrity->config['features']['fan_applications'] ?? false)
                             <li><a href="{{ route('celebrity.apply', ['celebrity' => $celebrity->slug]) }}" class="hover:accent-text transition">Apply to Join</a></li>
+                        @endif
+                        @if (($celebrity->config['management_portal']['enabled'] ?? false) && ($celebrity->config['management_portal']['url'] ?? false))
+                            <li><a href="{{ $celebrity->config['management_portal']['url'] }}" target="_blank" class="hover:accent-text transition">{{ $celebrity->config['management_portal']['label'] ?: 'Management Portal' }}</a></li>
                         @endif
                     @endif
                 </ul>

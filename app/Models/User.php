@@ -97,6 +97,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Wallet::class);
     }
 
+    public function giveawayEntries()
+    {
+        return $this->hasMany(GiveawayEntry::class);
+    }
+
     public function walletForCelebrity(Celebrity $celebrity): ?Wallet
     {
         return $this->wallets()->where('celebrity_id', $celebrity->id)->first();
