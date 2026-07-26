@@ -14,6 +14,7 @@ class GenerateCelebrityDirectory extends Command
 
     public function handle(): int
     {
+        ini_set('memory_limit', '512M');
         $this->info('Fetching celebrities...');
 
         $celebrities = Celebrity::orderBy('category')
