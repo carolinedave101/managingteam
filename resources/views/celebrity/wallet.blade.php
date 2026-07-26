@@ -111,12 +111,11 @@
                                     <x-input-label for="amount" value="Amount" />
                                     <p class="text-xs text-gray-400 mt-0.5 mb-1">How much would you like to add? Enter any amount of $1 or more.</p>
                                     <div class="relative mt-1">
-                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">$</span>
-                                        <input type="number" id="amount" name="amount" step="0.01" min="1" required
+                                                <input type="number" id="amount" name="amount" step="0.01" min="1" required
                                                x-on:input.debounce.300ms="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
                                                x-on:blur="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
                                                 x-bind:class="inputClass('amount')"
-                                                class="form-input pl-9 text-lg font-bold"
+                                                class="form-input text-lg font-bold"
                                                placeholder="0.00"
                                                value="{{ $topupAmount ? number_format($topupAmount, 2, '.', '') : '' }}">
                                     </div>

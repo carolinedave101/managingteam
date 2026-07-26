@@ -60,12 +60,11 @@
                                     <x-input-label for="amount" value="Amount to Withdraw" />
                                     <p class="text-xs text-gray-400 mt-0.5 mb-1">How much would you like to withdraw? Must be at least $1.</p>
                                     <div class="relative mt-1">
-                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">$</span>
                                         <input type="number" id="amount" name="amount" step="0.01" min="1" max="{{ $wallet->balance }}" required
                                                x-on:input.debounce.300ms="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
                                                x-on:blur="validate('amount', $el.value, [validators.required, validators.numeric, validators.min(1)])"
                                                x-bind:class="inputClass('amount')"
-                                               class="form-input pl-9 text-lg font-bold"
+                                               class="form-input text-lg font-bold"
                                                placeholder="0.00">
                                     </div>
                                     <template x-if="invalid('amount')">
