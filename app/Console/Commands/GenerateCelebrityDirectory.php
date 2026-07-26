@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Celebrity;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Console\Command;
+use Mpdf\Mpdf;
 
 class GenerateCelebrityDirectory extends Command
 {
@@ -15,7 +15,8 @@ class GenerateCelebrityDirectory extends Command
     public function handle(): int
     {
         ini_set('memory_limit', '512M');
-        set_time_limit(600);
+        ini_set('pcre.backtrack_limit', '4000000');
+        set_time_limit(300);
         $this->info('Fetching celebrities...');
 
         $celebrities = Celebrity::orderBy('category')
@@ -23,7 +24,6 @@ class GenerateCelebrityDirectory extends Command
             ->get()
             ->map(fn (Celebrity $c) => [
                 'name' => $c->name,
-                'category_key' => $c->category ?? 'general',
                 'category_label' => $c->categoryLabel(),
                 'gender' => $c->gender ? ucfirst($c->gender) : null,
                 'country' => $c->country,
@@ -34,30 +34,24 @@ class GenerateCelebrityDirectory extends Command
         $count = $celebrities->count();
         $this->info("Rendering PDF for {$count} celebrities...");
 
-        $this->info('Loading PDF view...');
+        $html = view('pdf.celebrity-directory', [
+            'celebrities' => $celebrities,
+        ])->render();
 
-        $this->info('Loading PDF view...');
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4-L',
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 15,
+            'margin_bottom' => 15,
+            'tempDir' => storage_path('app/mpdf-tmp'),
+        ]);
 
-        try {
-            $dompdf = new \Dompdf\Dompdf();
-            $dompdf->set_option('isRemoteEnabled', false);
-            $dompdf->set_option('isHtml5ParserEnabled', true);
-            $dompdf->set_option('defaultFont', 'DejaVu Sans');
+        $mpdf->WriteHTML($html);
 
-            $html = view('pdf.celebrity-directory', [
-                'celebrities' => $celebrities,
-            ])->render();
-
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('a4', 'landscape');
-            $dompdf->render();
-
-            $path = base_path('celebrity-directory.pdf');
-            file_put_contents($path, $dompdf->output());
-        } catch (\Exception $e) {
-            $this->error('PDF generation failed: '.$e->getMessage());
-            return self::FAILURE;
-        }
+        $path = base_path('celebrity-directory.pdf');
+        $mpdf->Output($path, 'F');
 
         $this->info("Done! PDF saved to: {$path}");
 
