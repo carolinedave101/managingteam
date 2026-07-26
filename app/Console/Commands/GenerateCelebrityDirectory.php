@@ -36,23 +36,26 @@ class GenerateCelebrityDirectory extends Command
 
         $this->info('Loading PDF view...');
 
+        $this->info('Loading PDF view...');
+
         try {
-            $pdf = Pdf::loadView('pdf.celebrity-directory', [
+            $dompdf = new \Dompdf\Dompdf();
+            $dompdf->set_option('isRemoteEnabled', false);
+            $dompdf->set_option('isHtml5ParserEnabled', true);
+            $dompdf->set_option('defaultFont', 'DejaVu Sans');
+
+            $html = view('pdf.celebrity-directory', [
                 'celebrities' => $celebrities,
-            ])->setPaper('a4', 'landscape');
+            ])->render();
+
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('a4', 'landscape');
+            $dompdf->render();
+
+            $path = base_path('celebrity-directory.pdf');
+            file_put_contents($path, $dompdf->output());
         } catch (\Exception $e) {
-            $this->error('loadView failed: '.$e->getMessage());
-            return self::FAILURE;
-        }
-
-        $this->info('PDF loaded, saving...');
-
-        $path = base_path('celebrity-directory.pdf');
-
-        try {
-            $pdf->save($path);
-        } catch (\Exception $e) {
-            $this->error('save failed: '.$e->getMessage());
+            $this->error('PDF generation failed: '.$e->getMessage());
             return self::FAILURE;
         }
 

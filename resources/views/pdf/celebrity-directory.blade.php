@@ -5,28 +5,26 @@
     <title>Celebrity Directory</title>
     <style>
         @page {
-            margin: 20px 15px;
+            margin: 15px 10px;
             size: A4 landscape;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif;
-            font-size: 7.5pt;
+            font-family: 'DejaVu Sans', sans-serif;
+            font-size: 7pt;
             color: #1e293b;
         }
         .header {
             text-align: center;
-            padding: 10px 0 8px 0;
+            padding: 8px 0;
             border-bottom: 2px solid #e11d48;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .header h1 {
-            font-size: 16pt;
-            color: #0f172a;
+            font-size: 14pt;
             margin-bottom: 2px;
         }
         .header p {
-            font-size: 8pt;
+            font-size: 7pt;
             color: #64748b;
         }
         table {
@@ -37,59 +35,28 @@
             background: #e11d48;
             color: #fff;
             font-weight: 600;
-            font-size: 7pt;
+            font-size: 6.5pt;
             text-align: left;
-            padding: 4px 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 3px 5px;
         }
         td {
-            padding: 3px 6px;
+            padding: 2px 5px;
             border-bottom: 1px solid #e2e8f0;
-            font-size: 7pt;
+            font-size: 6.5pt;
         }
         tr:nth-child(even) td {
             background: #f8fafc;
         }
-        .num {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 6.5pt;
-            width: 30px;
-        }
-        .name {
-            font-weight: 600;
-            color: #0f172a;
-        }
-        .category {
-            display: inline-block;
-            padding: 1px 6px;
-            border-radius: 3px;
-            font-size: 6.5pt;
-            font-weight: 600;
-        }
-        .category-general { background: #f1f5f9; color: #475569; }
-        .category-movie_star { background: #eef2ff; color: #4338ca; }
-        .category-country_singer { background: #fffbeb; color: #b45309; }
-        .category-musician { background: #fdf2f8; color: #be185d; }
-        .category-adult_star { background: #faf5ff; color: #7c3aed; }
-        .gender {
-            text-align: center;
-        }
-        .country {
-            color: #475569;
-        }
-        .instagram {
-            color: #e11d48;
-            font-size: 6.5pt;
-        }
+        .num { text-align: center; width: 25px; }
+        .name { font-weight: 600; }
+        .gender { text-align: center; }
         .footer {
             text-align: center;
-            font-size: 6.5pt;
+            font-size: 6pt;
             color: #94a3b8;
-            padding: 10px 0 0 0;
+            padding: 8px 0 0 0;
             border-top: 1px solid #e2e8f0;
-            margin-top: 8px;
+            margin-top: 6px;
         }
     </style>
 </head>
@@ -105,7 +72,7 @@
                 <th class="num">#</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th style="text-align:center;">Gender</th>
+                <th class="gender">Gender</th>
                 <th>Country</th>
                 <th>Instagram</th>
             </tr>
@@ -115,19 +82,17 @@
                 <tr>
                     <td class="num">{{ $i + 1 }}</td>
                     <td class="name">{{ $c['name'] }}</td>
-                    <td>
-                        <span class="category category-{{ $c['category_key'] }}">{{ $c['category_label'] }}</span>
-                    </td>
+                    <td>{{ $c['category_label'] }}</td>
                     <td class="gender">{{ $c['gender'] ?: '—' }}</td>
-                    <td class="country">{{ $c['country'] ?: '—' }}</td>
-                    <td class="instagram">{{ $c['instagram'] ?: '—' }}</td>
+                    <td>{{ $c['country'] ?: '—' }}</td>
+                    <td>{{ $c['instagram'] ?: '—' }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
     <div class="footer">
-        {{ count($celebrities) }} celebrity {{ Str::plural('entry', count($celebrities)) }}
+        {{ count($celebrities) }} celebrity entries
     </div>
 </body>
 </html>
