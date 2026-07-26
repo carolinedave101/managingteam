@@ -15,6 +15,7 @@ class GenerateCelebrityDirectory extends Command
     public function handle(): int
     {
         ini_set('memory_limit', '512M');
+        set_time_limit(600);
         $this->info('Fetching celebrities...');
 
         $celebrities = Celebrity::orderBy('category')
@@ -35,7 +36,7 @@ class GenerateCelebrityDirectory extends Command
 
         $pdf = Pdf::loadView('pdf.celebrity-directory', [
             'celebrities' => $celebrities,
-        ]);
+        ])->setPaper('a4', 'landscape');
 
         $path = base_path('celebrity-directory.pdf');
         $pdf->save($path);
