@@ -34,12 +34,27 @@ class GenerateCelebrityDirectory extends Command
         $count = $celebrities->count();
         $this->info("Rendering PDF for {$count} celebrities...");
 
-        $pdf = Pdf::loadView('pdf.celebrity-directory', [
-            'celebrities' => $celebrities,
-        ])->setPaper('a4', 'landscape');
+        $this->info('Loading PDF view...');
+
+        try {
+            $pdf = Pdf::loadView('pdf.celebrity-directory', [
+                'celebrities' => $celebrities,
+            ])->setPaper('a4', 'landscape');
+        } catch (\Exception $e) {
+            $this->error('loadView failed: '.$e->getMessage());
+            return self::FAILURE;
+        }
+
+        $this->info('PDF loaded, saving...');
 
         $path = base_path('celebrity-directory.pdf');
-        $pdf->save($path);
+
+        try {
+            $pdf->save($path);
+        } catch (\Exception $e) {
+            $this->error('save failed: '.$e->getMessage());
+            return self::FAILURE;
+        }
 
         $this->info("Done! PDF saved to: {$path}");
 
