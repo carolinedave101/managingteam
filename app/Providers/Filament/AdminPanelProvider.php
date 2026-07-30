@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Middleware\AutoProcessCampaigns;
 use App\Filament\Admin\Widgets\RecentApplications;
 use App\Filament\Admin\Widgets\RecentMessages;
 use App\Filament\Admin\Widgets\StatsOverview;
@@ -61,6 +62,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                AutoProcessCampaigns::class,
             ])
             ->login()
             ->profile()

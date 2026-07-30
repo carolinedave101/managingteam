@@ -97,6 +97,14 @@ curl -s -o /dev/null -w "%{http_code}" "https://jennie.managingteam.info"
 | **Login redirect fails** | Check `APP_URL` in `.env.production` |
 | **File uploads not showing** | Run `php artisan storage:link` (storage symlink) |
 | **Stale views shown** | Old compiled Blade views — clear `storage/framework/views/` |
+| **Campaign emails not sending** | 1) Check cron entry exists in cPanel 2) Run `php artisan campaigns:process` manually to test 3) Verify `QUEUE_CONNECTION=sync` or configured in `.env` |
+
+### Email Campaign Cron Setup (Post-Deployment)
+After deploying, add ONE cron entry in cPanel. Never change it — it handles all future campaigns automatically:
+```
+* * * * * /usr/local/bin/php /home/managingteam/public_html/artisan campaigns:process >/dev/null 2>&1
+```
+The command runs every minute, processes a batch (respecting 50/hr + 1,000/day limits), and exits. If cron is unavailable, campaigns still advance when the admin visits any admin page (safety net processes 3/request).
 
 ## Architecture Principles
 1. **Celebrity config JSON** is the single source of truth for all per-celebrity customization (theme, content, pricing, features, payments)

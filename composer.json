@@ -15,6 +15,7 @@
         "laravel/framework": "^13.8",
         "laravel/reverb": "^1.10",
         "laravel/tinker": "^3.0",
+        "league/csv": "*",
         "livewire/livewire": "*",
         "mpdf/mpdf": "^8.3",
         "stripe/stripe-php": "^17.6"
