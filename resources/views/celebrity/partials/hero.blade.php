@@ -8,17 +8,17 @@
     $catHeroDefaults = [
         'movie_star' => [
             'badge' => 'Official Fan Community',
-            'title' => '<span class="text-matte" style="color: #fbbf24;">Hollywood</span> Awaits You',
+            'title' => '<span style="color: #fbbf24;">Hollywood</span> Awaits You',
             'subtitle' => 'Get exclusive red carpet access, behind-the-scenes content, and VIP meet & greets with your favorite star.',
         ],
         'country_singer' => [
             'badge' => 'Official Fan Community',
-            'title' => '<span class="text-matte" style="color: #f59e0b;">Front Row</span> Access Awaits',
+            'title' => '<span style="color: #f59e0b;">Front Row</span> Access Awaits',
             'subtitle' => 'Join the family. Get backstage passes, exclusive acoustic sessions, and VIP concert access.',
         ],
         'adult_star' => [
             'badge' => 'Exclusive Fan Community',
-            'title' => '<span class="text-matte" style="color: #ec4899;">Premium</span> Access Awaits',
+            'title' => '<span style="color: #ec4899;">Premium</span> Access Awaits',
             'subtitle' => 'Unlock exclusive content, private messaging, and VIP perks for the ultimate fan experience.',
         ],
         'musician' => [
