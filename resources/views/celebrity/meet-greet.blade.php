@@ -51,7 +51,8 @@
             @if (count($events))
                 <div class="flex flex-wrap justify-center gap-8 [&>*]:grow [&>*]:basis-80 [&>*]:max-w-sm">
                     @foreach ($events as $event)
-                        <div class="card-glow ring-glow-hover bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden transition-all duration-300">
+                        <div class="card-glow ring-glow-hover bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden transition-all duration-300 depth-card" x-data="sheenCard">
+                            <div class="card-sheen" aria-hidden="true"></div>
                             @if ($event->image_url)
                                 <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="w-full h-48 object-cover">
                             @else
