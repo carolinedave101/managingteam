@@ -85,7 +85,8 @@
                 </div>
             @else
                 {{-- Application form --}}
-                <div class="bg-white/90 backdrop-blur-sm rounded-2xl border border-white/60 shadow-lg p-8 card-glow ring-glow-hover">
+                <div class="bg-white/90 backdrop-blur-sm rounded-2xl border border-white/60 shadow-lg p-8 card-glow ring-glow-hover depth-card" x-data="sheenCard">
+                    <div class="card-sheen" aria-hidden="true"></div>
                     @php $fee = $celebrity->config['pricing']['fan_application_fee'] ?? 0; @endphp
                     @if ($fee > 0)
                         <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5 mb-6 flex items-start gap-4 banner-gradient-soft">

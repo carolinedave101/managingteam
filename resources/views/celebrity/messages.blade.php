@@ -88,11 +88,12 @@
                             $myInitial = strtoupper(substr(auth()->user()->name, 0, 1));
                             $me = auth()->user();
                         @endphp
-                        <div x-data="{ expanded: false }"
-                             class="bg-white/95 backdrop-blur-sm rounded-2xl border-2 shadow-sm overflow-hidden transition-all duration-300"
+                        <div x-data="{ expanded: false, ...sheenCard() }"
+                             class="bg-white/95 backdrop-blur-sm rounded-2xl border-2 shadow-sm overflow-hidden transition-all duration-300 depth-card"
                              x-bind:class="expanded
                                 ? 'border-rose-300 shadow-md shadow-rose-100/50'
                                 : 'border-gray-200 {{ $hasUnread ? 'border-rose-300' : 'hover:border-gray-300' }}'">
+                            <div class="card-sheen" aria-hidden="true"></div>
 
                             {{-- Thread preview (collapsed state) --}}
                             <button @click="expanded = !expanded" class="w-full text-left p-4 hover:bg-gray-50/50 transition-colors duration-150">
