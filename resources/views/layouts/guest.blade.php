@@ -217,6 +217,8 @@
     <div class="min-h-screen flex relative overflow-hidden">
         {{-- Background layer --}}
         <div class="absolute inset-0 z-0 mesh-gradient"></div>
+        <div class="film-grain" aria-hidden="true"></div>
+        <div class="bg-grid-masked" aria-hidden="true"></div>
 
         {{-- Decorative blobs --}}
         <div class="absolute -top-28 -right-28 w-80 h-80 rounded-full opacity-20 animate-blob"
@@ -305,11 +307,8 @@
 
             {{-- Card --}}
             <div class="w-full sm:max-w-md auth-fade-in auth-fade-in-delay-2">
-                <div class="auth-card relative rounded-2xl sm:rounded-3xl px-8 py-10 sm:px-12 sm:py-12"
-                     style="background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); box-shadow:
-                        0 8px 40px color-mix(in srgb, var(--accent) 10%, transparent),
-                        0 1px 3px rgba(0,0,0,0.04),
-                        inset 0 1px 0 rgba(255,255,255,0.8);
+                <div class="auth-card depth-card relative rounded-2xl sm:rounded-3xl px-8 py-10 sm:px-12 sm:py-12"
+                     style="background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
                      border: 1px solid rgba(255,255,255,0.6);">
 
                     {{-- Gradient top accent bar with animated shimmer --}}

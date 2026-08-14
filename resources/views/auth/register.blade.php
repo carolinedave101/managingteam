@@ -108,7 +108,7 @@
 
         <button type="submit"
                 class="auth-btn w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 text-sm font-semibold text-white rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2"
-                style="background: linear-gradient(135deg, {{ $primary }}, color-mix(in srgb, {{ $primary }} 70%, black)); box-shadow: 0 4px 20px color-mix(in srgb, {{ $primary }} 35%, transparent), 0 1px 3px rgba(0,0,0,0.06);"
+                style="background: linear-gradient(135deg, {{ $primary }}, color-mix(in srgb, {{ $primary }} 70%, black));"
                 x-on:click="$el.classList.add('loading'); $el.querySelector('svg').classList.add('animate-spin')">
             <svg class="w-4 h-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
