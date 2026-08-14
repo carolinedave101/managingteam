@@ -131,14 +131,15 @@
 
     {{-- ─── STATS ─── --}}
     <section class="relative -mt-10 md:-mt-16 container-x z-10">
-        <div class="glass-strong rounded-2xl p-8 md:p-12">
+        <div class="glass-strong depth-card rounded-2xl p-8 md:p-12" x-data="sheenCard">
+            <div class="card-sheen" aria-hidden="true"></div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 @php
                     $stats = $content['stats'] ?? $defaults['stats'];
                 @endphp
                 @foreach ($stats as $stat)
                     <div class="space-y-1">
-                        <div class="text-3xl md:text-4xl font-bold count-highlight">{{ $stat['value'] }}</div>
+                        <div class="text-3xl md:text-4xl font-bold count-highlight text-matte-accent">{{ $stat['value'] }}</div>
                         <div class="text-sm text-gray-500 font-medium">{{ $stat['label'] }}</div>
                     </div>
                 @endforeach
@@ -159,6 +160,7 @@
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 @foreach ($gallery as $index => $img)
                     <div class="group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 @if($index < 2) md:col-span-2 md:row-span-2 @endif @if($index === 0) lg:col-span-1 @endif cursor-pointer" onclick="openLightbox({{ $index }})">
+                        <div class="film-grain" aria-hidden="true"></div>
                         <img src="{{ $img }}" alt="{{ $celebrity->name }} gallery image {{ $index + 1 }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -271,8 +273,9 @@
                         @endif
                     </div>
                 </div>
-                <div class="relative">
-                    <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-xl">
+                <div class="relative" x-data="sheenCard">
+                    <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-xl depth-card">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         @if ($celebrity->cover_photo)
                             <img src="{{ $celebrity->getCoverUrl() }}" alt="{{ $celebrity->name }}" class="w-full h-full object-cover">
                         @else
@@ -327,7 +330,8 @@
                 @foreach ($features as $key => $enabled)
                     @if ($enabled && isset($featureIcons[$key]))
                         @php $icon = $featureIcons[$key]; @endphp
-                        <a href="{{ route($featureRoutePrefixes[$key] ?? 'celebrity.home', ['celebrity' => $celebrity->slug]) }}" class="group card-glow bg-white rounded-2xl p-8 border shadow-sm hover:shadow-xl" style="border-color: color-mix(in srgb, var(--accent) 12%, transparent);">
+                        <a href="{{ route($featureRoutePrefixes[$key] ?? 'celebrity.home', ['celebrity' => $celebrity->slug]) }}" class="group card-glow bg-white rounded-2xl p-8 border shadow-sm hover:shadow-xl depth-card" style="border-color: color-mix(in srgb, var(--accent) 12%, transparent);" x-data="sheenCard">
+                            <div class="card-sheen" aria-hidden="true"></div>
                             <div class="feature-card-header w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110" style="background: var(--accent-soft-bg); color: var(--accent-deep);">
                                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $icon[0] }}"/>
@@ -361,7 +365,7 @@
 
             <div class="flex flex-wrap justify-center gap-6 [&>*]:grow [&>*]:basis-60 [&>*]:max-w-sm">
                 @foreach ($tiers as $tier)
-                    <div class="group relative bg-white rounded-2xl p-8 border shadow-sm transition-all duration-300 hover:-translate-y-2 card-glow ring-glow-hover" style="border-color: color-mix(in srgb, var(--accent) 15%, transparent);">
+                    <div class="group relative bg-white rounded-2xl p-8 border shadow-sm transition-all duration-300 hover:-translate-y-2 card-glow ring-glow-hover depth-card" style="border-color: color-mix(in srgb, var(--accent) 15%, transparent);">
                         <div class="w-12 h-1 rounded-full mb-6" style="background: {{ $tier['color'] ?? $theme['primary_color'] ?? 'var(--accent)' }};"></div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $tier['name'] }}</h3>
                         <div class="mb-6">
@@ -411,7 +415,7 @@
 
             <div class="flex flex-wrap justify-center gap-8 [&>*]:grow [&>*]:basis-80 [&>*]:max-w-sm">
                 @foreach ($events as $event)
-                    <div class="group bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 card-glow" style="border-color: color-mix(in srgb, var(--accent) 12%, transparent);">
+                    <div class="group bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 card-glow depth-card" style="border-color: color-mix(in srgb, var(--accent) 12%, transparent);">
                         <div class="h-48 relative overflow-hidden" style="background: var(--accent-gradient);">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="text-center text-white">
@@ -487,6 +491,7 @@
 
     {{-- ─── CTA ─── --}}
     <section class="relative overflow-hidden py-28" style="background: var(--accent-gradient);">
+        <div class="film-grain" aria-hidden="true"></div>
         <div class="absolute inset-0 opacity-10 banner-gradient">
             <div class="absolute top-10 left-10 w-40 h-40 rounded-full bg-white animate-float"></div>
             <div class="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-white animate-blob-reverse"></div>
