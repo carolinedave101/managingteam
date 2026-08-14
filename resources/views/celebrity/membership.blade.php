@@ -22,7 +22,7 @@
 
             {{-- How it works --}}
             <div class="max-w-3xl mx-auto mb-10">
-                <div class="glass-strong rounded-2xl p-5 shadow-md">
+                <div class="glass-strong rounded-2xl p-5 shadow-md depth-card">
                     <div class="flex items-center gap-2 mb-4">
                         <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <h2 class="text-base font-bold text-gray-900">How to Subscribe</h2>
@@ -89,10 +89,11 @@
             {{-- Tiers grid --}}
             <div class="flex flex-wrap justify-center gap-6 [&>*]:grow [&>*]:basis-60 [&>*]:max-w-sm">
                 @foreach ($tiers as $tier)
-                    <div class="tier-card card-hover ring-glow-hover bg-white rounded-2xl border-2 shadow-sm
+                    <div class="tier-card card-hover ring-glow-hover bg-white rounded-2xl border-2 shadow-sm depth-card
                         {{ $activeMembership?->tier === $tier['name']
                             ? 'border-pink-500 ring-2 ring-pink-500'
-                            : ($loop->index === 1 ? 'tier-card featured' : 'border-gray-100') }}">
+                            : ($loop->index === 1 ? 'tier-card featured' : 'border-gray-100') }}" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         @if ($activeMembership?->tier === $tier['name'])
                             <div class="bg-gradient-to-r from-pink-500 to-rose-500 text-white text-center text-xs font-bold py-1.5 tracking-wider uppercase">Your Current Plan</div>
                         @endif
