@@ -36,7 +36,8 @@
                 {{-- Left: Balance + Form --}}
                 <div class="lg:col-span-2 space-y-6">
                     {{-- Balance card --}}
-                    <div class="reveal is-visible bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 rounded-3xl p-6 text-white shadow-2xl relative overflow-hidden">
+                    <div class="reveal is-visible bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 rounded-3xl p-6 text-white shadow-2xl relative overflow-hidden depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -mr-16 -mt-16 animate-float"></div>
                         <div class="relative">
                             <p class="text-sm text-white/70 uppercase tracking-wider font-semibold">Available Balance</p>
@@ -47,7 +48,8 @@
 
                     {{-- Withdrawal form --}}
                     @if ($accounts->count())
-                    <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-6">
+                    <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-6 depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="flex items-center gap-2 mb-4">
                             <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                             <h2 class="text-lg font-bold text-gray-900">Request a Withdrawal</h2>
@@ -98,7 +100,8 @@
                         </form>
                     </div>
                     @else
-                    <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-8 text-center">
+                    <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-8 text-center depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg class="w-7 h-7 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
@@ -112,7 +115,8 @@
                 {{-- Right: Accounts --}}
                 <div class="space-y-6">
                     {{-- Saved accounts --}}
-                    <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-5">
+                    <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-5 depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
