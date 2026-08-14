@@ -20,7 +20,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased" style="font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;">
-    <div class="hero-gradient min-h-screen flex flex-col items-center justify-center px-4">
+    <div class="hero-gradient min-h-screen flex flex-col items-center justify-center px-4 relative">
+        <div class="film-grain" aria-hidden="true"></div>
         <div class="w-full max-w-lg mx-auto text-center">
             <div class="mb-8">
                 <a href="/" class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-6 group transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
@@ -41,7 +42,8 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+            <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 depth-card" x-data="sheenCard">
+                <div class="card-sheen" aria-hidden="true"></div>
                 <form method="POST" action="{{ route('landing.redirect') }}" class="space-y-4">
                     @csrf
                     <div>

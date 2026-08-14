@@ -22,7 +22,7 @@
         </div>
 
         <div class="max-w-6xl mx-auto px-4 -mt-6 pb-12">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden depth-card">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
