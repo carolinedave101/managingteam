@@ -39,7 +39,8 @@
             @if ($activeGiveaways->count())
                 <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($activeGiveaways as $giveaway)
-                        <div class="bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1" style="border-color: color-mix(in srgb, var(--accent, #ec4899) 12%, transparent);">
+                        <div class="bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 depth-card" style="border-color: color-mix(in srgb, var(--accent, #ec4899) 12%, transparent);" x-data="sheenCard">
+                            <div class="card-sheen" aria-hidden="true"></div>
                             @if ($giveaway->prize_image_url)
                                 <img src="{{ $giveaway->prize_image_url }}" alt="{{ $giveaway->prize_description }}" class="w-full h-48 object-cover">
                             @else
