@@ -28,7 +28,7 @@
         <div class="max-w-7xl mx-auto px-4 py-8 relative">
 
             {{-- ═══ ONBOARDING PROGRESS ═══ --}}
-            <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-6 mb-8">
+            <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-6 mb-8 depth-card">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-5">
                     <div class="flex items-center gap-4">
                         <div class="relative">
@@ -196,7 +196,8 @@
 
             {{-- ═══ STATS ROW ═══ --}}
             <div class="flex flex-wrap justify-center gap-4 mb-8 [&>*]:grow [&>*]:basis-48 [&>*]:max-w-xs">
-                <div class="reveal is-visible reveal-delay-1 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover">
+                <div class="reveal is-visible reveal-delay-1 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                    <div class="card-sheen" aria-hidden="true"></div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-400 to-rose-500 shadow-lg shadow-pink-200/50 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
@@ -205,7 +206,8 @@
                         <p class="text-base font-bold {{ $membership ? 'gradient-text-gold' : 'text-gray-900' }}">{{ $membership ? ucfirst($membership->tier) : 'None' }}</p>
                     </div>
                 </div>
-                <div class="reveal is-visible reveal-delay-2 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover">
+                <div class="reveal is-visible reveal-delay-2 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                    <div class="card-sheen" aria-hidden="true"></div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-400 to-violet-500 shadow-lg shadow-purple-200/50 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                     </div>
@@ -219,7 +221,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="reveal is-visible reveal-delay-3 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover">
+                <div class="reveal is-visible reveal-delay-3 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                    <div class="card-sheen" aria-hidden="true"></div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-200/50 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
@@ -229,7 +232,8 @@
                     </div>
                 </div>
                 <a href="{{ route('celebrity.wallet', ['celebrity' => $celebrity->slug]) }}"
-                   class="reveal is-visible reveal-delay-4 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover group">
+                   class="reveal is-visible reveal-delay-4 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover group depth-card" x-data="sheenCard">
+                    <div class="card-sheen" aria-hidden="true"></div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-200/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                     </div>
@@ -238,7 +242,8 @@
                         <p class="text-base font-bold gradient-text-gold" data-wallet-balance>${{ number_format($wallet->balance, 2) }}</p>
                     </div>
                 </a>
-                <div class="reveal is-visible reveal-delay-4 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover">
+                <div class="reveal is-visible reveal-delay-4 glass-strong rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex items-center gap-3 card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                    <div class="card-sheen" aria-hidden="true"></div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 shadow-lg shadow-sky-200/50 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
                     </div>
@@ -254,7 +259,8 @@
             {{-- ═══ FEATURE GRID ═══ --}}
             <div class="flex flex-wrap justify-center gap-5 mb-8 [&>*]:grow [&>*]:basis-80 [&>*]:max-w-sm">
                 @if ($features['fan_applications'] ?? false)
-                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover">
+                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="feature-card-header feature-accent-amber"></div>
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-3">
@@ -294,7 +300,8 @@
                 @endif
 
                 @if ($features['membership'] ?? false)
-                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover">
+                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="feature-card-header feature-accent-pink"></div>
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-3">
@@ -324,7 +331,8 @@
                 @endif
 
                 @if ($features['meet_greet'] ?? false)
-                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover">
+                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="feature-card-header feature-accent-purple"></div>
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-3">
@@ -353,7 +361,8 @@
                 @endif
 
                 @if ($features['membership_card'] ?? false)
-                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover">
+                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="feature-card-header feature-accent-indigo"></div>
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-3">
@@ -384,7 +393,8 @@
                 @endif
 
                 @if ($features['private_meetup'] ?? false)
-                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover">
+                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="feature-card-header feature-accent-teal"></div>
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-3">
@@ -416,7 +426,8 @@
                 @endif
 
                 @if ($features['messaging'] ?? false)
-                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover">
+                    <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="feature-card-header feature-accent-rose"></div>
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-3">
@@ -445,7 +456,8 @@
                 @endif
 
                 {{-- Wallet card --}}
-                <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover">
+                <div class="reveal is-visible group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden card-hover ring-glow-hover depth-card" x-data="sheenCard">
+                    <div class="card-sheen" aria-hidden="true"></div>
                     <div class="feature-card-header feature-accent-emerald"></div>
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-3">
