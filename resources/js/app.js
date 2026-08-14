@@ -177,6 +177,23 @@ document.addEventListener('alpine:init', () => {
             return !!this.touched[field];
         },
     }));
+
+    Alpine.data('sheenCard', () => ({
+        raf: null,
+        init() {
+            const card = this.$el;
+            const move = (e) => {
+                if (window.scrollY > window.innerHeight * 2.5) return;
+                cancelAnimationFrame(this.raf);
+                this.raf = requestAnimationFrame(() => {
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                });
+            };
+            card.addEventListener('mousemove', move);
+        },
+    }));
 });
 
 window.validators = {
