@@ -50,7 +50,8 @@
             <div class="section-divider"></div>
 
             {{-- Balance card --}}
-            <div class="reveal is-visible bg-gradient-to-br from-pink-500 via-purple-600 to-indigo-700 rounded-3xl p-8 text-white shadow-2xl mb-8 relative overflow-hidden">
+            <div class="reveal is-visible bg-gradient-to-br from-pink-500 via-purple-600 to-indigo-700 rounded-3xl p-8 text-white shadow-2xl mb-8 relative overflow-hidden depth-card" x-data="sheenCard">
+                <div class="card-sheen" aria-hidden="true"></div>
                 <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 animate-float"></div>
                 <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-16 -mb-16 animate-float-slow"></div>
                 <div class="relative">
@@ -156,7 +157,7 @@
             {{-- Pending deposits --}}
             @if ($pendingTopUps->count())
             <div class="reveal is-visible mb-8">
-                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 depth-card">
                     <div class="flex items-center gap-2 mb-4">
                         <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <h2 class="text-base font-bold text-amber-800">Pending Deposits ({{ $pendingTopUps->count() }})</h2>
@@ -185,7 +186,7 @@
             <div class="section-divider"></div>
 
             {{-- Transaction history --}}
-            <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-6">
+            <div class="reveal is-visible glass-strong rounded-2xl border border-white/60 shadow-lg p-6 depth-card">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
