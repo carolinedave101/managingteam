@@ -139,7 +139,8 @@
                 {{-- Order section --}}
                 <div class="max-w-lg mx-auto">
                     @if ($cardFee > 0)
-                        <div class="mb-4 rounded-xl border p-4 flex items-center gap-3" style="background:#fefce8;border-color:#fde68a;">
+                        <div class="mb-4 rounded-xl border p-4 flex items-center gap-3 depth-card" style="background:#fefce8;border-color:#fde68a;" x-data="sheenCard">
+                            <div class="card-sheen" aria-hidden="true"></div>
                             <div class="w-9 h-9 rounded-lg shrink-0 flex items-center justify-center" style="background:#f59e0b20;">
                                 <svg class="w-4 h-4" style="color:#d97706;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
@@ -147,7 +148,8 @@
                         </div>
                     @endif
 
-                    <div class="rounded-2xl border shadow-sm" style="background:white;border-color:#e5e7eb;">
+                    <div class="rounded-2xl border shadow-sm depth-card" style="background:white;border-color:#e5e7eb;" x-data="sheenCard">
+                        <div class="card-sheen" aria-hidden="true"></div>
                         <div class="px-6 py-4 border-b border-gray-100">
                             <h2 class="text-base font-semibold text-gray-900 flex items-center gap-2">
                                 <svg class="w-4 h-4" style="color:{{ $primaryColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
@@ -183,7 +185,7 @@
             @else
                 {{-- Card active actions --}}
                 <div class="max-w-lg mx-auto text-center">
-                    <div class="rounded-2xl border shadow-sm p-6" style="background:white;border-color:#e5e7eb;">
+                    <div class="rounded-2xl border shadow-sm p-6 depth-card" style="background:white;border-color:#e5e7eb;">
                         <div class="flex items-center justify-center gap-2 mb-3">
                             <div class="w-2.5 h-2.5 rounded-full {{ $card->is_active ? 'bg-emerald-500' : 'bg-amber-500' }} animate-pulse"></div>
                             <span class="text-sm font-semibold {{ $card->is_active ? 'text-emerald-600' : 'text-amber-600' }}">
@@ -206,7 +208,7 @@
             @endif
 
             <div class="max-w-lg mx-auto mt-8 text-center">
-                <div class="rounded-xl border p-4" style="background:#f8fafc;border-color:#e2e8f0;">
+                <div class="rounded-xl border p-4 depth-card" style="background:#f8fafc;border-color:#e2e8f0;">
                     <div class="flex items-center justify-center gap-4 text-xs text-gray-500">
                         <span class="flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
