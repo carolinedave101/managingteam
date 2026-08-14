@@ -96,7 +96,7 @@
             $txt = $parts[2];
             $prose = $parts[3];
         @endphp
-        <div id="{{ $uniqueId }}-{{ $pmType }}" class="pm-panel {{ $bg }} border {{ $border }} rounded-xl p-3 mb-2">
+        <div id="{{ $uniqueId }}-{{ $pmType }}" class="pm-panel depth-card {{ $bg }} border {{ $border }} rounded-xl p-3 mb-2">
             <div class="flex items-center gap-2 mb-2">
                 <svg class="w-4 h-4 {{ $txt }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     @switch($pmType)

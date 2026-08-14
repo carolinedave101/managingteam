@@ -1,4 +1,5 @@
 <footer class="mt-24 bg-gray-950 text-gray-300">
+    <div class="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
     <div class="container-x py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
             <div class="md:col-span-1">
