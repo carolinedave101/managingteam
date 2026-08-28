@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\FanIsolationMiddleware;
+use App\Models\Celebrity;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,6 +21,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'fan.isolation' => FanIsolationMiddleware::class,
         ]);
+
+        $middleware->redirectGuestsTo(function (Request $request) {
+            $slug = explode('.', $request->getHost())[0] ?? null;
+            if ($slug && Celebrity::where('slug', $slug)->exists()) {
+                return route('celebrity.login', ['celebrity' => $slug]);
+            }
+
+            return route('landing');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
