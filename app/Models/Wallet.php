@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\WalletUpdated;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -70,6 +71,8 @@ class Wallet extends Model
 
         $transaction->save();
 
+        safe_event(new WalletUpdated($this, 'credit', (float) $amount));
+
         return $transaction;
     }
 
@@ -99,6 +102,8 @@ class Wallet extends Model
         }
 
         $transaction->save();
+
+        safe_event(new WalletUpdated($this, 'debit', (float) $amount));
 
         return $transaction;
     }

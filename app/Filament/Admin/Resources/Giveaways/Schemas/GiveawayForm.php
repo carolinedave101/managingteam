@@ -32,7 +32,7 @@ class GiveawayForm
                             ->label('Target Fan (optional)')
                             ->placeholder('All Fans')
                             ->options(fn (callable $get) => $get('celebrity_id')
-                                ? User::whereHas('celebrities', fn ($q) => $q->where('id', $get('celebrity_id')))->pluck('name', 'id')
+                                ? User::whereHas('celebrities', fn ($q) => $q->where('celebrities.id', $get('celebrity_id')))->pluck('name', 'id')
                                 : [])
                             ->searchable()
                             ->nullable()
