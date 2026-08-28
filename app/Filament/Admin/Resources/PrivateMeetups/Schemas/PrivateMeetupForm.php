@@ -42,10 +42,9 @@ class PrivateMeetupForm
                             ->required()
                             ->helperText('The scheduled date and time for the meetup. When confirming a request, set this to the agreed time. The fan will see this on their dashboard. All times are in UTC — convert to your local timezone when coordinating.'),
                         TextInput::make('duration')
-                            ->required()
                             ->numeric()
-                            ->default(60)
-                            ->helperText('How long the meetup will last, in minutes. Default is 60 minutes. Common values: 30 (short), 60 (standard), 90 (extended), 120 (premium). This is displayed to the fan for scheduling purposes.'),
+                            ->placeholder('e.g. 60')
+                            ->helperText('How long the meetup will last, in minutes. Leave blank if the celebrity uses a one-time fixed price for meetups (no duration chosen by the fan). Common values: 30 (short), 60 (standard), 90 (extended), 120 (premium). This is displayed to the fan for scheduling purposes.'),
                         TextInput::make('location')
                             ->helperText('The physical venue address (e.g. "123 Main St, Suite 4B") or a virtual meeting link (e.g. Zoom, Google Meet URL). The fan will see this location in their confirmation details. Leave blank if not yet determined.'),
                         TextInput::make('price')

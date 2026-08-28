@@ -17,7 +17,7 @@ class PrivateMeetupRequest extends FormRequest
             'title' => ['required', 'string', 'min:3', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'date' => ['required', 'date', 'after:today'],
-            'duration' => ['required', 'integer', 'in:30,60,90,120'],
+            'duration' => ['nullable', 'integer', 'in:30,60,90,120'],
             'location' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:1000'],
             'payment_method' => ['required', 'string'],

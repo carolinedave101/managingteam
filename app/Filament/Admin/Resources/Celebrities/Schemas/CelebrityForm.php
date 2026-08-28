@@ -202,7 +202,7 @@ class CelebrityForm
                                             ->addActionLabel('Add Image')
                                             ->reorderable()
                                             ->collapsible()
-                                            ->itemLabel(fn (array $state): ?string => isset($state['url']) ? 'Image ' . (array_search($state, $state['__parent_key'] ?? []) + 1) : 'Image'),
+                                            ->itemLabel(fn (array $state): ?string => isset($state['url']) ? 'Image '.(array_search($state, $state['__parent_key'] ?? []) + 1) : 'Image'),
                                     ]),
                             ]),
 
@@ -370,8 +370,17 @@ class CelebrityForm
                                             ->helperText('Default ticket price in USD.'),
                                     ]),
                                 Section::make('Private Meetup Pricing')
-                                    ->description('Define the available durations and their prices for private 1-on-1 meetups.')
+                                    ->description('Choose how private 1-on-1 meetups are priced. "Per-Duration Pricing" lets fans pick a duration (30/60/90/120 min) with a different price each. "One-Time Fixed Price" charges a single flat price for any meetup — fans book without choosing a duration.')
                                     ->schema([
+                                        Select::make('config.pricing.private_meetup_mode')
+                                            ->label('Pricing Mode')
+                                            ->options([
+                                                'duration' => 'Per-Duration Pricing',
+                                                'fixed' => 'One-Time Fixed Price',
+                                            ])
+                                            ->default('duration')
+                                            ->live()
+                                            ->helperText('Choose how this celebrity prices private meetups. Per-duration: fans select a duration and pay its listed price. Fixed: every meetup costs the same one-time price regardless of length, and fans do not pick a duration.'),
                                         Repeater::make('config.pricing.private_meetup')
                                             ->schema([
                                                 Select::make('duration')
@@ -392,7 +401,16 @@ class CelebrityForm
                                             ->defaultItems(4)
                                             ->addActionLabel('Add Duration')
                                             ->reorderable()
-                                            ->collapsible(),
+                                            ->collapsible()
+                                            ->visible(fn ($get) => ($get('config.pricing.private_meetup_mode') ?? 'duration') === 'duration')
+                                            ->helperText('Only used in Per-Duration Pricing mode. Each row is one selectable duration with its own one-time price.'),
+                                        TextInput::make('config.pricing.private_meetup_fixed')
+                                            ->label('Fixed Meetup Price')
+                                            ->numeric()
+                                            ->prefix('$')
+                                            ->default(5000)
+                                            ->visible(fn ($get) => ($get('config.pricing.private_meetup_mode') ?? 'duration') === 'fixed')
+                                            ->helperText('Only used in One-Time Fixed Price mode. This single one-time price is charged for every private meetup, regardless of how long it lasts. Fans do not choose a duration.'),
                                     ]),
                             ]),
 

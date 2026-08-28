@@ -19,27 +19,30 @@
                         <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <h2 class="text-base font-bold text-gray-900">How to Book a Private Meetup</h2>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
-                        <div class="p-2">
-                            <div class="step-glow w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-1.5 text-teal-700 text-[11px] font-bold">1</div>
-                            <p class="text-xs font-semibold text-gray-700">Fill details</p>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Title, description, date & location.</p>
-                        </div>
-                        <div class="p-2">
-                            <div class="step-glow w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-1.5 text-teal-700 text-[11px] font-bold">2</div>
-                            <p class="text-xs font-semibold text-gray-700">Choose duration</p>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Pick 30, 60, 90, or 120 minutes.</p>
-                        </div>
-                        <div class="p-2">
-                            <div class="step-glow w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-1.5 text-teal-700 text-[11px] font-bold">3</div>
-                            <p class="text-xs font-semibold text-gray-700">Pay</p>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Select method, upload proof or use wallet.</p>
-                        </div>
-                        <div class="p-2">
-                            <div class="step-glow w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-1.5 text-teal-700 text-[11px] font-bold">4</div>
-                            <p class="text-xs font-semibold text-gray-700">Confirmation</p>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Team reviews and confirms your meetup.</p>
-                        </div>
+                    @php
+                        $meetupMode = $celebrity->config['pricing']['private_meetup_mode'] ?? 'duration';
+                        $fixedPrice = $celebrity->config['pricing']['private_meetup_fixed'] ?? 0;
+                        $stepItems = $meetupMode === 'fixed'
+                            ? [
+                                ['label' => 'Fill details', 'hint' => 'Title, description, date & location.'],
+                                ['label' => 'Pay', 'hint' => 'One-time price, select method or use wallet.'],
+                                ['label' => 'Confirmation', 'hint' => 'Team reviews and confirms your meetup.'],
+                            ]
+                            : [
+                                ['label' => 'Fill details', 'hint' => 'Title, description, date & location.'],
+                                ['label' => 'Choose duration', 'hint' => 'Pick 30, 60, 90, or 120 minutes.'],
+                                ['label' => 'Pay', 'hint' => 'Select method, upload proof or use wallet.'],
+                                ['label' => 'Confirmation', 'hint' => 'Team reviews and confirms your meetup.'],
+                            ];
+                    @endphp
+                    <div class="grid grid-cols-1 sm:grid-cols-{{ count($stepItems) }} gap-3 text-center">
+                        @foreach ($stepItems as $index => $step)
+                            <div class="p-2">
+                                <div class="step-glow w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-1.5 text-teal-700 text-[11px] font-bold">{{ $index + 1 }}</div>
+                                <p class="text-xs font-semibold text-gray-700">{{ $step['label'] }}</p>
+                                <p class="text-[11px] text-gray-400 mt-0.5">{{ $step['hint'] }}</p>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -51,29 +54,44 @@
                 <div class="space-y-6">
                     @php
                         $meetupPricing = $celebrity->config['pricing']['private_meetup'] ?? [];
-                        $minMeetupPrice = collect($meetupPricing)->min('price') ?? 0;
+                        $minMeetupPrice = $meetupMode === 'fixed'
+                            ? (float) $fixedPrice
+                            : (collect($meetupPricing)->min('price') ?? 0);
                     @endphp
-                    @if (count($meetupPricing))
+                    @if ($meetupMode === 'fixed' ? (float) $fixedPrice > 0 : count($meetupPricing))
                         <div class="card-glow ring-glow-hover bg-white/90 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-md p-6 depth-card" x-data="sheenCard">
                             <div class="card-sheen" aria-hidden="true"></div>
                             <div class="flex items-center gap-2 mb-4">
                                 <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <h3 class="text-base font-bold text-gray-900">Pricing Options</h3>
+                                <h3 class="text-base font-bold text-gray-900">Pricing</h3>
                             </div>
-                            <div class="space-y-2">
-                                @foreach ($meetupPricing as $option)
-                                    <div class="card-glow ring-glow-hover flex items-center justify-between p-3 rounded-xl bg-teal-50/50 border border-teal-100/50">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 text-xs font-bold">{{ $option['duration'] }}</div>
-                                            <div>
-                                                <p class="text-sm font-semibold text-gray-700">{{ $option['duration'] }} minutes</p>
-                                                <p class="text-xs text-gray-400">Private session</p>
-                                            </div>
+                            @if ($meetupMode === 'fixed')
+                                <div class="card-glow ring-glow-hover flex items-center justify-between p-3 rounded-xl bg-teal-50/50 border border-teal-100/50">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 text-xs font-bold">∞</div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-700">Any duration</p>
+                                            <p class="text-xs text-gray-400">One-time fixed price — length agreed with the team</p>
                                         </div>
-                                        <span class="price-glow price-gold text-lg font-bold text-teal-600">${{ number_format($option['price'], 2) }}</span>
                                     </div>
-                                @endforeach
-                            </div>
+                                    <span class="price-glow price-gold text-lg font-bold text-teal-600">${{ number_format($fixedPrice, 2) }}</span>
+                                </div>
+                            @else
+                                <div class="space-y-2">
+                                    @foreach ($meetupPricing as $option)
+                                        <div class="card-glow ring-glow-hover flex items-center justify-between p-3 rounded-xl bg-teal-50/50 border border-teal-100/50">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 text-xs font-bold">{{ $option['duration'] }}</div>
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-700">{{ $option['duration'] }} minutes</p>
+                                                    <p class="text-xs text-gray-400">Private session</p>
+                                                </div>
+                                            </div>
+                                            <span class="price-glow price-gold text-lg font-bold text-teal-600">${{ number_format($option['price'], 2) }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                             <p class="text-xs text-gray-400 mt-4">💡 All prices are one-time payments. Duration starts when the meetup begins.</p>
                         </div>
                     @endif
@@ -127,8 +145,8 @@
                                     placeholder="Tell us more about your request and what you're looking forward to...">{{ old('description') }}</textarea>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
+                            <div class="{{ $meetupMode === 'fixed' ? '' : 'grid grid-cols-2 gap-4' }}">
+                                <div class="{{ $meetupMode === 'fixed' ? 'sm:col-span-2' : '' }}">
                                     <x-input-label for="date" value="Preferred Date &amp; Time" />
                                     <p class="text-xs text-gray-400 mt-0.5 mb-1">Pick your ideal date and time. Make sure it's at least 48 hours from now.</p>
                                     <input type="datetime-local" id="date" name="date" required
@@ -143,6 +161,7 @@
                                         <p class="text-green-600 text-xs mt-1">Perfect time!</p>
                                     </template>
                                 </div>
+                                @if ($meetupMode === 'duration')
                                 <div>
                                     <x-input-label for="duration" value="Duration" />
                                     <p class="text-xs text-gray-400 mt-0.5 mb-1">How long would you like the meetup to last?</p>
@@ -159,6 +178,7 @@
                                         <p x-text="errors.duration" class="text-red-500 text-xs mt-1"></p>
                                     </template>
                                 </div>
+                                @endif
                             </div>
 
                             <div>
@@ -190,7 +210,7 @@
                                 :wallet="$wallet"
                                 :celebrity="$celebrity"
                                 label="Payment Method"
-                                amountLabel="Price depends on selected duration"
+                                amountLabel="{{ $meetupMode === 'fixed' ? 'One-time price of $' . number_format($fixedPrice, 2) : 'Price depends on selected duration' }}"
                                 :price="$minMeetupPrice"
                             />
 

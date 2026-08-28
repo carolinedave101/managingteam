@@ -29,8 +29,17 @@ class PrivateMeetupController extends Controller
 
     public function store(PrivateMeetupRequest $request)
     {
-        $meetupPricing = $this->celebrity->config['pricing']['private_meetup'] ?? [];
-        $price = collect($meetupPricing)->firstWhere('duration', (int) $request->duration)['price'] ?? 0;
+        $pricing = $this->celebrity->config['pricing'] ?? [];
+        $mode = $pricing['private_meetup_mode'] ?? 'duration';
+
+        if ($mode === 'fixed') {
+            $price = (float) ($pricing['private_meetup_fixed'] ?? 0);
+            $duration = null;
+        } else {
+            $meetupPricing = $pricing['private_meetup'] ?? [];
+            $price = collect($meetupPricing)->firstWhere('duration', (int) $request->duration)['price'] ?? 0;
+            $duration = $request->duration;
+        }
 
         if ($request->payment_method === 'wallet') {
             $txn = $this->processWalletPayment($this->celebrity, $price);
@@ -47,7 +56,7 @@ class PrivateMeetupController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'date' => $request->date,
-            'duration' => $request->duration,
+            'duration' => $duration,
             'location' => $request->location,
             'price' => $price,
             'notes' => $request->notes,
