@@ -22,6 +22,8 @@ class EmailCampaign extends Model
         'daily_limit',
         'daily_sent_count',
         'daily_sent_reset_at',
+        'subject_variations',
+        'body_variations',
         'created_by',
     ];
 
@@ -30,6 +32,8 @@ class EmailCampaign extends Model
         return [
             'hourly_sent_reset_at' => 'datetime',
             'daily_sent_reset_at' => 'datetime',
+            'subject_variations' => 'array',
+            'body_variations' => 'array',
         ];
     }
 

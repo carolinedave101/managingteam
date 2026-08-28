@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources\EmailCampaigns\Schemas;
 use App\Models\Celebrity;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -67,15 +68,42 @@ class EmailCampaignForm
                                 ->columns(['default' => 1, 'sm' => 1, 'md' => 1, 'lg' => 1, 'xl' => 1, '2xl' => 1])
                                 ->schema([
                                     TextInput::make('subject')
-                                        ->label('Subject Line')
+                                        ->label('Subject Line (Primary)')
                                         ->required()
                                         ->maxLength(255)
                                         ->placeholder('e.g. Exciting News from Jennie!')
-                                        ->helperText('The email subject line. Keep it concise and engaging.'),
+                                        ->helperText('Use {{email}} and {{name}} — replaced per recipient. Add 2 more variations below.'),
+                                    Repeater::make('subject_variations')
+                                        ->label('Additional Subject Variations')
+                                        ->schema([
+                                            TextInput::make('subject')
+                                                ->label('Variation')
+                                                ->required()
+                                                ->maxLength(255)
+                                                ->helperText('{{email}} and {{name}} supported.'),
+                                        ])
+                                        ->addable(false)
+                                        ->deletable(false)
+                                        ->defaultItems(2)
+                                        ->maxItems(2)
+                                        ->minItems(2)
+                                        ->helperText('The system picks one at random per recipient — 3 subjects × 3 bodies = 9 unique combos.'),
                                     RichEditor::make('body')
-                                        ->label('Email Body')
+                                        ->label('Email Body (Primary)')
                                         ->required()
-                                        ->helperText('Write your campaign message. HTML formatting is supported. Include images, links, and anything you need.'),
+                                        ->helperText('Write your campaign message. {{email}} and {{name}} supported.'),
+                                    Repeater::make('body_variations')
+                                        ->label('Additional Body Variations')
+                                        ->schema([
+                                            RichEditor::make('body')
+                                                ->label('Variation')
+                                                ->required(),
+                                        ])
+                                        ->addable(false)
+                                        ->deletable(false)
+                                        ->defaultItems(2)
+                                        ->maxItems(2)
+                                        ->minItems(2),
                                 ]),
                         ]),
 
@@ -105,7 +133,7 @@ class EmailCampaignForm
     {
         return $schema
             ->components([
-                Section::make('Campaign Details')
+                Section::make('Campaign Status')
                     ->columns(['default' => 1, 'sm' => 1, 'md' => 1, 'lg' => 1, 'xl' => 1, '2xl' => 1])
                     ->schema([
                         Select::make('status')
@@ -116,6 +144,43 @@ class EmailCampaignForm
                                 'paused' => 'Paused',
                             ])
                             ->helperText('Current campaign status. Set to "sending" to start or resume processing.'),
+                    ]),
+                Section::make('Content & Variations')
+                    ->columns(['default' => 1, 'sm' => 1, 'md' => 1, 'lg' => 1, 'xl' => 1, '2xl' => 1])
+                    ->schema([
+                        TextInput::make('subject')
+                            ->label('Subject Line (Primary)')
+                            ->required()
+                            ->maxLength(255)
+                            ->helperText('{{email}} and {{name}} supported.'),
+                        Repeater::make('subject_variations')
+                            ->label('Additional Subject Variations')
+                            ->schema([
+                                TextInput::make('subject')
+                                    ->label('Variation')
+                                    ->maxLength(255)
+                                    ->helperText('{{email}} and {{name}} supported.'),
+                            ])
+                            ->addable(false)
+                            ->deletable(false)
+                            ->defaultItems(0)
+                            ->maxItems(2)
+                            ->minItems(0),
+                        RichEditor::make('body')
+                            ->label('Email Body (Primary)')
+                            ->required()
+                            ->helperText('{{email}} and {{name}} supported.'),
+                        Repeater::make('body_variations')
+                            ->label('Additional Body Variations')
+                            ->schema([
+                                RichEditor::make('body')
+                                    ->label('Variation'),
+                            ])
+                            ->addable(false)
+                            ->deletable(false)
+                            ->defaultItems(0)
+                            ->maxItems(2)
+                            ->minItems(0),
                     ]),
             ]);
     }

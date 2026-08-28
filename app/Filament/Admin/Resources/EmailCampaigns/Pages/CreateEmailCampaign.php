@@ -117,11 +117,11 @@ class CreateEmailCampaign extends CreateRecord
                 return;
             }
 
-            $recipients = array_map(fn ($email) => [
+            $recipients = array_map(fn ($lead) => [
                 'campaign_id' => $campaign->id,
                 'user_id' => null,
-                'email' => $email,
-                'name' => null,
+                'email' => $lead['email'],
+                'name' => $lead['name'] ?: null,
                 'status' => 'pending',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -153,6 +153,7 @@ class CreateEmailCampaign extends CreateRecord
 
         if (! $disk->exists($filename)) {
             Log::warning('CSV file not found on any disk', ['filename' => $filename]);
+
             return null;
         }
 
@@ -162,8 +163,9 @@ class CreateEmailCampaign extends CreateRecord
         $leads = [];
         foreach ($csv->getRecords() as $record) {
             $email = trim($record['email'] ?? '');
+            $name = trim($record['name'] ?? '');
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $leads[] = $email;
+                $leads[] = ['email' => $email, 'name' => $name];
             }
         }
 

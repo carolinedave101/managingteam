@@ -3,12 +3,6 @@
 @section('subject', $subject)
 
 @section('content')
-    @if ($userName)
-        <p style="margin:0 0 16px;font-size:16px;">Hi <strong>{{ $userName }}</strong>,</p>
-    @else
-        <p style="margin:0 0 16px;font-size:16px;">Hello,</p>
-    @endif
-
     <div style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#334155;">
         {!! $body !!}
     </div>
